@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://safelink-srhr.netlify.app/sitemap.xml
