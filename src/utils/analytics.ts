@@ -21,7 +21,7 @@ export class PrivacyAnalytics {
   private static instance: PrivacyAnalytics;
   private events: AnalyticsEvent[] = [];
   private usageStats: UsageStats | null = null;
-  private anonymousId: string;
+  private anonymousId: string = '';
 
   constructor() {
     if (!PrivacyAnalytics.instance) {
