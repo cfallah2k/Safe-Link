@@ -30,7 +30,7 @@ const NotificationSystem: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState(0);
 
   // Sample notifications for SRHR app
-  const sampleNotifications: Notification[] = [
+  const sampleNotifications: Notification[] = useMemo(() => [
     {
       id: '1',
       type: 'reminder',
@@ -84,7 +84,7 @@ const NotificationSystem: React.FC = () => {
       actionText: 'Find Mentors',
       category: 'community'
     }
-  ];
+  ], []);
 
   useEffect(() => {
     setNotifications(sampleNotifications);
