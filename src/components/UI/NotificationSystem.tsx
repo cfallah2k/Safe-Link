@@ -89,7 +89,7 @@ const NotificationSystem: React.FC = () => {
   useEffect(() => {
     setNotifications(sampleNotifications);
     setUnreadCount(sampleNotifications.filter(n => !n.isRead).length);
-  }, []);
+  }, [sampleNotifications]);
 
   const getNotificationIcon = (type: string, category: string) => {
     if (category === 'health') return Heart;

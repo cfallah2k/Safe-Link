@@ -8,12 +8,9 @@ import {
   Users, 
   Star,
   Search,
-  Filter,
-  Download,
   Wifi,
   WifiOff,
   FileText,
-  ExternalLink,
   Bookmark,
   Share2
 } from 'lucide-react';

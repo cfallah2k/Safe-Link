@@ -12,8 +12,7 @@ import {
   RefreshCw,
   Settings,
   Trash2,
-  Eye,
-  Star
+  Eye
 } from 'lucide-react';
 import Header from '../components/Layout/Header';
 import { useOffline } from '../hooks/useOffline';

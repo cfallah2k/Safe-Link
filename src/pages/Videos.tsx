@@ -9,7 +9,6 @@ import {
   Users, 
   Star,
   Search,
-  Filter,
   Download,
   Wifi,
   WifiOff
