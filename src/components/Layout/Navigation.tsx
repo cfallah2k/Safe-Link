@@ -11,14 +11,18 @@ import {
   Users, 
   Settings,
   Menu,
-  X
+  X,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
 import { useState } from 'react';
+import { useOffline } from '../../hooks/useOffline';
 
 const Navigation: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isOnline } = useOffline();
 
   const navigationItems = [
     { path: '/', icon: Home, label: t('navigation.home') },
@@ -82,6 +86,32 @@ const Navigation: React.FC = () => {
             <div className="flex-1 min-w-0">
               <h1 className="text-lg sm:text-xl font-bold text-gray-900 truncate">{t('app.name')}</h1>
               <p className="text-xs text-gray-500 truncate">{t('app.tagline')}</p>
+            </div>
+          </div>
+
+          {/* Mobile Status Section - Only visible on mobile */}
+          <div className="lg:hidden mb-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                {/* Online/Offline indicator */}
+                <div className="flex items-center space-x-2">
+                  {isOnline ? (
+                    <Wifi className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <WifiOff className="w-5 h-5 text-red-500" />
+                  )}
+                  <span className={`text-sm font-medium ${isOnline ? 'text-green-600' : 'text-red-600'}`}>
+                    {isOnline ? 'Online' : 'Offline'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Shield className="w-5 h-5 text-green-600" />
+                <span className="text-sm font-medium text-green-700">
+                  {t('common.anonymous')}
+                </span>
+              </div>
             </div>
           </div>
 

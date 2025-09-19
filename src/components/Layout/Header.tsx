@@ -16,10 +16,18 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle, showPrivacy = true }) 
   return (
     <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
       <div className="flex items-center justify-between">
-        {/* Left side - Icons and text */}
-        <div className="flex items-center space-x-3 flex-1 min-w-0">
-          {/* Status icons - Always visible on mobile */}
-          <div className="flex items-center space-x-2 flex-shrink-0">
+        {/* Left side - Title and subtitle only */}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{title}</h1>
+          {subtitle && (
+            <p className="text-sm sm:text-base text-gray-600 mt-1 truncate">{subtitle}</p>
+          )}
+        </div>
+        
+        {/* Right side - Language selector and status (desktop only) */}
+        <div className="hidden sm:flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
+          {/* Status icons - Desktop only */}
+          <div className="flex items-center space-x-2">
             {/* Online/Offline indicator */}
             <div className="flex items-center space-x-1">
               {isOnline ? (
@@ -37,19 +45,8 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle, showPrivacy = true }) 
             )}
           </div>
 
-          {/* Title and subtitle */}
-          <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{title}</h1>
-            {subtitle && (
-              <p className="text-sm sm:text-base text-gray-600 mt-1 truncate">{subtitle}</p>
-            )}
-          </div>
-        </div>
-        
-        {/* Right side - Language selector and status text */}
-        <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
-          {/* Language selector - Hidden on small mobile */}
-          <div className="hidden sm:flex items-center space-x-2">
+          {/* Language selector */}
+          <div className="flex items-center space-x-2">
             <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
             <select className="text-xs sm:text-sm border-0 bg-transparent text-gray-600 focus:outline-none">
               <option value="en">English</option>
@@ -60,8 +57,8 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle, showPrivacy = true }) 
             </select>
           </div>
 
-          {/* Status text - Hidden on mobile, shown on larger screens */}
-          <div className="hidden sm:flex items-center space-x-2">
+          {/* Status text */}
+          <div className="flex items-center space-x-2">
             <span className={`text-xs sm:text-sm font-medium ${isOnline ? 'text-green-600' : 'text-red-600'}`}>
               {isOnline ? 'Online' : 'Offline'}
             </span>
