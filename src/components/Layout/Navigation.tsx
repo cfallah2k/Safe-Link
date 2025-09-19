@@ -40,10 +40,10 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      {/* Mobile menu button - Enhanced for better touch targets */}
+      {/* Mobile menu button - Enhanced for better touch targets - Moved to right side */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-white rounded-xl shadow-lg border border-gray-200 touch-manipulation active:scale-95 transition-transform"
+        className="lg:hidden fixed top-4 right-4 z-50 p-3 bg-white rounded-xl shadow-lg border border-gray-200 touch-manipulation active:scale-95 transition-transform"
         style={{ 
           paddingTop: 'max(12px, env(safe-area-inset-top))',
           minHeight: '48px',
