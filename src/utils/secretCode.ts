@@ -7,6 +7,17 @@ export interface SecretCode {
   isActive: boolean;
 }
 
+export interface UserDemographics {
+  gender: string;
+  ageRange: string;
+  county: string;
+  education: string;
+  relationshipStatus: string;
+  primaryLanguage: string;
+  hasChildren: string;
+  srhrExperience: string;
+}
+
 export class SecretCodeManager {
   private static instance: SecretCodeManager;
   private storageKey = 'safelink_secret_code';
@@ -177,6 +188,37 @@ export class SecretCodeManager {
     if (hasVariety && code.length >= 8) return 'strong';
     if (hasLetters || hasNumbers) return 'medium';
     return 'weak';
+  }
+
+  // Store user demographics (for analytics)
+  storeUserDemographics(demographics: UserDemographics): void {
+    try {
+      localStorage.setItem('safelink_user_demographics', JSON.stringify({
+        ...demographics,
+        createdAt: Date.now()
+      }));
+    } catch (error) {
+      console.error('Failed to store user demographics:', error);
+    }
+  }
+
+  // Get user demographics
+  getUserDemographics(): UserDemographics | null {
+    try {
+      const stored = localStorage.getItem('safelink_user_demographics');
+      if (stored) {
+        const data = JSON.parse(stored);
+        return data;
+      }
+    } catch (error) {
+      console.error('Failed to get user demographics:', error);
+    }
+    return null;
+  }
+
+  // Clear user demographics
+  clearUserDemographics(): void {
+    localStorage.removeItem('safelink_user_demographics');
   }
 }
 
