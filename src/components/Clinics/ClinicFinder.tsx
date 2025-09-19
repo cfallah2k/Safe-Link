@@ -105,16 +105,6 @@ const ClinicFinder: React.FC = () => {
     }
   ];
 
-  useEffect(() => {
-    // Load clinics from offline storage or use sample data
-    loadClinics();
-    getUserLocation();
-  }, [loadClinics]);
-
-  useEffect(() => {
-    filterAndSortClinics();
-  }, [filterAndSortClinics]);
-
   const loadClinics = useCallback(async () => {
     try {
       const storedClinics = await offlineStorage.getData('clinics');
@@ -130,6 +120,16 @@ const ClinicFinder: React.FC = () => {
       setClinics(sampleClinics);
     }
   }, []);
+
+  useEffect(() => {
+    // Load clinics from offline storage or use sample data
+    loadClinics();
+    getUserLocation();
+  }, [loadClinics]);
+
+  useEffect(() => {
+    filterAndSortClinics();
+  }, [filterAndSortClinics]);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -157,10 +157,10 @@ const ClinicFinder: React.FC = () => {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(clinic =>
+      filtered = filtered.filter((clinic: Clinic) =>
         clinic.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         clinic.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        clinic.services.some(service => 
+        clinic.services.some((service: string) => 
           service.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
@@ -168,11 +168,11 @@ const ClinicFinder: React.FC = () => {
 
     // Filter by type
     if (selectedType !== 'all') {
-      filtered = filtered.filter(clinic => clinic.type === selectedType);
+      filtered = filtered.filter((clinic: Clinic) => clinic.type === selectedType);
     }
 
     // Sort
-    filtered.sort((a, b) => {
+    filtered.sort((a: Clinic, b: Clinic) => {
       switch (sortBy) {
         case 'distance':
           return a.distance - b.distance;
@@ -245,7 +245,7 @@ const ClinicFinder: React.FC = () => {
                 type="text"
                 placeholder="Search clinics, services, or locations..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
@@ -255,7 +255,7 @@ const ClinicFinder: React.FC = () => {
           <div className="lg:w-48">
             <select
               value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedType(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="all">All Types</option>
@@ -270,7 +270,7 @@ const ClinicFinder: React.FC = () => {
           <div className="lg:w-48">
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'distance' | 'rating' | 'name')}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value as 'distance' | 'rating' | 'name')}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="distance">Sort by Distance</option>
@@ -284,7 +284,7 @@ const ClinicFinder: React.FC = () => {
       {/* Results */}
       <div className="space-y-4">
         {filteredClinics.length > 0 ? (
-          filteredClinics.map((clinic) => {
+          filteredClinics.map((clinic: Clinic) => {
             const TypeIcon = getTypeIcon(clinic.type);
             return (
               <div key={clinic.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -335,7 +335,7 @@ const ClinicFinder: React.FC = () => {
                     <div>
                       <h4 className="text-sm font-medium text-gray-900 mb-2">Services Offered:</h4>
                       <div className="flex flex-wrap gap-2">
-                        {clinic.services.map((service, index) => (
+                        {clinic.services.map((service: string, index: number) => (
                           <span
                             key={index}
                             className="px-2 py-1 bg-primary-50 text-primary-700 text-xs rounded-full"
