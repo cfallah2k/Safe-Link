@@ -17,8 +17,7 @@ import {
   Play,
   Download,
   FileText,
-  Globe,
-  Bell
+  Globe
 } from 'lucide-react';
 import { useState } from 'react';
 import { useOffline } from '../../hooks/useOffline';

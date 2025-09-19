@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Shield, Copy, Check, ArrowLeft, Download, User, MapPin, Calendar, Users } from 'lucide-react';
+import { Shield, Copy, Check, ArrowLeft, Download, User } from 'lucide-react';
 import { secretCodeManager } from '../../utils/secretCode';
 
 interface CreateCodeFormProps {
