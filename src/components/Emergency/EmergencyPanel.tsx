@@ -80,23 +80,6 @@ const EmergencyPanel: React.FC = () => {
     }
   ];
 
-  useEffect(() => {
-    loadEmergencyData();
-    getUserLocation();
-  }, [loadEmergencyData]);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (panicMode && countdown > 0) {
-      interval = setInterval(() => {
-        setCountdown(prev => prev - 1);
-      }, 1000);
-    } else if (panicMode && countdown === 0) {
-      handlePanicActivated();
-    }
-    return () => clearInterval(interval);
-  }, [panicMode, countdown, handlePanicActivated]);
-
   const loadEmergencyData = useCallback(async () => {
     try {
       const [contacts, logs] = await Promise.all([
@@ -241,6 +224,23 @@ const EmergencyPanel: React.FC = () => {
   const formatTime = (timestamp: number) => {
     return new Date(timestamp).toLocaleString();
   };
+
+  useEffect(() => {
+    loadEmergencyData();
+    getUserLocation();
+  }, [loadEmergencyData]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (panicMode && countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+    } else if (panicMode && countdown === 0) {
+      handlePanicActivated();
+    }
+    return () => clearInterval(interval);
+  }, [panicMode, countdown, handlePanicActivated]);
 
   if (panicMode) {
     return (
