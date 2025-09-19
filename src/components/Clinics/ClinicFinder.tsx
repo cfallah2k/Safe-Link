@@ -34,6 +34,7 @@ const ClinicFinder: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'distance' | 'rating' | 'name'>('distance');
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   // Sample clinic data (in a real app, this would come from an API)
   const sampleClinics: Clinic[] = useMemo(() => [
@@ -121,6 +122,7 @@ const ClinicFinder: React.FC = () => {
   }, [sampleClinics]);
 
   const getUserLocation = () => {
+    setIsLoadingLocation(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -128,16 +130,19 @@ const ClinicFinder: React.FC = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           });
+          setIsLoadingLocation(false);
         },
         (error) => {
           console.error('Error getting location:', error);
           // Use default location (Monrovia)
           setUserLocation({ lat: 6.3008, lng: -10.7972 });
+          setIsLoadingLocation(false);
         }
       );
     } else {
       // Use default location
       setUserLocation({ lat: 6.3008, lng: -10.7972 });
+      setIsLoadingLocation(false);
     }
   };
 
