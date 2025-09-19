@@ -121,16 +121,6 @@ const ClinicFinder: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    // Load clinics from offline storage or use sample data
-    loadClinics();
-    getUserLocation();
-  }, [loadClinics]);
-
-  useEffect(() => {
-    filterAndSortClinics();
-  }, [filterAndSortClinics]);
-
   const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -187,6 +177,16 @@ const ClinicFinder: React.FC = () => {
 
     setFilteredClinics(filtered);
   }, [clinics, searchTerm, selectedType, sortBy]);
+
+  useEffect(() => {
+    // Load clinics from offline storage or use sample data
+    loadClinics();
+    getUserLocation();
+  }, [loadClinics]);
+
+  useEffect(() => {
+    filterAndSortClinics();
+  }, [filterAndSortClinics]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
