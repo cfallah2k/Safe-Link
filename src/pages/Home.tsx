@@ -10,7 +10,10 @@ import {
   Users,
   Heart,
   BookOpen,
-  Phone
+  Phone,
+  Play,
+  Download,
+  FileText
 } from 'lucide-react';
 import Header from '../components/Layout/Header';
 
@@ -23,6 +26,22 @@ const Home: React.FC = () => {
       icon: MessageCircle,
       title: t('home.getHelp'),
       description: 'Ask SRHR questions anonymously',
+      color: 'bg-blue-500',
+      textColor: 'text-blue-600'
+    },
+    {
+      path: '/videos',
+      icon: Play,
+      title: 'Educational Videos',
+      description: 'Watch expert SRHR content',
+      color: 'bg-red-500',
+      textColor: 'text-red-600'
+    },
+    {
+      path: '/articles',
+      icon: FileText,
+      title: 'Expert Articles',
+      description: 'Read in-depth SRHR guides',
       color: 'bg-blue-500',
       textColor: 'text-blue-600'
     },
@@ -65,6 +84,14 @@ const Home: React.FC = () => {
       description: 'Connect with trained mentors',
       color: 'bg-indigo-500',
       textColor: 'text-indigo-600'
+    },
+    {
+      path: '/offline',
+      icon: Download,
+      title: 'Offline Mode',
+      description: 'Access downloaded content',
+      color: 'bg-gray-500',
+      textColor: 'text-gray-600'
     }
   ];
 
@@ -85,10 +112,10 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Hero section - Enhanced for mobile */}
           <div className="bg-gradient-to-br from-primary-600 to-secondary-600 rounded-2xl p-6 sm:p-8 text-white mb-6 sm:mb-8 shadow-xl">
-            <div className="flex items-center space-x-3 sm:space-x-4 mb-4">
-              <Heart className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" />
-              <h2 className="text-xl sm:text-2xl font-bold">SafeLink</h2>
-            </div>
+              <div className="flex items-center space-x-3 sm:space-x-4 mb-4">
+                <Heart className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" />
+                <h2 className="text-xl sm:text-2xl font-bold">Safe-Linkz</h2>
+              </div>
             <p className="text-base sm:text-lg opacity-90 mb-6 leading-relaxed">
               Your anonymous companion for sexual and reproductive health and rights. 
               Get accurate information, find services, and connect with support - all while maintaining complete privacy.
@@ -168,8 +195,8 @@ const Home: React.FC = () => {
               ) : (
                 <div className="text-center py-8 sm:py-12">
                   <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 text-sm sm:text-base">No recent activity</p>
-                  <p className="text-gray-400 text-xs sm:text-sm">Start exploring SafeLink features</p>
+                    <p className="text-gray-500 text-sm sm:text-base">No recent activity</p>
+                    <p className="text-gray-400 text-xs sm:text-sm">Start exploring Safe-Linkz features</p>
                 </div>
               )}
             </div>
@@ -181,10 +208,10 @@ const Home: React.FC = () => {
               <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mt-1 flex-shrink-0" />
               <div className="min-w-0">
                 <h4 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">Your Privacy is Protected</h4>
-                <p className="text-blue-800 text-xs sm:text-sm mb-3 leading-relaxed">
-                  SafeLink uses secret codes to ensure your complete anonymity. No personal information is required or stored. 
-                  Your conversations, health data, and activities remain private and secure.
-                </p>
+                  <p className="text-blue-800 text-xs sm:text-sm mb-3 leading-relaxed">
+                    Safe-Linkz uses secret codes to ensure your complete anonymity. No personal information is required or stored. 
+                    Your conversations, health data, and activities remain private and secure.
+                  </p>
                 <ul className="text-blue-700 text-xs sm:text-sm space-y-1">
                   <li>• No phone numbers or names required</li>
                   <li>• All data encrypted and stored locally</li>

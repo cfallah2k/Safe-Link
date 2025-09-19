@@ -11,11 +11,14 @@ import CreateCodeForm from './components/Auth/CreateCodeForm';
 // Pages
 import Home from './pages/Home';
 import Chatbot from './pages/Chatbot';
+import Videos from './pages/Videos';
+import Articles from './pages/Articles';
 import Clinics from './pages/Clinics';
 import Tracker from './pages/Tracker';
 import Games from './pages/Games';
 import Emergency from './pages/Emergency';
 import Mentorship from './pages/Mentorship';
+import OfflineMode from './pages/OfflineMode';
 import Settings from './pages/Settings';
 
 // Utils
@@ -97,11 +100,14 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/chatbot" element={<Chatbot />} />
+                <Route path="/videos" element={<Videos />} />
+                <Route path="/articles" element={<Articles />} />
                 <Route path="/clinics" element={<Clinics />} />
                 <Route path="/tracker" element={<Tracker />} />
                 <Route path="/games" element={<Games />} />
                 <Route path="/emergency" element={<Emergency />} />
                 <Route path="/mentorship" element={<Mentorship />} />
+                <Route path="/offline" element={<OfflineMode />} />
                 <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

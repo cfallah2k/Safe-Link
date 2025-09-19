@@ -13,7 +13,10 @@ import {
   Menu,
   X,
   Wifi,
-  WifiOff
+  WifiOff,
+  Play,
+  Download,
+  FileText
 } from 'lucide-react';
 import { useState } from 'react';
 import { useOffline } from '../../hooks/useOffline';
@@ -27,11 +30,14 @@ const Navigation: React.FC = () => {
   const navigationItems = [
     { path: '/', icon: Home, label: t('navigation.home') },
     { path: '/chatbot', icon: MessageCircle, label: t('navigation.chatbot') },
+    { path: '/videos', icon: Play, label: 'Videos' },
+    { path: '/articles', icon: FileText, label: 'Articles' },
     { path: '/clinics', icon: MapPin, label: t('navigation.clinics') },
     { path: '/tracker', icon: Calendar, label: t('navigation.tracker') },
     { path: '/games', icon: Gamepad2, label: t('navigation.games') },
     { path: '/emergency', icon: Shield, label: t('navigation.emergency') },
     { path: '/mentorship', icon: Users, label: t('navigation.mentorship') },
+    { path: '/offline', icon: Download, label: 'Offline Mode' },
     { path: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 
@@ -83,10 +89,10 @@ const Navigation: React.FC = () => {
             <div className="w-12 h-12 sm:w-10 sm:h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
               <Shield className="w-7 h-7 sm:w-6 sm:h-6 text-white" />
             </div>
-            <div className="flex-1 min-w-0">
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900 truncate">{t('app.name')}</h1>
-              <p className="text-xs text-gray-500 truncate">{t('app.tagline')}</p>
-            </div>
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-lg sm:text-xl font-bold text-gray-900 truncate">Safe-Linkz</h1>
+                  <p className="text-xs text-gray-500 truncate">Your Safe Space for SRHR</p>
+                </div>
           </div>
 
           {/* Mobile Status Section - Only visible on mobile */}
