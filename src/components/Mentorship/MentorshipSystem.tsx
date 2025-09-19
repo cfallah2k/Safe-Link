@@ -1,21 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   Users, 
   MessageCircle, 
   Star, 
-  Clock, 
   Shield, 
-  Heart, 
-  BookOpen,
   Send,
-  Phone,
-  Video,
-  Calendar,
-  CheckCircle,
   XCircle,
-  UserPlus,
-  UserCheck
+  UserPlus
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 
@@ -57,7 +49,6 @@ interface ChatMessage {
 }
 
 const MentorshipSystem: React.FC = () => {
-  const { t } = useTranslation();
   const [mentors, setMentors] = useState<Mentor[]>([]);
   const [mentorshipRequests, setMentorshipRequests] = useState<MentorshipRequest[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -132,9 +123,9 @@ const MentorshipSystem: React.FC = () => {
 
   useEffect(() => {
     loadMentorshipData();
-  }, []);
+  }, [loadMentorshipData]);
 
-  const loadMentorshipData = async () => {
+  const loadMentorshipData = useCallback(async () => {
     try {
       const [mentorsData, requestsData, messagesData] = await Promise.all([
         offlineStorage.getData('mentors'),
@@ -149,7 +140,7 @@ const MentorshipSystem: React.FC = () => {
       console.error('Failed to load mentorship data:', error);
       setMentors(sampleMentors);
     }
-  };
+  }, []);
 
   const saveMentorshipData = async () => {
     try {
@@ -203,9 +194,6 @@ const MentorshipSystem: React.FC = () => {
     setNewMessage('');
   };
 
-  const getMentorRequests = (mentorId: string) => {
-    return mentorshipRequests.filter(req => req.mentorId === mentorId);
-  };
 
   const getMentorMessages = (mentorId: string) => {
     return chatMessages.filter(msg => 

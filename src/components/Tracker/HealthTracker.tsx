@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   Calendar, 
   Heart, 
   Droplets, 
-  Thermometer, 
   Smile, 
   Frown, 
   Meh,
   Plus,
   Save,
-  BarChart3,
   Target,
   AlertCircle
 } from 'lucide-react';
@@ -41,7 +39,6 @@ interface CycleData {
 }
 
 const HealthTracker: React.FC = () => {
-  const { t } = useTranslation();
   const [cycleData, setCycleData] = useState<CycleData>({
     entries: [],
     cycleLength: 28,
@@ -88,7 +85,7 @@ const HealthTracker: React.FC = () => {
 
   useEffect(() => {
     calculatePredictions();
-  }, [cycleData.entries, cycleData.cycleLength, cycleData.periodLength]);
+  }, [calculatePredictions]);
 
   const loadCycleData = async () => {
     try {
@@ -110,7 +107,7 @@ const HealthTracker: React.FC = () => {
     }
   };
 
-  const calculatePredictions = () => {
+  const calculatePredictions = useCallback(() => {
     const entries = cycleData.entries;
     if (entries.length === 0) return;
 
@@ -140,7 +137,7 @@ const HealthTracker: React.FC = () => {
       ...prev,
       predictions: newPredictions
     }));
-  };
+  }, [cycleData.entries, cycleData.cycleLength]);
 
   const getEntryForDate = (date: Date): CycleEntry | undefined => {
     const dateStr = format(date, 'yyyy-MM-dd');

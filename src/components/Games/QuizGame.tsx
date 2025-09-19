@@ -33,7 +33,6 @@ interface QuizResult {
 }
 
 const QuizGame: React.FC = () => {
-  const { t } = useTranslation();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -173,7 +172,7 @@ const QuizGame: React.FC = () => {
   useEffect(() => {
     loadUserStats();
     setQuestions(sampleQuestions);
-  }, []);
+  }, [sampleQuestions]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

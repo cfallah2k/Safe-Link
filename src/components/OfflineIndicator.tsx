@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOffline } from '../hooks/useOffline';
-import { Wifi, WifiOff, AlertTriangle } from 'lucide-react';
+import { WifiOff, AlertTriangle } from 'lucide-react';
 
 const OfflineIndicator: React.FC = () => {
   const { isOnline, isSlowConnection, connectionType } = useOffline();

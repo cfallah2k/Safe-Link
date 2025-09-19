@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   Shield, 
@@ -10,7 +10,6 @@ import {
   Users,
   Clock,
   CheckCircle,
-  XCircle,
   Send,
   Navigation
 } from 'lucide-react';
@@ -34,7 +33,6 @@ interface EmergencyLog {
 }
 
 const EmergencyPanel: React.FC = () => {
-  const { t } = useTranslation();
   const [emergencyContacts, setEmergencyContacts] = useState<EmergencyContact[]>([]);
   const [emergencyLogs, setEmergencyLogs] = useState<EmergencyLog[]>([]);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -85,7 +83,7 @@ const EmergencyPanel: React.FC = () => {
   useEffect(() => {
     loadEmergencyData();
     getUserLocation();
-  }, []);
+  }, [loadEmergencyData]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -97,9 +95,9 @@ const EmergencyPanel: React.FC = () => {
       handlePanicActivated();
     }
     return () => clearInterval(interval);
-  }, [panicMode, countdown]);
+  }, [panicMode, countdown, handlePanicActivated]);
 
-  const loadEmergencyData = async () => {
+  const loadEmergencyData = useCallback(async () => {
     try {
       const [contacts, logs] = await Promise.all([
         offlineStorage.getData('emergency_contacts'),
@@ -112,7 +110,7 @@ const EmergencyPanel: React.FC = () => {
       console.error('Failed to load emergency data:', error);
       setEmergencyContacts(sampleContacts);
     }
-  };
+  }, []);
 
   const saveEmergencyData = async () => {
     try {
@@ -147,7 +145,7 @@ const EmergencyPanel: React.FC = () => {
     setShowLocationShare(true);
   };
 
-  const handlePanicActivated = () => {
+  const handlePanicActivated = useCallback(() => {
     // Log the emergency
     const log: EmergencyLog = {
       id: Date.now().toString(),
@@ -171,7 +169,7 @@ const EmergencyPanel: React.FC = () => {
     alert('Emergency alert sent! Help is on the way.');
     setPanicMode(false);
     setShowLocationShare(false);
-  };
+  }, [emergencyLogs, userLocation, emergencyMessage]);
 
   const handleCancelPanic = () => {
     setPanicMode(false);

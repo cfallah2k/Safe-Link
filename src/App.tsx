@@ -24,7 +24,6 @@ import { secretCodeManager } from './utils/secretCode';
 import { smsIntegration } from './utils/smsIntegration';
 
 function App() {
-  const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showCreateCode, setShowCreateCode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

@@ -17,7 +17,6 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
-  const { t } = useTranslation();
   const { isOnline } = useOffline();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
@@ -60,7 +59,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
       };
       setMessages([welcomeMessage]);
     }
-  }, []);
+  }, [messages.length, commonQuestions]);
 
   useEffect(() => {
     scrollToBottom();

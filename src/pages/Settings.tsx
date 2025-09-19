@@ -2,16 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   Settings as SettingsIcon, 
-  Globe, 
   Shield, 
-  Bell, 
   Database, 
   Info, 
   HelpCircle, 
   LogOut,
   Trash2,
   Download,
-  Upload,
   Eye,
   EyeOff
 } from 'lucide-react';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   MapPin, 
@@ -6,7 +6,6 @@ import {
   Clock, 
   Star, 
   Search, 
-  Filter, 
   Navigation,
   Heart,
   Shield,
@@ -30,7 +29,6 @@ interface Clinic {
 }
 
 const ClinicFinder: React.FC = () => {
-  const { t } = useTranslation();
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [filteredClinics, setFilteredClinics] = useState<Clinic[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -111,13 +109,13 @@ const ClinicFinder: React.FC = () => {
     // Load clinics from offline storage or use sample data
     loadClinics();
     getUserLocation();
-  }, []);
+  }, [loadClinics]);
 
   useEffect(() => {
     filterAndSortClinics();
-  }, [clinics, searchTerm, selectedType, sortBy]);
+  }, [filterAndSortClinics]);
 
-  const loadClinics = async () => {
+  const loadClinics = useCallback(async () => {
     try {
       const storedClinics = await offlineStorage.getData('clinics');
       if (storedClinics && storedClinics.length > 0) {
@@ -131,7 +129,7 @@ const ClinicFinder: React.FC = () => {
       console.error('Failed to load clinics:', error);
       setClinics(sampleClinics);
     }
-  };
+  }, []);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -154,7 +152,7 @@ const ClinicFinder: React.FC = () => {
     }
   };
 
-  const filterAndSortClinics = () => {
+  const filterAndSortClinics = useCallback(() => {
     let filtered = clinics;
 
     // Filter by search term
@@ -188,7 +186,7 @@ const ClinicFinder: React.FC = () => {
     });
 
     setFilteredClinics(filtered);
-  };
+  }, [clinics, searchTerm, selectedType, sortBy]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
