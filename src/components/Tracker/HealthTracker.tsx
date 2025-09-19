@@ -79,14 +79,6 @@ const HealthTracker: React.FC = () => {
     'Breast tenderness', 'Acne', 'Food cravings', 'Insomnia', 'Hot flashes'
   ];
 
-  useEffect(() => {
-    loadCycleData();
-  }, []);
-
-  useEffect(() => {
-    calculatePredictions();
-  }, [calculatePredictions]);
-
   const loadCycleData = async () => {
     try {
       const stored = await offlineStorage.getData('cycle_data');
@@ -143,6 +135,14 @@ const HealthTracker: React.FC = () => {
     const dateStr = format(date, 'yyyy-MM-dd');
     return cycleData.entries.find(entry => entry.date === dateStr);
   };
+
+  useEffect(() => {
+    loadCycleData();
+  }, []);
+
+  useEffect(() => {
+    calculatePredictions();
+  }, [calculatePredictions]);
 
   const getDateColor = (date: Date): string => {
     const entry = getEntryForDate(date);

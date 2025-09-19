@@ -121,10 +121,6 @@ const MentorshipSystem: React.FC = () => {
     }
   ];
 
-  useEffect(() => {
-    loadMentorshipData();
-  }, [loadMentorshipData]);
-
   const loadMentorshipData = useCallback(async () => {
     try {
       const [mentorsData, requestsData, messagesData] = await Promise.all([
@@ -153,6 +149,10 @@ const MentorshipSystem: React.FC = () => {
       console.error('Failed to save mentorship data:', error);
     }
   };
+
+  useEffect(() => {
+    loadMentorshipData();
+  }, [loadMentorshipData]);
 
   const handleRequestMentorship = () => {
     if (!selectedMentor || !requestForm.topic || !requestForm.message) return;
