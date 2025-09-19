@@ -84,25 +84,29 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 overflow-x-hidden">
         <OfflineIndicator />
         
-        <div className="flex">
+        {/* Mobile-first responsive layout */}
+        <div className="flex flex-col lg:flex-row">
           <Navigation />
           
-          <div className="flex-1 lg:ml-64">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/chatbot" element={<Chatbot />} />
-              <Route path="/clinics" element={<Clinics />} />
-              <Route path="/tracker" element={<Tracker />} />
-              <Route path="/games" element={<Games />} />
-              <Route path="/emergency" element={<Emergency />} />
-              <Route path="/mentorship" element={<Mentorship />} />
-              <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </div>
+          {/* Main content area with proper mobile spacing */}
+          <main className="flex-1 lg:ml-64 min-h-screen-safe">
+            <div className="w-full max-w-none">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/chatbot" element={<Chatbot />} />
+                <Route path="/clinics" element={<Clinics />} />
+                <Route path="/tracker" element={<Tracker />} />
+                <Route path="/games" element={<Games />} />
+                <Route path="/emergency" element={<Emergency />} />
+                <Route path="/mentorship" element={<Mentorship />} />
+                <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
+          </main>
         </div>
       </div>
     </Router>

@@ -75,63 +75,63 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header 
         title={t('home.welcome')} 
         subtitle="Your safe space for SRHR information and support"
       />
       
-      <main className="p-6">
+      <main className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
-          {/* Hero section */}
-          <div className="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-2xl p-8 text-white mb-8">
-            <div className="flex items-center space-x-4 mb-4">
-              <Heart className="w-8 h-8" />
-              <h2 className="text-2xl font-bold">SafeLink</h2>
+          {/* Hero section - Enhanced for mobile */}
+          <div className="bg-gradient-to-br from-primary-600 to-secondary-600 rounded-2xl p-6 sm:p-8 text-white mb-6 sm:mb-8 shadow-xl">
+            <div className="flex items-center space-x-3 sm:space-x-4 mb-4">
+              <Heart className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" />
+              <h2 className="text-xl sm:text-2xl font-bold">SafeLink</h2>
             </div>
-            <p className="text-lg opacity-90 mb-6">
+            <p className="text-base sm:text-lg opacity-90 mb-6 leading-relaxed">
               Your anonymous companion for sexual and reproductive health and rights. 
               Get accurate information, find services, and connect with support - all while maintaining complete privacy.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4">
               <div className="flex items-center space-x-2">
-                <Shield className="w-5 h-5" />
-                <span>100% Anonymous</span>
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-sm sm:text-base">100% Anonymous</span>
               </div>
               <div className="flex items-center space-x-2">
-                <BookOpen className="w-5 h-5" />
-                <span>Evidence-Based</span>
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-sm sm:text-base">Evidence-Based</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Phone className="w-5 h-5" />
-                <span>24/7 Available</span>
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-sm sm:text-base">24/7 Available</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Access */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          {/* Quick Access - Enhanced mobile grid */}
+          <div className="mb-6 sm:mb-8">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
               {t('home.quickAccess')}
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="mobile-grid">
               {quickAccessItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
                     key={item.path}
                     to={item.path}
-                    className="card hover:shadow-md transition-shadow duration-200 group"
+                    className="card hover:shadow-xl transition-all duration-300 group active:scale-98 touch-manipulation"
                   >
-                    <div className="flex items-start space-x-4">
-                      <div className={`p-3 rounded-lg ${item.color} group-hover:scale-110 transition-transform duration-200`}>
-                        <Icon className="w-6 h-6 text-white" />
+                    <div className="flex items-start space-x-3 sm:space-x-4">
+                      <div className={`p-3 sm:p-4 rounded-xl ${item.color} group-hover:scale-110 transition-transform duration-200 flex-shrink-0`}>
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                       </div>
-                      <div className="flex-1">
-                        <h4 className={`font-semibold ${item.textColor} mb-1`}>
+                      <div className="flex-1 min-w-0">
+                        <h4 className={`font-semibold ${item.textColor} mb-1 text-sm sm:text-base`}>
                           {item.title}
                         </h4>
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
                           {item.description}
                         </p>
                       </div>
@@ -142,50 +142,50 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Recent Activity */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          {/* Recent Activity - Enhanced mobile layout */}
+          <div className="mb-6 sm:mb-8">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
               {t('home.recentActivity')}
             </h3>
             <div className="card">
               {recentActivities.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-4 sm:space-y-6">
                   {recentActivities.map((activity, index) => {
                     const Icon = activity.icon;
                     return (
-                      <div key={index} className="flex items-center space-x-4">
-                        <div className="p-2 bg-gray-100 rounded-lg">
-                          <Icon className="w-5 h-5 text-gray-600" />
+                      <div key={index} className="flex items-center space-x-3 sm:space-x-4">
+                        <div className="p-2 sm:p-3 bg-gray-100 rounded-lg flex-shrink-0">
+                          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-gray-900 font-medium">{activity.text}</p>
-                          <p className="text-gray-500 text-sm">{activity.time}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-gray-900 font-medium text-sm sm:text-base truncate">{activity.text}</p>
+                          <p className="text-gray-500 text-xs sm:text-sm">{activity.time}</p>
                         </div>
                       </div>
                     );
                   })}
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">No recent activity</p>
-                  <p className="text-gray-400 text-sm">Start exploring SafeLink features</p>
+                <div className="text-center py-8 sm:py-12">
+                  <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 text-sm sm:text-base">No recent activity</p>
+                  <p className="text-gray-400 text-xs sm:text-sm">Start exploring SafeLink features</p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Privacy Notice */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <div className="flex items-start space-x-3">
-              <Shield className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold text-blue-900 mb-2">Your Privacy is Protected</h4>
-                <p className="text-blue-800 text-sm mb-3">
+          {/* Privacy Notice - Enhanced mobile layout */}
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6">
+            <div className="flex items-start space-x-3 sm:space-x-4">
+              <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mt-1 flex-shrink-0" />
+              <div className="min-w-0">
+                <h4 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">Your Privacy is Protected</h4>
+                <p className="text-blue-800 text-xs sm:text-sm mb-3 leading-relaxed">
                   SafeLink uses secret codes to ensure your complete anonymity. No personal information is required or stored. 
                   Your conversations, health data, and activities remain private and secure.
                 </p>
-                <ul className="text-blue-700 text-sm space-y-1">
+                <ul className="text-blue-700 text-xs sm:text-sm space-y-1">
                   <li>• No phone numbers or names required</li>
                   <li>• All data encrypted and stored locally</li>
                   <li>• Anonymous usage analytics only</li>

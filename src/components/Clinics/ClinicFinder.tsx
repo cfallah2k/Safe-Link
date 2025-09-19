@@ -232,132 +232,156 @@ const ClinicFinder: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="flex flex-col lg:flex-row gap-4">
-          {/* Search */}
-          <div className="flex-1">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6">
+      {/* Search and Filters - Enhanced for mobile */}
+      <div className="card mb-4 sm:mb-6">
+        <div className="space-y-4 sm:space-y-6">
+          {/* Search - Full width on mobile */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Search Location
+            </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               <input
                 type="text"
                 placeholder="Search clinics, services, or locations..."
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="input-field pl-10 text-sm sm:text-base"
               />
             </div>
           </div>
 
-          {/* Type Filter */}
-          <div className="lg:w-48">
-            <select
-              value={selectedType}
+          {/* Filters - Grid layout for mobile */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Type Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Service Type
+              </label>
+              <select
+                value={selectedType}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedType(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            >
-              <option value="all">All Types</option>
-              <option value="clinic">Clinics</option>
-              <option value="hospital">Hospitals</option>
-              <option value="counseling">Counseling</option>
-              <option value="emergency">Emergency</option>
-            </select>
-          </div>
+                className="input-field text-sm sm:text-base"
+              >
+                <option value="all">All Types</option>
+                <option value="clinic">Clinics</option>
+                <option value="hospital">Hospitals</option>
+                <option value="counseling">Counseling</option>
+                <option value="emergency">Emergency</option>
+              </select>
+            </div>
 
-          {/* Sort */}
-          <div className="lg:w-48">
-            <select
-              value={sortBy}
+            {/* Sort */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Sort By
+              </label>
+              <select
+                value={sortBy}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value as 'distance' | 'rating' | 'name')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            >
-              <option value="distance">Sort by Distance</option>
-              <option value="rating">Sort by Rating</option>
-              <option value="name">Sort by Name</option>
-            </select>
+                className="input-field text-sm sm:text-base"
+              >
+                <option value="distance">Distance</option>
+                <option value="rating">Rating</option>
+                <option value="name">Name</option>
+              </select>
+            </div>
+
+            {/* Location Button */}
+            <div className="sm:col-span-2 lg:col-span-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Location
+              </label>
+              <button
+                onClick={getUserLocation}
+                disabled={isLoadingLocation}
+                className="w-full btn-outline text-sm sm:text-base flex items-center justify-center space-x-2"
+              >
+                <Navigation size={16} />
+                <span>{isLoadingLocation ? 'Getting...' : 'My Location'}</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Results */}
-      <div className="space-y-4">
+      {/* Results - Enhanced mobile layout */}
+      <div className="space-y-4 sm:space-y-6">
         {filteredClinics.length > 0 ? (
           filteredClinics.map((clinic: Clinic) => {
             const TypeIcon = getTypeIcon(clinic.type);
             return (
-              <div key={clinic.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="flex flex-col lg:flex-row lg:items-start gap-4">
-                  {/* Clinic Info */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-lg ${getTypeColor(clinic.type)}`}>
-                          <TypeIcon size={20} />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900">{clinic.name}</h3>
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <div className="flex items-center space-x-1">
-                              <MapPin size={14} />
-                              <span>{clinic.distance} km away</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Star size={14} className="text-yellow-500" />
-                              <span>{clinic.rating}</span>
-                            </div>
-                            <div className={`flex items-center space-x-1 ${clinic.isOpen ? 'text-green-600' : 'text-red-600'}`}>
-                              <Clock size={14} />
-                              <span>{clinic.isOpen ? 'Open' : 'Closed'}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+              <div key={clinic.id} className="card">
+                <div className="space-y-4 sm:space-y-6">
+                  {/* Clinic Header - Enhanced for mobile */}
+                  <div className="flex items-start space-x-3 sm:space-x-4">
+                    <div className={`p-3 sm:p-4 rounded-xl ${getTypeColor(clinic.type)} flex-shrink-0`}>
+                      <TypeIcon size={20} className="sm:w-6 sm:h-6" />
                     </div>
-
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <MapPin size={16} />
-                        <span>{clinic.address}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <Phone size={16} />
-                        <span>{clinic.phone}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <Clock size={16} />
-                        <span>{clinic.hours}</span>
-                      </div>
-                    </div>
-
-                    {/* Services */}
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Services Offered:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {clinic.services.map((service: string, index: number) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-primary-50 text-primary-700 text-xs rounded-full"
-                          >
-                            {service}
-                          </span>
-                        ))}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 truncate">{clinic.name}</h3>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-xs sm:text-sm text-gray-500">
+                        <div className="flex items-center space-x-1">
+                          <MapPin size={14} />
+                          <span>{clinic.distance} km away</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Star size={14} className="text-yellow-500" />
+                          <span>{clinic.rating}</span>
+                        </div>
+                        <div className={`flex items-center space-x-1 ${clinic.isOpen ? 'text-green-600' : 'text-red-600'}`}>
+                          <Clock size={14} />
+                          <span>{clinic.isOpen ? 'Open' : 'Closed'}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex flex-col space-y-2 lg:w-48">
+                  {/* Clinic Details - Enhanced mobile layout */}
+                  <div className="space-y-3 sm:space-y-4">
+                    <div className="flex items-start space-x-2 sm:space-x-3 text-gray-600">
+                      <MapPin size={16} className="flex-shrink-0 mt-0.5" />
+                      <span className="text-sm sm:text-base leading-relaxed">{clinic.address}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 sm:space-x-3 text-gray-600">
+                      <Phone size={16} className="flex-shrink-0" />
+                      <span className="text-sm sm:text-base">{clinic.phone}</span>
+                    </div>
+                    <div className="flex items-start space-x-2 sm:space-x-3 text-gray-600">
+                      <Clock size={16} className="flex-shrink-0 mt-0.5" />
+                      <span className="text-sm sm:text-base leading-relaxed">{clinic.hours}</span>
+                    </div>
+                  </div>
+
+                  {/* Services - Enhanced mobile layout */}
+                  <div>
+                    <h4 className="text-sm sm:text-base font-medium text-gray-900 mb-2 sm:mb-3">Services Offered:</h4>
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      {clinic.services.map((service: string, index: number) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 sm:px-4 sm:py-2 bg-primary-50 text-primary-700 text-xs sm:text-sm rounded-full border border-primary-200"
+                        >
+                          {service}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions - Enhanced mobile buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                     <button
                       onClick={() => handleCall(clinic.phone)}
-                      className="w-full btn-primary flex items-center justify-center space-x-2"
+                      className="flex-1 btn-primary flex items-center justify-center space-x-2 text-sm sm:text-base"
                     >
                       <Phone size={16} />
-                      <span>Call</span>
+                      <span>Call Now</span>
                     </button>
                     <button
                       onClick={() => handleDirections(clinic.coordinates)}
-                      className="w-full btn-outline flex items-center justify-center space-x-2"
+                      className="flex-1 btn-outline flex items-center justify-center space-x-2 text-sm sm:text-base"
                     >
                       <Navigation size={16} />
                       <span>Directions</span>
@@ -368,35 +392,37 @@ const ClinicFinder: React.FC = () => {
             );
           })
         ) : (
-          <div className="text-center py-12">
-            <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No clinics found</h3>
-            <p className="text-gray-500">Try adjusting your search or filters</p>
+          <div className="text-center py-12 sm:py-16">
+            <MapPin className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-2">No clinics found</h3>
+            <p className="text-sm sm:text-base text-gray-500">Try adjusting your search or filters</p>
           </div>
         )}
       </div>
 
-      {/* Emergency Notice */}
-      <div className="mt-8 bg-red-50 border border-red-200 rounded-lg p-6">
-        <div className="flex items-start space-x-3">
-          <Shield className="w-6 h-6 text-red-600 mt-1 flex-shrink-0" />
-          <div>
-            <h4 className="font-semibold text-red-900 mb-2">Emergency Services</h4>
-            <p className="text-red-800 text-sm mb-3">
+      {/* Emergency Notice - Enhanced for mobile */}
+      <div className="mt-6 sm:mt-8 bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6">
+        <div className="flex items-start space-x-3 sm:space-x-4">
+          <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 mt-1 flex-shrink-0" />
+          <div className="min-w-0">
+            <h4 className="font-semibold text-red-900 mb-2 text-sm sm:text-base">Emergency Services</h4>
+            <p className="text-red-800 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
               If you're experiencing a medical emergency or need immediate help, call the emergency hotline or visit the nearest hospital.
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <button
                 onClick={() => handleCall('+231-555-9999')}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="btn-primary bg-red-600 hover:bg-red-700 active:bg-red-800 text-sm sm:text-base flex items-center justify-center space-x-2"
               >
-                Emergency Hotline
+                <Phone size={16} />
+                <span>Emergency Hotline</span>
               </button>
               <button
                 onClick={() => handleCall('+231-555-0104')}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="btn-outline border-red-600 text-red-600 hover:bg-red-600 hover:text-white text-sm sm:text-base flex items-center justify-center space-x-2"
               >
-                GBV Support
+                <Shield size={16} />
+                <span>GBV Support</span>
               </button>
             </div>
           </div>

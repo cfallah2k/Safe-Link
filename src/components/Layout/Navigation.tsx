@@ -40,44 +40,53 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      {/* Mobile menu button */}
+      {/* Mobile menu button - Enhanced for better touch targets */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-white rounded-lg shadow-md touch-manipulation"
-        style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}
+        className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-white rounded-xl shadow-lg border border-gray-200 touch-manipulation active:scale-95 transition-transform"
+        style={{ 
+          paddingTop: 'max(12px, env(safe-area-inset-top))',
+          minHeight: '48px',
+          minWidth: '48px'
+        }}
+        aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
       >
         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay with better touch handling */}
       {isMobileMenuOpen && (
         <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 backdrop-blur-sm"
           onClick={() => setIsMobileMenuOpen(false)}
+          style={{ paddingTop: 'env(safe-area-inset-top)' }}
         />
       )}
 
-      {/* Navigation */}
+      {/* Navigation - Enhanced mobile experience */}
       <nav className={`
-        fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out
-        lg:translate-x-0 lg:static lg:shadow-none
+        fixed left-0 top-0 h-full w-72 sm:w-80 bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out
+        lg:translate-x-0 lg:static lg:shadow-none lg:w-64
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}
-      style={{ paddingTop: 'max(60px, env(safe-area-inset-top))' }}>
-        <div className="p-6">
-          {/* Logo */}
-          <div className="flex items-center space-x-3 mb-8">
-            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-              <Shield className="w-6 h-6 text-white" />
+      style={{ 
+        paddingTop: 'max(60px, env(safe-area-inset-top))',
+        paddingBottom: 'env(safe-area-inset-bottom)'
+      }}>
+        <div className="p-4 sm:p-6 h-full flex flex-col">
+          {/* Logo - Enhanced for mobile */}
+          <div className="flex items-center space-x-3 mb-6 sm:mb-8">
+            <div className="w-12 h-12 sm:w-10 sm:h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Shield className="w-7 h-7 sm:w-6 sm:h-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">{t('app.name')}</h1>
-              <p className="text-xs text-gray-500">{t('app.tagline')}</p>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900 truncate">{t('app.name')}</h1>
+              <p className="text-xs text-gray-500 truncate">{t('app.tagline')}</p>
             </div>
           </div>
 
-          {/* Navigation items */}
-          <div className="space-y-2">
+          {/* Navigation items - Enhanced spacing and touch targets */}
+          <div className="space-y-1 flex-1 overflow-y-auto">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.path);
@@ -88,30 +97,31 @@ const Navigation: React.FC = () => {
                   to={item.path}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`
-                    flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation
+                    flex items-center space-x-3 px-4 py-4 rounded-xl transition-all duration-200 touch-manipulation
+                    active:scale-98 lg:active:scale-100
                     ${active 
-                      ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600' 
+                      ? 'bg-primary-50 text-primary-700 border-r-4 border-primary-600 shadow-sm' 
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 active:bg-gray-100'
                     }
                   `}
-                  style={{ minHeight: '44px' }}
+                  style={{ minHeight: '52px' }}
                 >
-                  <Icon size={20} />
-                  <span className="font-medium">{item.label}</span>
+                  <Icon size={22} className="flex-shrink-0" />
+                  <span className="font-medium text-sm sm:text-base truncate">{item.label}</span>
                 </Link>
               );
             })}
           </div>
 
-          {/* Privacy indicator */}
-          <div className="mt-8 p-4 bg-green-50 rounded-lg">
+          {/* Privacy indicator - Enhanced for mobile */}
+          <div className="mt-4 sm:mt-8 p-3 sm:p-4 bg-green-50 rounded-xl border border-green-200">
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
               <span className="text-sm font-medium text-green-700">
                 {t('common.anonymous')}
               </span>
             </div>
-            <p className="text-xs text-green-600 mt-1">
+            <p className="text-xs text-green-600 mt-1 leading-relaxed">
               Your data is protected and anonymous
             </p>
           </div>

@@ -176,52 +176,52 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3">
+    <div className="flex flex-col h-screen-safe bg-gray-50 overflow-hidden">
+      {/* Header - Enhanced for mobile */}
+      <div className="bg-white border-b border-gray-200 px-4 py-3 sm:px-6 flex-shrink-0" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <Bot className="w-6 h-6 text-primary-600" />
+          <div className="flex items-center space-x-3 min-w-0 flex-1">
+            <div className="p-2 sm:p-3 bg-primary-100 rounded-xl flex-shrink-0">
+              <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
             </div>
-            <div>
-              <h1 className="text-lg font-semibold text-gray-900">SRHR Assistant</h1>
-              <p className="text-sm text-gray-500">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">SRHR Assistant</h1>
+              <p className="text-xs sm:text-sm text-gray-500 truncate">
                 {isOnline ? 'Online' : 'Offline'} • Anonymous
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <Shield className="w-5 h-5 text-green-600" />
-            <span className="text-sm text-green-600 font-medium">Secure</span>
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+            <span className="text-xs sm:text-sm text-green-600 font-medium hidden sm:inline">Secure</span>
           </div>
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Messages - Enhanced mobile scrolling */}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 smooth-scroll">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`flex space-x-2 max-w-xs lg:max-w-md ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
-              <div className={`p-2 rounded-full ${message.isUser ? 'bg-primary-600' : 'bg-gray-200'}`}>
+            <div className={`flex space-x-2 sm:space-x-3 max-w-[85%] sm:max-w-xs lg:max-w-md ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
+              <div className={`p-2 sm:p-3 rounded-full flex-shrink-0 ${message.isUser ? 'bg-primary-600' : 'bg-gray-200'}`}>
                 {message.isUser ? (
-                  <User className="w-4 h-4 text-white" />
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 ) : (
-                  <Bot className="w-4 h-4 text-gray-600" />
+                  <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 )}
               </div>
-              <div className={`rounded-lg px-4 py-2 ${message.isUser ? 'bg-primary-600 text-white' : 'bg-white text-gray-900 shadow-sm'}`}>
-                <p className="text-sm">{message.text}</p>
+              <div className={`rounded-xl px-3 py-2 sm:px-4 sm:py-3 ${message.isUser ? 'bg-primary-600 text-white' : 'bg-white text-gray-900 shadow-sm border border-gray-100'}`}>
+                <p className="text-sm sm:text-base leading-relaxed break-words">{message.text}</p>
                 {message.suggestions && (
-                  <div className="mt-2 space-y-1">
+                  <div className="mt-2 sm:mt-3 space-y-1 sm:space-y-2">
                     {message.suggestions.map((suggestion, index) => (
                       <button
                         key={index}
                         onClick={() => handleSuggestionClick(suggestion)}
-                        className="block w-full text-left text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 transition-colors"
+                        className="block w-full text-left text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-lg text-gray-700 transition-colors touch-manipulation"
                       >
                         {suggestion}
                       </button>
@@ -235,14 +235,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
         
         {isLoading && (
           <div className="flex justify-start">
-            <div className="flex space-x-2">
-              <div className="p-2 rounded-full bg-gray-200">
-                <Bot className="w-4 h-4 text-gray-600" />
+            <div className="flex space-x-2 sm:space-x-3">
+              <div className="p-2 sm:p-3 rounded-full bg-gray-200 flex-shrink-0">
+                <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
               </div>
-              <div className="bg-white rounded-lg px-4 py-2 shadow-sm">
+              <div className="bg-white rounded-xl px-3 py-2 sm:px-4 sm:py-3 shadow-sm border border-gray-100">
                 <div className="flex items-center space-x-2">
                   <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
-                  <span className="text-sm text-gray-500">Thinking...</span>
+                  <span className="text-xs sm:text-sm text-gray-500">Thinking...</span>
                 </div>
               </div>
             </div>
@@ -252,9 +252,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="bg-white border-t border-gray-200 p-4">
-        <div className="flex space-x-2">
+      {/* Input - Enhanced mobile input */}
+      <div className="bg-white border-t border-gray-200 p-3 sm:p-4 flex-shrink-0" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+        <div className="flex space-x-2 sm:space-x-3">
           <input
             ref={inputRef}
             type="text"
@@ -262,27 +262,27 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask about sexual and reproductive health..."
-            className="flex-1 input-field"
+            className="flex-1 input-field text-sm sm:text-base"
             disabled={isLoading}
           />
           <button
             onClick={handleSendMessage}
             disabled={!inputText.trim() || isLoading}
-            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed p-3 sm:p-4"
           >
-            <Send size={20} />
+            <Send size={18} className="sm:w-5 sm:h-5" />
           </button>
         </div>
         
-        {/* Common questions */}
-        <div className="mt-3">
-          <p className="text-xs text-gray-500 mb-2">Quick questions:</p>
-          <div className="flex flex-wrap gap-2">
+        {/* Common questions - Enhanced mobile layout */}
+        <div className="mt-3 sm:mt-4">
+          <p className="text-xs text-gray-500 mb-2 sm:mb-3">Quick questions:</p>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {commonQuestions.slice(0, 3).map((question, index) => (
               <button
                 key={index}
                 onClick={() => handleSuggestionClick(question)}
-                className="text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-700 transition-colors"
+                className="text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-full text-gray-700 transition-colors touch-manipulation"
               >
                 {question}
               </button>
