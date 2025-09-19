@@ -128,10 +128,7 @@ const Navigation: React.FC = () => {
                   {/* Bottom row - Notifications and Language */}
                   <div className="flex items-center justify-between">
                     {/* Notifications */}
-                    <div className="flex items-center space-x-2">
-                      <Bell className="w-4 h-4 text-gray-500" />
-                      <NotificationSystem />
-                    </div>
+                    <NotificationSystem />
 
                     {/* Language selector */}
                     <div className="flex items-center space-x-2">
