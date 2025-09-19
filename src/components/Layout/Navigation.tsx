@@ -16,10 +16,13 @@ import {
   WifiOff,
   Play,
   Download,
-  FileText
+  FileText,
+  Globe,
+  Bell
 } from 'lucide-react';
 import { useState } from 'react';
 import { useOffline } from '../../hooks/useOffline';
+import NotificationSystem from '../UI/NotificationSystem';
 
 const Navigation: React.FC = () => {
   const { t } = useTranslation();
@@ -95,31 +98,55 @@ const Navigation: React.FC = () => {
                 </div>
           </div>
 
-          {/* Mobile Status Section - Only visible on mobile */}
-          <div className="lg:hidden mb-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                {/* Online/Offline indicator */}
-                <div className="flex items-center space-x-2">
-                  {isOnline ? (
-                    <Wifi className="w-5 h-5 text-green-500" />
-                  ) : (
-                    <WifiOff className="w-5 h-5 text-red-500" />
-                  )}
-                  <span className={`text-sm font-medium ${isOnline ? 'text-green-600' : 'text-red-600'}`}>
-                    {isOnline ? 'Online' : 'Offline'}
-                  </span>
+              {/* Mobile Status Section - Only visible on mobile */}
+              <div className="lg:hidden mb-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                <div className="space-y-3">
+                  {/* Top row - Status indicators */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      {/* Online/Offline indicator */}
+                      <div className="flex items-center space-x-2">
+                        {isOnline ? (
+                          <Wifi className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <WifiOff className="w-5 h-5 text-red-500" />
+                        )}
+                        <span className={`text-sm font-medium ${isOnline ? 'text-green-600' : 'text-red-600'}`}>
+                          {isOnline ? 'Online' : 'Offline'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Shield className="w-5 h-5 text-green-600" />
+                      <span className="text-sm font-medium text-green-700">
+                        {t('common.anonymous')}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Bottom row - Notifications and Language */}
+                  <div className="flex items-center justify-between">
+                    {/* Notifications */}
+                    <div className="flex items-center space-x-2">
+                      <Bell className="w-4 h-4 text-gray-500" />
+                      <NotificationSystem />
+                    </div>
+
+                    {/* Language selector */}
+                    <div className="flex items-center space-x-2">
+                      <Globe className="w-4 h-4 text-gray-500" />
+                      <select className="text-sm border-0 bg-transparent text-gray-600 focus:outline-none">
+                        <option value="en">English</option>
+                        <option value="kpelle">Kpelle</option>
+                        <option value="bassa">Bassa</option>
+                        <option value="kru">Kru</option>
+                        <option value="vai">Vai</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-medium text-green-700">
-                  {t('common.anonymous')}
-                </span>
-              </div>
-            </div>
-          </div>
 
           {/* Navigation items - Enhanced spacing and touch targets */}
           <div className="space-y-1 flex-1 overflow-y-auto">
