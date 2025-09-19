@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   Shield, 
   Phone, 
@@ -41,7 +41,7 @@ const EmergencyPanel: React.FC = () => {
   const [showLocationShare, setShowLocationShare] = useState(false);
 
   // Sample emergency contacts
-  const sampleContacts: EmergencyContact[] = [
+  const sampleContacts: EmergencyContact[] = useMemo(() => [
     {
       id: '1',
       name: 'Emergency Services',
@@ -77,7 +77,7 @@ const EmergencyPanel: React.FC = () => {
       type: 'hotline',
       available: true
     }
-  ];
+  ], []);
 
   const loadEmergencyData = useCallback(async () => {
     try {
@@ -94,7 +94,7 @@ const EmergencyPanel: React.FC = () => {
     }
   }, [sampleContacts]);
 
-  const saveEmergencyData = async () => {
+  const saveEmergencyData = useCallback(async () => {
     try {
       await Promise.all([
         offlineStorage.storeData('emergency_contacts', emergencyContacts),
@@ -103,7 +103,7 @@ const EmergencyPanel: React.FC = () => {
     } catch (error) {
       console.error('Failed to save emergency data:', error);
     }
-  };
+  }, [emergencyContacts, emergencyLogs]);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {

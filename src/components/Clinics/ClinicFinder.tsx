@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   MapPin, 
   Phone, 
@@ -36,7 +36,7 @@ const ClinicFinder: React.FC = () => {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   // Sample clinic data (in a real app, this would come from an API)
-  const sampleClinics: Clinic[] = [
+  const sampleClinics: Clinic[] = useMemo(() => [
     {
       id: '1',
       name: 'Monrovia Health Center',
@@ -102,7 +102,7 @@ const ClinicFinder: React.FC = () => {
       type: 'clinic',
       isOpen: false
     }
-  ];
+  ], []);
 
   const loadClinics = useCallback(async () => {
     try {

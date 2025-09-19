@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   Users, 
   MessageCircle, 
@@ -61,7 +61,7 @@ const MentorshipSystem: React.FC = () => {
   });
 
   // Sample mentors data
-  const sampleMentors: Mentor[] = [
+  const sampleMentors: Mentor[] = useMemo(() => [
     {
       id: '1',
       name: 'Sarah Johnson',
@@ -118,7 +118,7 @@ const MentorshipSystem: React.FC = () => {
       isOnline: false,
       responseTime: 'Usually responds within 6 hours'
     }
-  ];
+  ], []);
 
   const loadMentorshipData = useCallback(async () => {
     try {
