@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { 
   Users, 
   MessageCircle, 
@@ -136,7 +135,7 @@ const MentorshipSystem: React.FC = () => {
       console.error('Failed to load mentorship data:', error);
       setMentors(sampleMentors);
     }
-  }, []);
+  }, [sampleMentors]);
 
   const saveMentorshipData = async () => {
     try {

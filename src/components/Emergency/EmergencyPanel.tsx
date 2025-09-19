@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { 
   Shield, 
   Phone, 
@@ -93,7 +92,7 @@ const EmergencyPanel: React.FC = () => {
       console.error('Failed to load emergency data:', error);
       setEmergencyContacts(sampleContacts);
     }
-  }, []);
+  }, [sampleContacts]);
 
   const saveEmergencyData = async () => {
     try {
@@ -152,7 +151,7 @@ const EmergencyPanel: React.FC = () => {
     alert('Emergency alert sent! Help is on the way.');
     setPanicMode(false);
     setShowLocationShare(false);
-  }, [emergencyLogs, userLocation, emergencyMessage]);
+  }, [emergencyLogs, userLocation, emergencyMessage, saveEmergencyData]);
 
   const handleCancelPanic = () => {
     setPanicMode(false);

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   CheckCircle, 
   XCircle, 
@@ -45,7 +44,7 @@ const QuizGame: React.FC = () => {
   const [userStats, setUserStats] = useState<QuizResult[]>([]);
 
   // Sample SRHR questions
-  const sampleQuestions: Question[] = [
+  const sampleQuestions: Question[] = useMemo(() => [
     {
       id: '1',
       question: 'What is the most effective way to prevent sexually transmitted infections (STIs)?',
@@ -158,7 +157,7 @@ const QuizGame: React.FC = () => {
       category: 'STI Prevention',
       difficulty: 'easy'
     }
-  ];
+  ], []);
 
   const categories = [
     { value: 'all', label: 'All Topics' },

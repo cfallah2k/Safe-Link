@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Send, Bot, User, Shield, Loader2 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 import { useOffline } from '../../hooks/useOffline';
@@ -25,14 +24,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Common questions for quick access
-  const commonQuestions = [
+  const commonQuestions = useMemo(() => [
     "What is contraception?",
     "How do I know if I have an STI?",
     "What are my reproductive rights?",
     "How can I stay safe during sex?",
     "What should I do if I'm pregnant?",
     "How do I talk to my partner about protection?"
-  ];
+  ], []);
 
   // Offline responses for common questions
   const offlineResponses: { [key: string]: string } = {

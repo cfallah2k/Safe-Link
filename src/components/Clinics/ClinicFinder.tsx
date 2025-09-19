@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { 
   MapPin, 
   Phone, 
@@ -119,7 +118,7 @@ const ClinicFinder: React.FC = () => {
       console.error('Failed to load clinics:', error);
       setClinics(sampleClinics);
     }
-  }, []);
+  }, [sampleClinics]);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
