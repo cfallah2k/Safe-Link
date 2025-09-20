@@ -563,6 +563,7 @@ const HealthTracker: React.FC = () => {
             </div>
           </div>
         </div>
+        </div>
       )}
 
       {/* Education Tab */}
