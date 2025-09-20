@@ -189,7 +189,7 @@ const EmergencyPanel: React.FC = () => {
       timestamp: Date.now(),
       type: 'panic_button',
       action: 'Panic button activated',
-      location: userLocation || undefined,
+      location: userLocation ? { lat: userLocation.latitude, lng: userLocation.longitude } : undefined,
       notes: emergencyMessage
     };
 
