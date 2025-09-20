@@ -189,8 +189,6 @@ const DesktopHeader: React.FC = () => {
           <div className="flex items-center space-x-4">
             {/* Notifications */}
             <NotificationSystem />
-
-            </div>
           </div>
         </div>
       </div>
