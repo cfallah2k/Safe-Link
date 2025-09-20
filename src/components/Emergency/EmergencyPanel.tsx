@@ -240,7 +240,7 @@ const EmergencyPanel: React.FC = () => {
       timestamp: Date.now(),
       type: 'message',
       action: 'Emergency message sent',
-      location: userLocation || undefined,
+      location: userLocation ? { lat: userLocation.latitude, lng: userLocation.longitude } : undefined,
       notes: emergencyMessage
     };
 
