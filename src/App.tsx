@@ -14,7 +14,6 @@ import SafeSpaceLocator from './components/SafeSpace/SafeSpaceLocator';
 import ConsentEducationGame from './components/Games/ConsentEducationGame';
 import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
 import KioskInterface from './components/Kiosk/KioskInterface';
-import AccessibilityButton from './components/Accessibility/AccessibilityButton';
 import AccessibilityDashboard from './components/Accessibility/AccessibilityDashboard';
 
 // Contexts
@@ -33,6 +32,7 @@ import Emergency from './pages/Emergency';
 import Mentorship from './pages/Mentorship';
 import OfflineMode from './pages/OfflineMode';
 import Settings from './pages/Settings';
+import Notifications from './pages/Notifications';
 
 // Utils
 import { secretCodeManager } from './utils/secretCode';
@@ -130,6 +130,7 @@ function App() {
                   <Route path="/mentorship" element={<Mentorship />} />
                   <Route path="/offline" element={<OfflineMode />} />
                   <Route path="/accessibility" element={<AccessibilityDashboard />} />
+                  <Route path="/notifications" element={<Notifications />} />
                   <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
@@ -137,8 +138,6 @@ function App() {
             </main>
           </div>
           
-          {/* Accessibility Button */}
-          <AccessibilityButton />
         </div>
       </Router>
     </AccessibilityProvider>

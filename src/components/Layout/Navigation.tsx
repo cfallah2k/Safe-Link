@@ -23,7 +23,8 @@ import {
   Heart,
   BookOpen,
   Lock,
-  Monitor
+  Monitor,
+  Accessibility
 } from 'lucide-react';
 import { useState } from 'react';
 import { useOffline } from '../../hooks/useOffline';
@@ -53,6 +54,8 @@ const Navigation: React.FC = () => {
     { path: '/emergency', icon: Shield, label: t('navigation.emergency') },
     { path: '/mentorship', icon: Users, label: t('navigation.mentorship') },
     { path: '/offline', icon: Download, label: 'Offline Mode' },
+    { path: '/accessibility', icon: Accessibility, label: 'Accessibility Settings' },
+    { path: '/notifications', icon: Bell, label: 'Notifications' },
     { path: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 
