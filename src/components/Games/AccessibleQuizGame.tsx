@@ -105,7 +105,7 @@ const AccessibleQuizGame: React.FC = () => {
     { value: 'Vaccination', label: 'Vaccination' }
   ];
 
-  const readCurrentQuestion = () => {
+  const readCurrentQuestion = useCallback(() => {
     if (questions[currentQuestionIndex]) {
       const question = questions[currentQuestionIndex];
       let text = `Question ${currentQuestionIndex + 1}: ${question.question}`;
@@ -114,13 +114,13 @@ const AccessibleQuizGame: React.FC = () => {
       });
       voiceCommandService.speak(text);
     }
-  };
+  }, [questions, currentQuestionIndex]);
 
-  const readExplanation = () => {
+  const readExplanation = useCallback(() => {
     if (questions[currentQuestionIndex] && showResult) {
       voiceCommandService.speak(questions[currentQuestionIndex].explanation);
     }
-  };
+  }, [questions, currentQuestionIndex, showResult]);
 
   const startQuiz = () => {
     setQuizStarted(true);
@@ -132,7 +132,7 @@ const AccessibleQuizGame: React.FC = () => {
     setTimeSpent(0);
   };
 
-  const handleSubmitAnswer = () => {
+  const handleSubmitAnswer = useCallback(() => {
     if (selectedAnswer === null) return;
     
     const currentQuestion = questions[currentQuestionIndex];
@@ -143,9 +143,9 @@ const AccessibleQuizGame: React.FC = () => {
     }
     
     setShowResult(true);
-  };
+  }, [selectedAnswer, questions, currentQuestionIndex]);
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
@@ -162,7 +162,7 @@ const AccessibleQuizGame: React.FC = () => {
       };
       saveUserStats(result);
     }
-  };
+  }, [currentQuestionIndex, questions.length, score, timeSpent, selectedCategory]);
 
   const handleVoiceCommand = useCallback((command: any) => {
     switch (command.action) {
