@@ -2616,6 +2616,7 @@ const QuizGame: React.FC = () => {
     );
   }
 
+  // Active quiz state
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
