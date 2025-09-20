@@ -105,46 +105,66 @@ const AccessibleQuizGame: React.FC = () => {
     { value: 'Vaccination', label: 'Vaccination' }
   ];
 
-  useEffect(() => {
-    setQuestions(sampleQuestions);
-    loadUserStats();
-  }, [sampleQuestions]);
-
-  useEffect(() => {
-    if (quizStarted && !quizCompleted) {
-      const interval = setInterval(() => {
-        setTimeSpent(prev => prev + 1);
-      }, 1000);
-      return () => clearInterval(interval);
+  const readCurrentQuestion = () => {
+    if (questions[currentQuestionIndex]) {
+      const question = questions[currentQuestionIndex];
+      let text = `Question ${currentQuestionIndex + 1}: ${question.question}`;
+      question.options.forEach((option, index) => {
+        text += ` Option ${String.fromCharCode(65 + index)}: ${option}`;
+      });
+      voiceCommandService.speak(text);
     }
-  }, [quizStarted, quizCompleted]);
+  };
 
-  // Voice command integration
-  useEffect(() => {
-    if (settings.voiceCommands) {
-      voiceCommandService.onCommand((command) => {
-        handleVoiceCommand(command);
-      });
-      
-      voiceCommandService.onError((error) => {
-        console.error('Voice command error:', error);
-      });
+  const readExplanation = () => {
+    if (questions[currentQuestionIndex] && showResult) {
+      voiceCommandService.speak(questions[currentQuestionIndex].explanation);
     }
-  }, [settings.voiceCommands, handleVoiceCommand]);
+  };
 
-  // Keyboard navigation integration
-  useEffect(() => {
-    if (settings.keyboardNavigation) {
-      keyboardNavigationService.enable();
-      keyboardNavigationService.onAction((action) => {
-        handleKeyboardAction(action);
-      });
+  const startQuiz = () => {
+    setQuizStarted(true);
+    setQuizCompleted(false);
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setTimeSpent(0);
+  };
+
+  const handleSubmitAnswer = () => {
+    if (selectedAnswer === null) return;
+    
+    const currentQuestion = questions[currentQuestionIndex];
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+    
+    if (isCorrect) {
+      setScore(prev => prev + 1);
+    }
+    
+    setShowResult(true);
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+      setSelectedAnswer(null);
+      setShowResult(false);
     } else {
-      keyboardNavigationService.disable();
+      setQuizCompleted(true);
+      const result: QuizResult = {
+        id: Date.now().toString(),
+        score,
+        totalQuestions: questions.length,
+        timeSpent,
+        date: new Date().toISOString(),
+        category: selectedCategory
+      };
+      saveUserStats(result);
     }
-  }, [settings.keyboardNavigation, handleKeyboardAction]);
+  };
 
-  const handleVoiceCommand = useCallback((command: any) => {
+  const handleVoiceCommand = (command: any) => {
     switch (command.action) {
       case 'quiz':
         if (!quizStarted) {
@@ -182,9 +202,9 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  }, [quizStarted, selectedAnswer, showResult]);
+  };
 
-  const handleKeyboardAction = useCallback((action: string) => {
+  const handleKeyboardAction = (action: string) => {
     switch (action) {
       case 'select-option-a':
         setSelectedAnswer(0);
@@ -209,24 +229,46 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  }, [selectedAnswer, showResult]);
+  };
 
-  const readCurrentQuestion = () => {
-    if (questions[currentQuestionIndex]) {
-      const question = questions[currentQuestionIndex];
-      let text = `Question ${currentQuestionIndex + 1}: ${question.question}`;
-      question.options.forEach((option, index) => {
-        text += ` Option ${String.fromCharCode(65 + index)}: ${option}`;
+  useEffect(() => {
+    setQuestions(sampleQuestions);
+    loadUserStats();
+  }, [sampleQuestions]);
+
+  useEffect(() => {
+    if (quizStarted && !quizCompleted) {
+      const interval = setInterval(() => {
+        setTimeSpent(prev => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [quizStarted, quizCompleted]);
+
+  // Voice command integration
+  useEffect(() => {
+    if (settings.voiceCommands) {
+      voiceCommandService.onCommand((command) => {
+        handleVoiceCommand(command);
       });
-      voiceCommandService.speak(text);
+      
+      voiceCommandService.onError((error) => {
+        console.error('Voice command error:', error);
+      });
     }
-  };
+  }, [settings.voiceCommands]);
 
-  const readExplanation = () => {
-    if (questions[currentQuestionIndex] && showResult) {
-      voiceCommandService.speak(questions[currentQuestionIndex].explanation);
+  // Keyboard navigation integration
+  useEffect(() => {
+    if (settings.keyboardNavigation) {
+      keyboardNavigationService.enable();
+      keyboardNavigationService.onAction((action) => {
+        handleKeyboardAction(action);
+      });
+    } else {
+      keyboardNavigationService.disable();
     }
-  };
+  }, [settings.keyboardNavigation]);
 
   const loadUserStats = async () => {
     try {
@@ -249,21 +291,6 @@ const AccessibleQuizGame: React.FC = () => {
     }
   };
 
-  const startQuiz = () => {
-    setQuizStarted(true);
-    setQuizCompleted(false);
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setSelectedAnswer(null);
-    setShowResult(false);
-    setTimeSpent(0);
-    
-    // Focus on question for screen readers
-    setTimeout(() => {
-      questionRef.current?.focus();
-    }, 100);
-  };
-
   const handleAnswerSelect = (index: number) => {
     if (!showResult) {
       setSelectedAnswer(index);
@@ -275,48 +302,6 @@ const AccessibleQuizGame: React.FC = () => {
     }
   };
 
-  const handleSubmitAnswer = () => {
-    if (selectedAnswer === null) return;
-
-    const isCorrect = selectedAnswer === questions[currentQuestionIndex].correctAnswer;
-    if (isCorrect) {
-      setScore(prev => prev + 1);
-    }
-
-    setShowResult(true);
-    
-    // Announce result for screen readers
-    if (settings.voiceCommands) {
-      const result = isCorrect ? 'Correct' : 'Incorrect';
-      voiceCommandService.speak(`${result}. ${questions[currentQuestionIndex].explanation}`);
-    }
-  };
-
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setSelectedAnswer(null);
-      setShowResult(false);
-      
-      // Focus on next question
-      setTimeout(() => {
-        questionRef.current?.focus();
-      }, 100);
-    } else {
-      // Quiz completed
-      const result: QuizResult = {
-        score: selectedAnswer === questions[currentQuestionIndex].correctAnswer ? score + 1 : score,
-        totalQuestions: questions.length,
-        correctAnswers: selectedAnswer === questions[currentQuestionIndex].correctAnswer ? score + 1 : score,
-        timeSpent,
-        category: selectedCategory,
-        completedAt: Date.now()
-      };
-      
-      saveUserStats(result);
-      setQuizCompleted(true);
-    }
-  };
 
   const resetQuiz = () => {
     setQuizStarted(false);
