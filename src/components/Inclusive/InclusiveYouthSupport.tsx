@@ -193,7 +193,7 @@ const InclusiveYouthSupport: React.FC = () => {
     }
   ];
 
-  const supportGroups: SupportGroup[] = [
+  const sampleSupportGroups: SupportGroup[] = [
     {
       id: '1',
       name: 'Liberia Youth Support Circle',
@@ -255,17 +255,17 @@ const InclusiveYouthSupport: React.FC = () => {
 
       setServices(storedServices || inclusiveServices);
       setResources(storedResources || inclusiveResources);
-      setSupportGroups(storedGroups || supportGroups);
+      setSupportGroups(storedGroups || sampleSupportGroups);
 
       // Store sample data if not exists
       if (!storedServices) await offlineStorage.storeData('inclusive_services', inclusiveServices);
       if (!storedResources) await offlineStorage.storeData('inclusive_resources', inclusiveResources);
-      if (!storedGroups) await offlineStorage.storeData('support_groups', supportGroups);
+      if (!storedGroups) await offlineStorage.storeData('support_groups', sampleSupportGroups);
     } catch (error) {
       console.error('Failed to load inclusive data:', error);
       setServices(inclusiveServices);
       setResources(inclusiveResources);
-      setSupportGroups(supportGroups);
+      setSupportGroups(sampleSupportGroups);
     }
   };
 
