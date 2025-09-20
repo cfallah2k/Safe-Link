@@ -408,10 +408,6 @@ const ConsentEducationGame: React.FC = () => {
     setCurrentScore(0);
   };
 
-  const getSelectedOption = () => {
-    if (!selectedOption || !currentScenario) return null;
-    return currentScenario.options.find(opt => opt.id === selectedOption);
-  };
 
   const getScorePercentage = () => {
     const filteredScenarios = getFilteredScenarios();

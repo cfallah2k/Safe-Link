@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Heart, 
   Shield, 
@@ -243,7 +243,7 @@ const InclusiveYouthSupport: React.FC = () => {
     { value: 'legal', label: 'Legal', icon: Shield }
   ];
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [storedServices, storedResources, storedGroups] = await Promise.all([
         offlineStorage.getData('inclusive_services'),
@@ -265,7 +265,7 @@ const InclusiveYouthSupport: React.FC = () => {
       setResources(inclusiveResources);
       setSupportGroups(sampleSupportGroups);
     }
-  };
+  }, [inclusiveServices, inclusiveResources, sampleSupportGroups]);
 
   const getFilteredServices = () => {
     let filtered = services;

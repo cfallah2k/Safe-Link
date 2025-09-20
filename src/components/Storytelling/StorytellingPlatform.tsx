@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   MessageSquare, 
   Heart, 
@@ -112,7 +112,7 @@ const StorytellingPlatform: React.FC = () => {
     'family planning', 'pregnancy', 'safe sex', 'education', 'support', 'community'
   ];
 
-  const loadStories = async () => {
+  const loadStories = useCallback(async () => {
     try {
       const storedStories = await offlineStorage.getData('srhr_stories');
       if (storedStories) {
@@ -126,7 +126,7 @@ const StorytellingPlatform: React.FC = () => {
     } catch (error) {
       console.error('Failed to load stories:', error);
     }
-  };
+  }, []);
 
   const generateSampleStories = (): Story[] => [
     {
@@ -191,7 +191,7 @@ const StorytellingPlatform: React.FC = () => {
     }
   };
 
-  const filterAndSortStories = () => {
+  const filterAndSortStories = useCallback(() => {
     let filtered = stories.filter(story => story.isApproved);
 
     // Filter by category
@@ -233,7 +233,7 @@ const StorytellingPlatform: React.FC = () => {
     });
 
     setFilteredStories(filtered);
-  };
+  }, [stories, selectedCategory, selectedLanguage, searchTerm, showAnonymousOnly, sortBy]);
 
   const handleCreateStory = async () => {
     if (!newStory.title || !newStory.content) {
