@@ -13,6 +13,7 @@ import {
   Navigation
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
+import { locationService, LocationData } from '../../utils/locationService';
 
 interface EmergencyContact {
   id: string;
@@ -34,11 +35,13 @@ interface EmergencyLog {
 const EmergencyPanel: React.FC = () => {
   const [emergencyContacts, setEmergencyContacts] = useState<EmergencyContact[]>([]);
   const [emergencyLogs, setEmergencyLogs] = useState<EmergencyLog[]>([]);
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [userLocation, setUserLocation] = useState<LocationData | null>(null);
   const [panicMode, setPanicMode] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [emergencyMessage, setEmergencyMessage] = useState('');
   const [showLocationShare, setShowLocationShare] = useState(false);
+  const [locationPermissionGranted, setLocationPermissionGranted] = useState(false);
+  const [isSharingLocation, setIsSharingLocation] = useState(false);
 
   // Sample emergency contacts
   const sampleContacts: EmergencyContact[] = useMemo(() => [
@@ -105,19 +108,71 @@ const EmergencyPanel: React.FC = () => {
     }
   }, [emergencyContacts, emergencyLogs]);
 
-  const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-        }
+  const getUserLocation = async () => {
+    try {
+      const result = await locationService.getCurrentLocation();
+      if (result.success && result.location) {
+        setUserLocation(result.location);
+        setLocationPermissionGranted(true);
+      } else {
+        console.error('Error getting location:', result.error);
+        // Set default location to Monrovia
+        setUserLocation({
+          latitude: 6.3008,
+          longitude: -10.7972,
+          accuracy: 0,
+          timestamp: new Date().toISOString()
+        });
+        setLocationPermissionGranted(false);
+      }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      setLocationPermissionGranted(false);
+    }
+  };
+
+  const shareLocationWithEmergency = async (emergencyType: 'police' | 'medical' | 'fire' | 'general') => {
+    if (!userLocation) {
+      alert('Location not available. Please enable location services.');
+      return;
+    }
+
+    setIsSharingLocation(true);
+    try {
+      const result = await locationService.shareLocationWithEmergency(
+        'user_' + Date.now(), // In real app, this would be actual user ID
+        '+231-555-0000', // In real app, this would be actual phone number
+        emergencyType,
+        emergencyMessage || 'Emergency assistance needed'
       );
+
+      if (result.success) {
+        alert('Location shared with emergency services successfully!');
+        
+        // Log the emergency action
+        const newLog: EmergencyLog = {
+          id: Date.now().toString(),
+          timestamp: new Date().toISOString(),
+          type: emergencyType,
+          action: `Location shared with ${emergencyType} services`,
+          location: {
+            lat: result.location!.latitude,
+            lng: result.location!.longitude
+          },
+          notes: emergencyMessage
+        };
+
+        const updatedLogs = [...emergencyLogs, newLog];
+        setEmergencyLogs(updatedLogs);
+        await offlineStorage.storeData('emergency_logs', updatedLogs);
+      } else {
+        alert('Failed to share location: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Error sharing location:', error);
+      alert('Failed to share location with emergency services');
+    } finally {
+      setIsSharingLocation(false);
     }
   };
 
@@ -360,20 +415,49 @@ const EmergencyPanel: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <MapPin className="w-5 h-5 text-gray-600" />
-            <div>
+            <div className="flex-1">
               <p className="font-medium text-gray-900">Location Sharing</p>
               <p className="text-sm text-gray-600">
                 {userLocation ? 'Your location is available for emergency services' : 'Location not detected'}
               </p>
+              {userLocation && (
+                <div className="mt-2 text-xs text-gray-500">
+                  <p>GPS Coordinates: {userLocation.latitude.toFixed(6)}, {userLocation.longitude.toFixed(6)}</p>
+                  <p>Accuracy: ±{Math.round(userLocation.accuracy)}m</p>
+                  <p>Last updated: {new Date(userLocation.timestamp).toLocaleTimeString()}</p>
+                </div>
+              )}
             </div>
           </div>
-          <button
-            onClick={getUserLocation}
-            className="btn-outline flex items-center space-x-2"
-          >
-            <Navigation size={16} />
-            <span>Update Location</span>
-          </button>
+          <div className="flex flex-col space-y-2">
+            <button
+              onClick={getUserLocation}
+              className="btn-outline flex items-center space-x-2"
+            >
+              <Navigation size={16} />
+              <span>Update Location</span>
+            </button>
+            {userLocation && (
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => shareLocationWithEmergency('police')}
+                  disabled={isSharingLocation}
+                  className="btn-primary flex items-center space-x-2 text-sm"
+                >
+                  <Shield size={14} />
+                  <span>Share with Police</span>
+                </button>
+                <button
+                  onClick={() => shareLocationWithEmergency('medical')}
+                  disabled={isSharingLocation}
+                  className="btn-primary flex items-center space-x-2 text-sm"
+                >
+                  <Heart size={14} />
+                  <span>Share with Medical</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

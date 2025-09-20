@@ -17,6 +17,8 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
+import { userVerificationService } from '../../utils/userVerification';
+import UserVerification from '../Auth/UserVerification';
 
 interface SafeSpace {
   id: string;
@@ -57,6 +59,9 @@ const SafeSpaceLocator: React.FC = () => {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [showDiscreetMode, setShowDiscreetMode] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<SafeSpace | null>(null);
+  const [showVerification, setShowVerification] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [verificationService, setVerificationService] = useState<string>('');
 
   const spaceTypes = [
     { value: 'crisis_center', label: 'Crisis Centers', icon: Shield, color: 'bg-red-100 text-red-600' },
@@ -302,6 +307,33 @@ const SafeSpaceLocator: React.FC = () => {
 
   const handleEmergencyCall = (contact: EmergencyContact) => {
     window.open(`tel:${contact.phone}`, '_self');
+  };
+
+  // Check if a service requires verification
+  const requiresVerification = (space: SafeSpace): boolean => {
+    const sensitiveTypes = ['crisis_center', 'shelter', 'legal_aid'];
+    return sensitiveTypes.includes(space.type);
+  };
+
+  // Handle access to sensitive services
+  const handleAccessService = (space: SafeSpace) => {
+    if (requiresVerification(space) && !isVerified) {
+      setVerificationService(space.name);
+      setShowVerification(true);
+    } else {
+      setSelectedSpace(space);
+    }
+  };
+
+  // Handle verification completion
+  const handleVerificationComplete = (verified: boolean) => {
+    setIsVerified(verified);
+    setShowVerification(false);
+    
+    if (verified) {
+      // User is now verified, they can access the service
+      alert('Verification successful! You can now access sensitive services.');
+    }
   };
 
   useEffect(() => {
@@ -597,7 +629,7 @@ const SafeSpaceLocator: React.FC = () => {
                       <span>Directions</span>
                     </button>
                     <button
-                      onClick={() => setSelectedSpace(space)}
+                      onClick={() => handleAccessService(space)}
                       className="flex-1 btn-outline flex items-center justify-center space-x-2"
                     >
                       <MessageSquare size={16} />
@@ -721,6 +753,19 @@ const SafeSpaceLocator: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Verification Modal */}
+      {showVerification && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <UserVerification
+              onVerificationComplete={handleVerificationComplete}
+              serviceName={verificationService}
+              isEmergency={false}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

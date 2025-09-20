@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GENDER_OPTIONS } from '../../utils/genderOptions';
 import { useTranslation } from 'react-i18next';
 import { Shield, Copy, Check, ArrowLeft, Download, User } from 'lucide-react';
 import { secretCodeManager } from '../../utils/secretCode';
@@ -158,12 +159,11 @@ SafeLink - Anonymous SRHR Platform`;
                   className="input-field"
                 >
                   <option value="">Select gender</option>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                  <option value="non-binary">Non-binary</option>
-                  <option value="transgender">Transgender</option>
-                  <option value="other">Other</option>
-                  <option value="prefer-not-to-say">Prefer not to say</option>
+                  {GENDER_OPTIONS.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
