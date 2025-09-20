@@ -112,7 +112,6 @@ const EmergencyPanel: React.FC = () => {
       const result = await locationService.getCurrentLocation();
       if (result.success && result.location) {
         setUserLocation(result.location);
-        setLocationPermissionGranted(true);
       } else {
         console.error('Error getting location:', result.error);
         // Set default location to Monrovia
