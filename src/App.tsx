@@ -6,6 +6,7 @@ import './styles/accessibility.css';
 // Components
 import OfflineIndicator from './components/OfflineIndicator';
 import Navigation from './components/Layout/Navigation';
+import DesktopHeader from './components/Layout/DesktopHeader';
 import LoginForm from './components/Auth/LoginForm';
 import CreateCodeForm from './components/Auth/CreateCodeForm';
 import SRHRAlerts from './components/SMS/SRHRAlerts';
@@ -33,6 +34,11 @@ import Mentorship from './pages/Mentorship';
 import OfflineMode from './pages/OfflineMode';
 import Settings from './pages/Settings';
 import Notifications from './pages/Notifications';
+import Tutorial from './pages/Tutorial';
+import VisualAccessibility from './pages/VisualAccessibility';
+import MotorAccessibility from './pages/MotorAccessibility';
+import HearingAccessibility from './pages/HearingAccessibility';
+import CognitiveAccessibility from './pages/CognitiveAccessibility';
 
 // Utils
 import { secretCodeManager } from './utils/secretCode';
@@ -104,12 +110,18 @@ function App() {
         <div className="min-h-screen bg-gray-50 overflow-x-hidden">
           <OfflineIndicator />
           
+          {/* Desktop Header */}
+          <DesktopHeader />
+          
           {/* Mobile-first responsive layout */}
           <div className="flex flex-col lg:flex-row">
-            <Navigation />
+            {/* Mobile Navigation - Hidden on desktop */}
+            <div className="lg:hidden">
+              <Navigation />
+            </div>
             
             {/* Main content area with proper mobile spacing */}
-            <main className="flex-1 lg:ml-64 min-h-screen-safe">
+            <main className="flex-1 lg:ml-0 min-h-screen-safe">
               <div className="w-full max-w-none">
                 <Routes>
                   <Route path="/" element={<Home />} />
@@ -131,6 +143,11 @@ function App() {
                   <Route path="/offline" element={<OfflineMode />} />
                   <Route path="/accessibility" element={<AccessibilityDashboard />} />
                   <Route path="/notifications" element={<Notifications />} />
+                  <Route path="/tutorial" element={<Tutorial />} />
+                  <Route path="/visual-accessibility" element={<VisualAccessibility />} />
+                  <Route path="/motor-accessibility" element={<MotorAccessibility />} />
+                  <Route path="/hearing-accessibility" element={<HearingAccessibility />} />
+                  <Route path="/cognitive-accessibility" element={<CognitiveAccessibility />} />
                   <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

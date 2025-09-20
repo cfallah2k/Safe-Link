@@ -24,7 +24,12 @@ import {
   BookOpen,
   Lock,
   Monitor,
-  Accessibility
+  Accessibility,
+  GraduationCap,
+  Eye,
+  MousePointer,
+  Volume2,
+  Brain
 } from 'lucide-react';
 import { useState } from 'react';
 import { useOffline } from '../../hooks/useOffline';
@@ -55,7 +60,12 @@ const Navigation: React.FC = () => {
     { path: '/mentorship', icon: Users, label: t('navigation.mentorship') },
     { path: '/offline', icon: Download, label: 'Offline Mode' },
     { path: '/accessibility', icon: Accessibility, label: 'Accessibility Settings' },
+    { path: '/visual-accessibility', icon: Eye, label: 'Visual Accessibility' },
+    { path: '/motor-accessibility', icon: MousePointer, label: 'Motor Accessibility' },
+    { path: '/hearing-accessibility', icon: Volume2, label: 'Hearing Accessibility' },
+    { path: '/cognitive-accessibility', icon: Brain, label: 'Easy to Use' },
     { path: '/notifications', icon: Bell, label: 'Notifications' },
+    { path: '/tutorial', icon: GraduationCap, label: 'Tutorial' },
     { path: '/settings', icon: Settings, label: t('navigation.settings') },
   ];
 
@@ -71,7 +81,7 @@ const Navigation: React.FC = () => {
       {/* Mobile menu button - Enhanced for better touch targets - Moved to right side */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 right-4 z-50 p-3 bg-white rounded-xl shadow-lg border border-gray-200 touch-manipulation active:scale-95 transition-transform"
+        className="fixed top-4 right-4 z-50 p-3 bg-white rounded-xl shadow-lg border border-gray-200 touch-manipulation active:scale-95 transition-transform"
         style={{ 
           paddingTop: 'max(12px, env(safe-area-inset-top))',
           minHeight: '48px',
@@ -94,7 +104,6 @@ const Navigation: React.FC = () => {
       {/* Navigation - Enhanced mobile experience */}
       <nav className={`
         fixed left-0 top-0 h-full w-72 sm:w-80 bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out
-        lg:translate-x-0 lg:static lg:shadow-none lg:w-64
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}
       style={{ 
