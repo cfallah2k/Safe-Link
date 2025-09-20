@@ -2452,16 +2452,17 @@ const QuizGame: React.FC = () => {
 
   if (!quizStarted) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
-            <BookOpen className="w-8 h-8 text-primary-600" />
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 rounded-full mb-4">
+              <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">SRHR Knowledge Quiz</h1>
+            <p className="text-sm sm:text-base text-gray-600">
+              Test your knowledge about sexual and reproductive health and rights
+            </p>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">SRHR Knowledge Quiz</h1>
-          <p className="text-gray-600">
-            Test your knowledge about sexual and reproductive health and rights
-          </p>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Quiz Setup */}
@@ -2566,14 +2567,16 @@ const QuizGame: React.FC = () => {
     const percentage = Math.round((score / questions.length) * 100);
     
     return (
-      <div className="max-w-2xl mx-auto p-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <Trophy className="w-8 h-8 text-green-600" />
-          </div>
-          
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Quiz Completed!</h1>
-          <p className="text-gray-600 mb-6">Great job on completing the SRHR knowledge quiz</p>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full mb-4">
+                <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
+              </div>
+              
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Quiz Completed!</h1>
+              <p className="text-sm sm:text-base text-gray-600 mb-6">Great job on completing the SRHR knowledge quiz</p>
           
           <div className="grid grid-cols-3 gap-4 mb-6">
             <div className="bg-blue-50 rounded-lg p-4">
@@ -2622,16 +2625,17 @@ const QuizGame: React.FC = () => {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* Progress Bar */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">
-            Question {currentQuestionIndex + 1} of {questions.length}
-          </span>
-          <span className="text-sm text-gray-500">{formatTime(timeSpent)}</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Progress Bar */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 space-y-2 sm:space-y-0">
+            <span className="text-sm font-medium text-gray-700">
+              Question {currentQuestionIndex + 1} of {questions.length}
+            </span>
+            <span className="text-sm text-gray-500">{formatTime(timeSpent)}</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
             className="bg-primary-600 h-2 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -2717,6 +2721,7 @@ const QuizGame: React.FC = () => {
             <ArrowRight size={16} />
           </button>
         )}
+        </div>
       </div>
     </div>
   );

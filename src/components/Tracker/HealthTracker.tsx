@@ -335,11 +335,12 @@ const HealthTracker: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-gray-900">Health Tracker</h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Health Tracker</h1>
           {activeTab === 'tracker' && (
             <button
               onClick={() => setShowEntryForm(true)}
@@ -394,33 +395,33 @@ const HealthTracker: React.FC = () => {
           </button>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-blue-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Calendar className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-blue-900">Cycle Length</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="bg-blue-50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                <span className="font-medium text-blue-900 text-sm sm:text-base">Cycle Length</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600">{cycleData.cycleLength} days</p>
             </div>
-            <p className="text-2xl font-bold text-blue-600">{cycleData.cycleLength} days</p>
-          </div>
-          
-          <div className="bg-pink-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Droplets className="w-5 h-5 text-pink-600" />
-              <span className="font-medium text-pink-900">Period Length</span>
+            
+            <div className="bg-pink-50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Droplets className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
+                <span className="font-medium text-pink-900 text-sm sm:text-base">Period Length</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-bold text-pink-600">{cycleData.periodLength} days</p>
             </div>
-            <p className="text-2xl font-bold text-pink-600">{cycleData.periodLength} days</p>
-          </div>
-          
-          <div className="bg-green-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Target className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-green-900">Next Period</span>
+            
+            <div className="bg-green-50 rounded-lg p-4 sm:col-span-2 lg:col-span-1">
+              <div className="flex items-center space-x-2 mb-2">
+                <Target className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                <span className="font-medium text-green-900 text-sm sm:text-base">Next Period</span>
+              </div>
+              <p className="text-sm sm:text-base font-bold text-green-600">
+                {cycleData.predictions.nextPeriod ? format(new Date(cycleData.predictions.nextPeriod), 'MMM dd') : 'Unknown'}
+              </p>
             </div>
-            <p className="text-sm font-bold text-green-600">
-              {cycleData.predictions.nextPeriod ? format(new Date(cycleData.predictions.nextPeriod), 'MMM dd') : 'Unknown'}
-            </p>
           </div>
-        </div>
       </div>
 
       {/* Tab Content */}
@@ -857,7 +858,8 @@ const HealthTracker: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

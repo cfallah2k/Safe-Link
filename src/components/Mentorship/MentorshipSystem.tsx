@@ -306,17 +306,18 @@ const MentorshipSystem: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
-          <Users className="w-8 h-8 text-primary-600" />
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 rounded-full mb-4">
+            <Users className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Peer Mentorship</h1>
+          <p className="text-sm sm:text-base text-gray-600">
+            Connect with trained mentors for guidance and support
+          </p>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Peer Mentorship</h1>
-        <p className="text-gray-600">
-          Connect with trained mentors for guidance and support
-        </p>
-      </div>
 
       {/* Mentors Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">

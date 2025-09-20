@@ -329,192 +329,192 @@ const InclusiveYouthSupport: React.FC = () => {
   }, [loadData]);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6">
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-gradient-to-r from-rainbow-500 to-purple-500 rounded-xl">
-              <Heart className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-3">
+              <div className="p-3 bg-gradient-to-r from-rainbow-500 to-purple-500 rounded-xl">
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                  {showDiscreetMode ? 'Youth Support Services' : 'Inclusive Youth Support'}
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600">
+                  {showDiscreetMode 
+                    ? 'Comprehensive support services for all youth' 
+                    : 'Safe, inclusive SRHR services for LGBTQ+ and all youth'
+                  }
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {showDiscreetMode ? 'Youth Support Services' : 'Inclusive Youth Support'}
-              </h1>
-              <p className="text-gray-600">
-                {showDiscreetMode 
-                  ? 'Comprehensive support services for all youth' 
-                  : 'Safe, inclusive SRHR services for LGBTQ+ and all youth'
-                }
+            <button
+              onClick={() => setShowDiscreetMode(!showDiscreetMode)}
+              className={`p-3 rounded-xl transition-colors self-start sm:self-auto ${
+                showDiscreetMode 
+                  ? 'bg-green-100 text-green-600' 
+                  : 'bg-gray-100 text-gray-600'
+              }`}
+              title={showDiscreetMode ? 'Exit discreet mode' : 'Enter discreet mode'}
+            >
+              {showDiscreetMode ? <Eye size={20} /> : <Lock size={20} />}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="bg-rainbow-50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-rainbow-600" />
+                <span className="font-medium text-rainbow-900 text-sm sm:text-base">Inclusive Services</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-bold text-rainbow-600">{services.length}</p>
+            </div>
+            
+            <div className="bg-green-50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                <span className="font-medium text-green-900 text-sm sm:text-base">Anonymous Access</span>
+              </div>
+              <p className="text-lg sm:text-2xl font-bold text-green-600">
+                {services.filter(s => s.isAnonymous).length}
               </p>
             </div>
-          </div>
-          <button
-            onClick={() => setShowDiscreetMode(!showDiscreetMode)}
-            className={`p-3 rounded-xl transition-colors ${
-              showDiscreetMode 
-                ? 'bg-green-100 text-green-600' 
-                : 'bg-gray-100 text-gray-600'
-            }`}
-            title={showDiscreetMode ? 'Exit discreet mode' : 'Enter discreet mode'}
-          >
-            {showDiscreetMode ? <Eye size={20} /> : <Lock size={20} />}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-rainbow-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Users className="w-5 h-5 text-rainbow-600" />
-              <span className="font-medium text-rainbow-900">Inclusive Services</span>
+            
+            <div className="bg-blue-50 rounded-lg p-4 sm:col-span-2 lg:col-span-1">
+              <div className="flex items-center space-x-2 mb-2">
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                <span className="font-medium text-blue-900 text-sm sm:text-base">Resources</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600">{resources.length}</p>
             </div>
-            <p className="text-2xl font-bold text-rainbow-600">{services.length}</p>
           </div>
-          
-          <div className="bg-green-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Shield className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-green-900">Anonymous Access</span>
-            </div>
-            <p className="text-2xl font-bold text-green-600">
-              {services.filter(s => s.isAnonymous).length}
-            </p>
-          </div>
-          
-          <div className="bg-blue-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <BookOpen className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-blue-900">Resources</span>
-            </div>
-            <p className="text-2xl font-bold text-blue-600">{resources.length}</p>
-          </div>
-        </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
-          <button
-            onClick={() => setActiveTab('services')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-              activeTab === 'services'
-                ? 'bg-white text-primary-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <Users className="w-4 h-4" />
-              <span>Services</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab('resources')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-              activeTab === 'resources'
-                ? 'bg-white text-primary-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <BookOpen className="w-4 h-4" />
-              <span>Resources</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab('support_groups')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-              activeTab === 'support_groups'
-                ? 'bg-white text-primary-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <Users className="w-4 h-4" />
-              <span>Support Groups</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab('safety')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-              activeTab === 'safety'
-                ? 'bg-white text-primary-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <Shield className="w-4 h-4" />
-              <span>Safety</span>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Search
-            </label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                placeholder="Search services, resources, or support groups..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-10"
-              />
-            </div>
+        {/* Tab Navigation */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-1 bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setActiveTab('services')}
+              className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                activeTab === 'services'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <Users className="w-4 h-4" />
+                <span className="text-sm sm:text-base">Services</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('resources')}
+              className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                activeTab === 'resources'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <BookOpen className="w-4 h-4" />
+                <span className="text-sm sm:text-base">Resources</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('support_groups')}
+              className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                activeTab === 'support_groups'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <Users className="w-4 h-4" />
+                <span className="text-sm sm:text-base">Support Groups</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('safety')}
+              className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                activeTab === 'safety'
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <Shield className="w-4 h-4" />
+                <span className="text-sm sm:text-base">Safety</span>
+              </div>
+            </button>
           </div>
+        </div>
 
-          {activeTab === 'services' && (
+        {/* Search and Filters */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Service Type
+                Search
               </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="input-field"
-              >
-                {categories.map(category => (
-                  <option key={category.value} value={category.value}>
-                    {category.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  placeholder="Search services, resources, or support groups..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="input-field pl-10 w-full"
+                />
+              </div>
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Tab Content */}
-      {activeTab === 'services' && (
-        <div className="space-y-6">
-          {getFilteredServices().length > 0 ? (
-            getFilteredServices().map((service) => (
-              <div key={service.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-4">
-                      <div className="p-3 bg-rainbow-100 rounded-xl">
-                        <Users className="w-6 h-6 text-rainbow-600" />
+            {activeTab === 'services' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Service Type
+                </label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="input-field w-full"
+                >
+                  {categories.map(category => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'services' && (
+          <div className="space-y-6">
+            {getFilteredServices().length > 0 ? (
+              getFilteredServices().map((service) => (
+                <div key={service.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                  <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4">
+                      <div className="p-3 bg-rainbow-100 rounded-xl flex-shrink-0">
+                        <Users className="w-5 h-5 sm:w-6 sm:h-6 text-rainbow-600" />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{service.name}</h3>
-                        <p className="text-gray-600 mb-3">{service.description}</p>
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{service.name}</h3>
+                        <p className="text-sm sm:text-base text-gray-600 mb-3">{service.description}</p>
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
                           <div className="flex items-center space-x-1">
-                            <MapPin size={14} />
-                            <span>{service.location}</span>
+                            <MapPin size={12} />
+                            <span className="truncate">{service.location}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Calendar size={14} />
-                            <span>{service.hours}</span>
+                            <Calendar size={12} />
+                            <span className="truncate">{service.hours}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Star size={14} className="text-yellow-500" />
+                            <Star size={12} className="text-yellow-500" />
                             <span>{service.rating}</span>
                           </div>
                           {service.isAnonymous && (
@@ -530,7 +530,6 @@ const InclusiveYouthSupport: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
 
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-3">Services Offered:</h4>
@@ -562,36 +561,36 @@ const InclusiveYouthSupport: React.FC = () => {
                     </div>
                   )}
 
-                  <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                    <button
-                      onClick={() => handleCall(service.contact)}
-                      className="flex-1 btn-primary flex items-center justify-center space-x-2"
-                    >
-                      <Phone size={16} />
-                      <span>Call Now</span>
-                    </button>
-                    {service.website && (
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4">
                       <button
-                        onClick={() => handleWebsite(service.website!)}
-                        className="flex-1 btn-outline flex items-center justify-center space-x-2"
+                        onClick={() => handleCall(service.contact)}
+                        className="flex-1 btn-primary flex items-center justify-center space-x-2 text-sm"
                       >
-                        <ExternalLink size={16} />
-                        <span>Website</span>
+                        <Phone size={14} />
+                        <span>Call Now</span>
                       </button>
-                    )}
+                      {service.website && (
+                        <button
+                          onClick={() => handleWebsite(service.website!)}
+                          className="flex-1 btn-outline flex items-center justify-center space-x-2 text-sm"
+                        >
+                          <ExternalLink size={14} />
+                          <span>Website</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
             ))
-          ) : (
-            <div className="text-center py-12">
-              <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No services found</h3>
-              <p className="text-gray-500">Try adjusting your search or filters</p>
-            </div>
-          )}
-        </div>
-      )}
+            ) : (
+              <div className="text-center py-12">
+                <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No services found</h3>
+                <p className="text-gray-500 text-sm sm:text-base">Try adjusting your search or filters</p>
+              </div>
+            )}
+          </div>
+        )}
 
       {activeTab === 'resources' && (
         <div className="space-y-6">
@@ -773,8 +772,9 @@ const InclusiveYouthSupport: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+        )}
 
+      </div>
     </div>
   );
 };

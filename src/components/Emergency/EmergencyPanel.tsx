@@ -333,129 +333,130 @@ const EmergencyPanel: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* Panic Button */}
-      <div className="bg-red-50 border-2 border-red-200 rounded-lg p-8 mb-6 text-center">
-        <AlertTriangle className="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-red-900 mb-2">Emergency Panic Button</h1>
-        <p className="text-red-800 mb-6">
-          Press this button if you're in immediate danger or need urgent help
-        </p>
-        <button
-          onClick={handlePanicButton}
-          className="px-8 py-4 bg-red-600 text-white rounded-lg font-bold text-xl hover:bg-red-700 transition-colors shadow-lg"
-        >
-          🚨 EMERGENCY ALERT 🚨
-        </button>
-        <p className="text-sm text-red-700 mt-4">
-          This will immediately contact emergency services and your emergency contacts
-        </p>
-      </div>
-
-      {/* Emergency Contacts */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Emergency Contacts</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {emergencyContacts.map((contact) => {
-            const Icon = getContactIcon(contact.type);
-            return (
-              <div key={contact.id} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className={`p-2 rounded-lg ${getContactColor(contact.type)}`}>
-                    <Icon size={20} />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900">{contact.name}</h3>
-                    <p className="text-sm text-gray-600">{contact.phone}</p>
-                  </div>
-                  <div className={`w-2 h-2 rounded-full ${contact.available ? 'bg-green-500' : 'bg-red-500'}`} />
-                </div>
-                <button
-                  onClick={() => handleCallContact(contact)}
-                  className="w-full btn-primary flex items-center justify-center space-x-2"
-                >
-                  <Phone size={16} />
-                  <span>Call Now</span>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Emergency Message */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Send Emergency Message</h2>
-        <div className="space-y-4">
-          <textarea
-            value={emergencyMessage}
-            onChange={(e) => setEmergencyMessage(e.target.value)}
-            placeholder="Describe your emergency situation..."
-            className="w-full input-field"
-            rows={4}
-          />
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Panic Button */}
+        <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 sm:p-8 mb-6 text-center">
+          <AlertTriangle className="w-12 h-12 sm:w-16 sm:h-16 text-red-600 mx-auto mb-4" />
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-900 mb-2">Emergency Panic Button</h1>
+          <p className="text-sm sm:text-base text-red-800 mb-6 max-w-2xl mx-auto">
+            Press this button if you're in immediate danger or need urgent help
+          </p>
           <button
-            onClick={handleSendMessage}
-            disabled={!emergencyMessage.trim()}
-            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            onClick={handlePanicButton}
+            className="w-full sm:w-auto px-6 sm:px-8 py-4 bg-red-600 text-white rounded-lg font-bold text-lg sm:text-xl hover:bg-red-700 transition-colors shadow-lg"
           >
-            <Send size={16} />
-            <span>Send Emergency Message</span>
+            🚨 EMERGENCY ALERT 🚨
           </button>
+          <p className="text-xs sm:text-sm text-red-700 mt-4 max-w-xl mx-auto">
+            This will immediately contact emergency services and your emergency contacts
+          </p>
         </div>
-      </div>
 
-      {/* Location Services */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Location Services</h2>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <MapPin className="w-5 h-5 text-gray-600" />
-            <div className="flex-1">
-              <p className="font-medium text-gray-900">Location Sharing</p>
-              <p className="text-sm text-gray-600">
-                {userLocation ? 'Your location is available for emergency services' : 'Location not detected'}
-              </p>
+        {/* Emergency Contacts */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Emergency Contacts</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {emergencyContacts.map((contact) => {
+              const Icon = getContactIcon(contact.type);
+              return (
+                <div key={contact.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className={`p-2 rounded-lg ${getContactColor(contact.type)} flex-shrink-0`}>
+                      <Icon size={18} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{contact.name}</h3>
+                      <p className="text-xs sm:text-sm text-gray-600 truncate">{contact.phone}</p>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${contact.available ? 'bg-green-500' : 'bg-red-500'}`} />
+                  </div>
+                  <button
+                    onClick={() => handleCallContact(contact)}
+                    className="w-full btn-primary flex items-center justify-center space-x-2 text-sm"
+                  >
+                    <Phone size={14} />
+                    <span>Call Now</span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Emergency Message */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Send Emergency Message</h2>
+          <div className="space-y-4">
+            <textarea
+              value={emergencyMessage}
+              onChange={(e) => setEmergencyMessage(e.target.value)}
+              placeholder="Describe your emergency situation..."
+              className="w-full input-field resize-none"
+              rows={4}
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={!emergencyMessage.trim()}
+              className="w-full sm:w-auto btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+            >
+              <Send size={16} />
+              <span>Send Emergency Message</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Location Services */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Location Services</h2>
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3">
+              <MapPin className="w-5 h-5 text-gray-600 flex-shrink-0 mt-1" />
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gray-900">Location Sharing</p>
+                <p className="text-sm text-gray-600">
+                  {userLocation ? 'Your location is available for emergency services' : 'Location not detected'}
+                </p>
+                {userLocation && (
+                  <div className="mt-2 text-xs text-gray-500 space-y-1">
+                    <p className="break-all">GPS: {userLocation.latitude.toFixed(6)}, {userLocation.longitude.toFixed(6)}</p>
+                    <p>Accuracy: ±{Math.round(userLocation.accuracy)}m</p>
+                    <p>Updated: {new Date(userLocation.timestamp).toLocaleTimeString()}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={getUserLocation}
+                className="btn-outline flex items-center justify-center space-x-2 flex-1 sm:flex-none"
+              >
+                <Navigation size={16} />
+                <span>Update Location</span>
+              </button>
               {userLocation && (
-                <div className="mt-2 text-xs text-gray-500">
-                  <p>GPS Coordinates: {userLocation.latitude.toFixed(6)}, {userLocation.longitude.toFixed(6)}</p>
-                  <p>Accuracy: ±{Math.round(userLocation.accuracy)}m</p>
-                  <p>Last updated: {new Date(userLocation.timestamp).toLocaleTimeString()}</p>
+                <div className="flex flex-col sm:flex-row gap-2 flex-1">
+                  <button
+                    onClick={() => shareLocationWithEmergency('police')}
+                    disabled={isSharingLocation}
+                    className="btn-primary flex items-center justify-center space-x-2 text-sm flex-1"
+                  >
+                    <Shield size={14} />
+                    <span>Share with Police</span>
+                  </button>
+                  <button
+                    onClick={() => shareLocationWithEmergency('medical')}
+                    disabled={isSharingLocation}
+                    className="btn-primary flex items-center justify-center space-x-2 text-sm flex-1"
+                  >
+                    <Heart size={14} />
+                    <span>Share with Medical</span>
+                  </button>
                 </div>
               )}
             </div>
           </div>
-          <div className="flex flex-col space-y-2">
-            <button
-              onClick={getUserLocation}
-              className="btn-outline flex items-center space-x-2"
-            >
-              <Navigation size={16} />
-              <span>Update Location</span>
-            </button>
-            {userLocation && (
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => shareLocationWithEmergency('police')}
-                  disabled={isSharingLocation}
-                  className="btn-primary flex items-center space-x-2 text-sm"
-                >
-                  <Shield size={14} />
-                  <span>Share with Police</span>
-                </button>
-                <button
-                  onClick={() => shareLocationWithEmergency('medical')}
-                  disabled={isSharingLocation}
-                  className="btn-primary flex items-center space-x-2 text-sm"
-                >
-                  <Heart size={14} />
-                  <span>Share with Medical</span>
-                </button>
-              </div>
-            )}
-          </div>
         </div>
-      </div>
 
       {/* Emergency Log */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -491,22 +492,23 @@ const EmergencyPanel: React.FC = () => {
         ) : (
           <div className="text-center py-8">
             <Shield className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">No emergency activity recorded</p>
-            <p className="text-gray-400 text-sm">Emergency actions will be logged here</p>
+            <p className="text-gray-500 text-sm sm:text-base">No emergency activity recorded</p>
+            <p className="text-gray-400 text-xs sm:text-sm">Emergency actions will be logged here</p>
           </div>
         )}
-      </div>
+        </div>
 
-      {/* Safety Tips */}
-      <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h3 className="font-semibold text-blue-900 mb-3">Safety Tips</h3>
-        <ul className="text-blue-800 text-sm space-y-2">
-          <li>• Keep your phone charged and with you at all times</li>
-          <li>• Know your emergency contacts by heart</li>
-          <li>• Share your location with trusted contacts when going out</li>
-          <li>• Trust your instincts - if something feels wrong, get help</li>
-          <li>• Have a safety plan for different situations</li>
-        </ul>
+        {/* Safety Tips */}
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6">
+          <h3 className="font-semibold text-blue-900 mb-3 text-sm sm:text-base">Safety Tips</h3>
+          <ul className="text-blue-800 text-xs sm:text-sm space-y-2">
+            <li>• Keep your phone charged and with you at all times</li>
+            <li>• Know your emergency contacts by heart</li>
+            <li>• Share your location with trusted contacts when going out</li>
+            <li>• Trust your instincts - if something feels wrong, get help</li>
+            <li>• Have a safety plan for different situations</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

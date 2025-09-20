@@ -345,68 +345,69 @@ const SafeSpaceLocator: React.FC = () => {
   }, [filterAndSortSpaces]);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6">
-      {/* Header with Discreet Mode Toggle */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl">
-              <Shield className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Header with Discreet Mode Toggle */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-3">
+              <div className="p-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                  {showDiscreetMode ? 'Health Services' : 'Safe Space Locator'}
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600">
+                  {showDiscreetMode 
+                    ? 'Find health and support services near you' 
+                    : 'Find safe spaces and support services for survivors'
+                  }
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {showDiscreetMode ? 'Health Services' : 'Safe Space Locator'}
-              </h1>
-              <p className="text-gray-600">
-                {showDiscreetMode 
-                  ? 'Find health and support services near you' 
-                  : 'Find safe spaces and support services for survivors'
-                }
+            <button
+              onClick={() => setShowDiscreetMode(!showDiscreetMode)}
+              className={`p-3 rounded-xl transition-colors self-start sm:self-auto ${
+                showDiscreetMode 
+                  ? 'bg-green-100 text-green-600' 
+                  : 'bg-gray-100 text-gray-600'
+              }`}
+              title={showDiscreetMode ? 'Exit discreet mode' : 'Enter discreet mode'}
+            >
+              {showDiscreetMode ? <Unlock size={20} /> : <Lock size={20} />}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="bg-red-50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
+                <span className="font-medium text-red-900 text-sm sm:text-base">Safe Spaces</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-bold text-red-600">{safeSpaces.length}</p>
+            </div>
+            
+            <div className="bg-green-50 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                <span className="font-medium text-green-900 text-sm sm:text-base">24/7 Services</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-bold text-green-600">
+                {safeSpaces.filter(s => s.is24Hours).length}
+              </p>
+            </div>
+            
+            <div className="bg-blue-50 rounded-lg p-4 sm:col-span-2 lg:col-span-1">
+              <div className="flex items-center space-x-2 mb-2">
+                <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                <span className="font-medium text-blue-900 text-sm sm:text-base">Anonymous Access</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600">
+                {safeSpaces.filter(s => s.isAnonymous).length}
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setShowDiscreetMode(!showDiscreetMode)}
-            className={`p-3 rounded-xl transition-colors ${
-              showDiscreetMode 
-                ? 'bg-green-100 text-green-600' 
-                : 'bg-gray-100 text-gray-600'
-            }`}
-            title={showDiscreetMode ? 'Exit discreet mode' : 'Enter discreet mode'}
-          >
-            {showDiscreetMode ? <Unlock size={20} /> : <Lock size={20} />}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-red-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Shield className="w-5 h-5 text-red-600" />
-              <span className="font-medium text-red-900">Safe Spaces</span>
-            </div>
-            <p className="text-2xl font-bold text-red-600">{safeSpaces.length}</p>
-          </div>
-          
-          <div className="bg-green-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Clock className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-green-900">24/7 Services</span>
-            </div>
-            <p className="text-2xl font-bold text-green-600">
-              {safeSpaces.filter(s => s.is24Hours).length}
-            </p>
-          </div>
-          
-          <div className="bg-blue-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Eye className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-blue-900">Anonymous Access</span>
-            </div>
-            <p className="text-2xl font-bold text-blue-600">
-              {safeSpaces.filter(s => s.isAnonymous).length}
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Emergency Contacts - Always Visible */}
@@ -764,7 +765,8 @@ const SafeSpaceLocator: React.FC = () => {
             />
           </div>
         </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

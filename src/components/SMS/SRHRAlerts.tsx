@@ -230,16 +230,17 @@ const SRHRAlerts: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6">
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-gradient-to-r from-pink-500 to-blue-500 rounded-xl">
-              <Bell className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">SRHR Alerts</h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-3">
+              <div className="p-3 bg-gradient-to-r from-pink-500 to-blue-500 rounded-xl">
+                <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">SRHR Alerts</h1>
               <p className="text-gray-600">SMS reminders for your sexual and reproductive health</p>
             </div>
           </div>
@@ -603,7 +604,8 @@ const SRHRAlerts: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
