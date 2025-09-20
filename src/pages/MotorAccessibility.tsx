@@ -34,6 +34,25 @@ const MotorAccessibility: React.FC = () => {
   const [slowClick, setSlowClick] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
+  // Text-to-speech functionality
+  const speakText = useCallback((text: string) => {
+    if ('speechSynthesis' in window) {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+      }
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.8;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [isSpeaking]);
+
   // Voice recognition setup
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -69,25 +88,6 @@ const MotorAccessibility: React.FC = () => {
       }
     }
   }, [voiceControl, voiceCommands, speakText]);
-
-  // Text-to-speech functionality
-  const speakText = useCallback((text: string) => {
-    if ('speechSynthesis' in window) {
-      if (isSpeaking) {
-        window.speechSynthesis.cancel();
-      }
-      
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.8;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-      
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      
-      window.speechSynthesis.speak(utterance);
-    }
-  }, [isSpeaking]);
 
   // Initialize voice commands
   useEffect(() => {
