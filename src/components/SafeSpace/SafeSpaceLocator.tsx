@@ -17,7 +17,6 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
-import { userVerificationService } from '../../utils/userVerification';
 import UserVerification from '../Auth/UserVerification';
 
 interface SafeSpace {

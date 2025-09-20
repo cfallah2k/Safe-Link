@@ -17,7 +17,6 @@ import {
   Calendar
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
-import { userVerificationService } from '../../utils/userVerification';
 import UserVerification from '../Auth/UserVerification';
 
 interface InclusiveService {
@@ -332,16 +331,6 @@ const InclusiveYouthSupport: React.FC = () => {
     return sensitiveTypes.includes(service.type);
   };
 
-  // Handle access to sensitive services
-  const handleAccessService = (service: InclusiveService) => {
-    if (requiresVerification(service) && !isVerified) {
-      setVerificationService(service.name);
-      setShowVerification(true);
-    } else {
-      // Direct access to service details
-      handleCall(service.contact);
-    }
-  };
 
   // Handle verification completion
   const handleVerificationComplete = (verified: boolean) => {

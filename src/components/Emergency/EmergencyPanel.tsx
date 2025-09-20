@@ -40,7 +40,6 @@ const EmergencyPanel: React.FC = () => {
   const [countdown, setCountdown] = useState(0);
   const [emergencyMessage, setEmergencyMessage] = useState('');
   const [showLocationShare, setShowLocationShare] = useState(false);
-  const [locationPermissionGranted, setLocationPermissionGranted] = useState(false);
   const [isSharingLocation, setIsSharingLocation] = useState(false);
 
   // Sample emergency contacts
