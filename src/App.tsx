@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './i18n';
+import './styles/accessibility.css';
 
 // Components
 import OfflineIndicator from './components/OfflineIndicator';
@@ -13,6 +14,10 @@ import SafeSpaceLocator from './components/SafeSpace/SafeSpaceLocator';
 import ConsentEducationGame from './components/Games/ConsentEducationGame';
 import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
 import KioskInterface from './components/Kiosk/KioskInterface';
+import AccessibilityButton from './components/Accessibility/AccessibilityButton';
+
+// Contexts
+import { AccessibilityProvider } from './contexts/AccessibilityContext';
 
 // Pages
 import Home from './pages/Home';
@@ -93,43 +98,48 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-        <OfflineIndicator />
-        
-        {/* Mobile-first responsive layout */}
-        <div className="flex flex-col lg:flex-row">
-          <Navigation />
+    <AccessibilityProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+          <OfflineIndicator />
           
-          {/* Main content area with proper mobile spacing */}
-          <main className="flex-1 lg:ml-64 min-h-screen-safe">
-            <div className="w-full max-w-none">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/chatbot" element={<Chatbot />} />
-                <Route path="/videos" element={<Videos />} />
-                <Route path="/articles" element={<Articles />} />
-                <Route path="/sms" element={<SMSInterface />} />
-                <Route path="/sms-alerts" element={<SRHRAlerts />} />
-                <Route path="/stories" element={<StorytellingPlatform />} />
-                <Route path="/clinics" element={<Clinics />} />
-                <Route path="/safe-spaces" element={<SafeSpaceLocator />} />
-                <Route path="/tracker" element={<Tracker />} />
-                <Route path="/games" element={<Games />} />
-                <Route path="/consent-game" element={<ConsentEducationGame />} />
-                <Route path="/inclusive-support" element={<InclusiveYouthSupport />} />
-                <Route path="/kiosk" element={<KioskInterface />} />
-                <Route path="/emergency" element={<Emergency />} />
-                <Route path="/mentorship" element={<Mentorship />} />
-                <Route path="/offline" element={<OfflineMode />} />
-                <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </div>
-          </main>
+          {/* Mobile-first responsive layout */}
+          <div className="flex flex-col lg:flex-row">
+            <Navigation />
+            
+            {/* Main content area with proper mobile spacing */}
+            <main className="flex-1 lg:ml-64 min-h-screen-safe">
+              <div className="w-full max-w-none">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/chatbot" element={<Chatbot />} />
+                  <Route path="/videos" element={<Videos />} />
+                  <Route path="/articles" element={<Articles />} />
+                  <Route path="/sms" element={<SMSInterface />} />
+                  <Route path="/sms-alerts" element={<SRHRAlerts />} />
+                  <Route path="/stories" element={<StorytellingPlatform />} />
+                  <Route path="/clinics" element={<Clinics />} />
+                  <Route path="/safe-spaces" element={<SafeSpaceLocator />} />
+                  <Route path="/tracker" element={<Tracker />} />
+                  <Route path="/games" element={<Games />} />
+                  <Route path="/consent-game" element={<ConsentEducationGame />} />
+                  <Route path="/inclusive-support" element={<InclusiveYouthSupport />} />
+                  <Route path="/kiosk" element={<KioskInterface />} />
+                  <Route path="/emergency" element={<Emergency />} />
+                  <Route path="/mentorship" element={<Mentorship />} />
+                  <Route path="/offline" element={<OfflineMode />} />
+                  <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </div>
+            </main>
+          </div>
+          
+          {/* Accessibility Button */}
+          <AccessibilityButton />
         </div>
-      </div>
-    </Router>
+      </Router>
+    </AccessibilityProvider>
   );
 }
 
