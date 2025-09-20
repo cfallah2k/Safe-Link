@@ -162,7 +162,7 @@ const AccessibleQuizGame: React.FC = () => {
       };
       saveUserStats(result);
     }
-  }, [currentQuestionIndex, questions.length, score, timeSpent, selectedCategory]);
+  }, [currentQuestionIndex, questions.length, score, timeSpent, selectedCategory, saveUserStats]);
 
   const handleVoiceCommand = useCallback((command: any) => {
     switch (command.action) {
