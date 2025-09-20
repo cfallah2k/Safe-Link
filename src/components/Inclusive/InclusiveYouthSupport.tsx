@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   Heart, 
   Shield, 
@@ -70,7 +70,7 @@ const InclusiveYouthSupport: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showDiscreetMode, setShowDiscreetMode] = useState(false);
 
-  const inclusiveServices: InclusiveService[] = [
+  const inclusiveServices: InclusiveService[] = useMemo(() => [
     {
       id: '1',
       name: 'Liberia Youth Health Network',
@@ -136,9 +136,9 @@ const InclusiveYouthSupport: React.FC = () => {
       rating: 4.9,
       isVerified: true
     }
-  ];
+  ], []);
 
-  const inclusiveResources: InclusiveResource[] = [
+  const inclusiveResources: InclusiveResource[] = useMemo(() => [
     {
       id: '1',
       title: 'Understanding Your Identity',
@@ -189,9 +189,9 @@ const InclusiveYouthSupport: React.FC = () => {
       isAgeAppropriate: true,
       tags: ['STI', 'prevention', 'testing', 'treatment', 'safe sex']
     }
-  ];
+  ], []);
 
-  const sampleSupportGroups: SupportGroup[] = [
+  const sampleSupportGroups: SupportGroup[] = useMemo(() => [
     {
       id: '1',
       name: 'Liberia Youth Support Circle',
@@ -231,7 +231,7 @@ const InclusiveYouthSupport: React.FC = () => {
       contact: '+231-555-0403',
       isActive: true
     }
-  ];
+  ], []);
 
   const categories = [
     { value: 'all', label: 'All Services', icon: Users },
