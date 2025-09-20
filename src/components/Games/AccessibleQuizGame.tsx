@@ -202,7 +202,7 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  }, [quizStarted, selectedAnswer, showResult]);
+  }, [quizStarted, selectedAnswer, showResult, handleNextQuestion, handleSubmitAnswer, readCurrentQuestion, readExplanation]);
 
   const handleKeyboardAction = useCallback((action: string) => {
     switch (action) {
@@ -229,7 +229,7 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  }, [selectedAnswer, showResult]);
+  }, [selectedAnswer, showResult, handleNextQuestion, handleSubmitAnswer]);
 
   useEffect(() => {
     setQuestions(sampleQuestions);
