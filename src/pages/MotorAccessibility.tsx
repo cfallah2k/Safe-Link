@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft,
@@ -68,10 +68,10 @@ const MotorAccessibility: React.FC = () => {
         recognition.start();
       }
     }
-  }, [voiceControl, voiceCommands]);
+  }, [voiceControl, voiceCommands, speakText]);
 
   // Text-to-speech functionality
-  const speakText = (text: string) => {
+  const speakText = useCallback((text: string) => {
     if ('speechSynthesis' in window) {
       if (isSpeaking) {
         window.speechSynthesis.cancel();
@@ -87,7 +87,7 @@ const MotorAccessibility: React.FC = () => {
       
       window.speechSynthesis.speak(utterance);
     }
-  };
+  }, [isSpeaking]);
 
   // Initialize voice commands
   useEffect(() => {
