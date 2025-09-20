@@ -43,6 +43,7 @@ const DesktopHeader: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<{ x: number; y: number } | null>(null);
 
   // Organize navigation items into logical groups
   const dropdownMenus: DropdownMenu[] = [
@@ -106,12 +107,23 @@ const DesktopHeader: React.FC = () => {
     return items.some(item => isActive(item.path));
   };
 
-  const handleDropdownToggle = (title: string) => {
-    setActiveDropdown(activeDropdown === title ? null : title);
+  const handleDropdownToggle = (title: string, event: React.MouseEvent) => {
+    if (activeDropdown === title) {
+      setActiveDropdown(null);
+      setDropdownPosition(null);
+    } else {
+      const rect = event.currentTarget.getBoundingClientRect();
+      setDropdownPosition({
+        x: rect.left + rect.width / 2,
+        y: rect.bottom + 4
+      });
+      setActiveDropdown(title);
+    }
   };
 
   const handleItemClick = () => {
     setActiveDropdown(null);
+    setDropdownPosition(null);
   };
 
   return (
@@ -140,7 +152,7 @@ const DesktopHeader: React.FC = () => {
               return (
                 <div key={menu.title} className="relative">
                   <button
-                    onClick={() => handleDropdownToggle(menu.title)}
+                    onClick={(e) => handleDropdownToggle(menu.title, e)}
                     className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
                       hasActiveItem || isOpen
                         ? 'bg-primary-50 text-primary-700 border border-primary-200'
@@ -154,33 +166,6 @@ const DesktopHeader: React.FC = () => {
                     }`} />
                   </button>
 
-                  {/* Dropdown Menu */}
-                  {isOpen && (
-                    <div className="absolute top-full left-0 mt-1 w-56 sm:w-64 bg-white rounded-xl shadow-xl border-2 border-red-500 z-50" style={{ zIndex: 9999, minHeight: '200px' }}>
-                      <div className="p-2">
-                        {menu.items.map((item) => {
-                          const ItemIcon = item.icon;
-                          const active = isActive(item.path);
-                          
-                          return (
-                            <Link
-                              key={item.path}
-                              to={item.path}
-                              onClick={handleItemClick}
-                              className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
-                                active
-                                  ? 'bg-primary-50 text-primary-700 border border-primary-200'
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                              }`}
-                            >
-                              <ItemIcon className="w-4 h-4 flex-shrink-0" />
-                              <span className="text-sm font-medium">{item.label}</span>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
                 </div>
               );
             })}
@@ -195,12 +180,61 @@ const DesktopHeader: React.FC = () => {
       </div>
     </header>
 
-    {/* Backdrop for closing dropdowns */}
+    {/* Dropdown Menus - Outside header to overlay page content */}
     {activeDropdown && (
-      <div 
-        className="fixed inset-0 z-30" 
-        onClick={() => setActiveDropdown(null)}
-      />
+      <>
+        {/* Backdrop for closing dropdowns */}
+        <div 
+          className="fixed inset-0 z-30" 
+          onClick={() => {
+            setActiveDropdown(null);
+            setDropdownPosition(null);
+          }}
+        />
+        
+        {/* Dropdown Content */}
+        {dropdownMenus.map((menu) => {
+          const isOpen = activeDropdown === menu.title;
+          if (!isOpen) return null;
+          
+          return (
+            <div 
+              key={menu.title}
+              className="fixed w-56 sm:w-64 bg-white rounded-xl shadow-xl border-2 border-red-500 z-50" 
+              style={{ 
+                zIndex: 9999, 
+                minHeight: '200px',
+                left: dropdownPosition ? `${dropdownPosition.x - 112}px` : '50%',
+                top: dropdownPosition ? `${dropdownPosition.y}px` : '64px',
+                transform: dropdownPosition ? 'none' : 'translateX(-50%)'
+              }}
+            >
+              <div className="p-2">
+                {menu.items.map((item) => {
+                  const ItemIcon = item.icon;
+                  const active = isActive(item.path);
+                  
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={handleItemClick}
+                      className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                        active
+                          ? 'bg-primary-50 text-primary-700 border border-primary-200'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      <ItemIcon className="w-4 h-4 flex-shrink-0" />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </>
     )}
     </>
   );
