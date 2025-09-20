@@ -23,7 +23,9 @@ import {
   Eye,
   MousePointer,
   Volume2,
-  Brain
+  Brain,
+  Menu,
+  X
 } from 'lucide-react';
 import NotificationSystem from '../UI/NotificationSystem';
 
@@ -44,6 +46,7 @@ const DesktopHeader: React.FC = () => {
   const location = useLocation();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dropdownPosition, setDropdownPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Organize navigation items into logical groups
   const dropdownMenus: DropdownMenu[] = [
@@ -124,6 +127,12 @@ const DesktopHeader: React.FC = () => {
   const handleItemClick = () => {
     setActiveDropdown(null);
     setDropdownPosition(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  // Get all navigation items for mobile menu
+  const getAllNavigationItems = (): NavigationItem[] => {
+    return dropdownMenus.flatMap(menu => menu.items);
   };
 
   return (
@@ -142,8 +151,8 @@ const DesktopHeader: React.FC = () => {
             </div>
           </div>
 
-            {/* Navigation Dropdowns */}
-            <nav className="flex items-center space-x-1 overflow-x-auto overflow-visible">
+            {/* Desktop Navigation Dropdowns - Hidden on mobile */}
+            <nav className="hidden lg:flex items-center space-x-1 overflow-x-auto overflow-visible">
             {dropdownMenus.map((menu) => {
               const Icon = menu.icon;
               const hasActiveItem = isAnyItemActive(menu.items);
@@ -171,6 +180,14 @@ const DesktopHeader: React.FC = () => {
             })}
           </nav>
 
+          {/* Mobile Hamburger Menu Button - Visible on mobile */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+
           {/* Right side - Status and Actions */}
           <div className="flex items-center space-x-4">
             {/* Notifications */}
@@ -180,7 +197,44 @@ const DesktopHeader: React.FC = () => {
       </div>
     </header>
 
-    {/* Dropdown Menus - Outside header to overlay page content */}
+    {/* Mobile Menu - Below header */}
+    {isMobileMenuOpen && (
+      <>
+        {/* Mobile menu backdrop */}
+        <div 
+          className="fixed inset-0 z-20 lg:hidden" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        <div className="lg:hidden bg-white border-b border-gray-200 shadow-lg relative z-30">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="grid grid-cols-1 gap-2">
+            {getAllNavigationItems().map((item) => {
+              const ItemIcon = item.icon;
+              const active = isActive(item.path);
+              
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={handleItemClick}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                    active
+                      ? 'bg-primary-50 text-primary-700 border border-primary-200'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
+                >
+                  <ItemIcon className="w-5 h-5 flex-shrink-0" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+        </div>
+      </>
+    )}
+
+    {/* Dropdown Menus - Outside header to overlay page content (Desktop only) */}
     {activeDropdown && (
       <>
         {/* Backdrop for closing dropdowns */}
