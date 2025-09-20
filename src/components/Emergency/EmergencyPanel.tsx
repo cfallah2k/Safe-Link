@@ -152,7 +152,7 @@ const EmergencyPanel: React.FC = () => {
         // Log the emergency action
         const newLog: EmergencyLog = {
           id: Date.now().toString(),
-          timestamp: new Date().toISOString(),
+          timestamp: Date.now(),
           type: emergencyType,
           action: `Location shared with ${emergencyType} services`,
           location: {
