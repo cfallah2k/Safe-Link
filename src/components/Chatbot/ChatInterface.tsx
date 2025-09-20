@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Send, Bot, User, Shield, Loader2, MessageCircle, Sparkles, Heart, Zap } from 'lucide-react';
+import { Send, Bot, User, Shield, MessageCircle, Sparkles } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 import { useOffline } from '../../hooks/useOffline';
 

@@ -4,32 +4,20 @@ import {
   Wifi, 
   WifiOff, 
   Battery, 
-  Volume2, 
-  VolumeX, 
   Settings, 
-  Power,
   Home,
-  ArrowLeft,
-  ArrowRight,
   RotateCcw,
   Maximize2,
   Minimize2,
-  Sun,
-  Moon,
   Globe,
   Phone,
   MapPin,
   Heart,
   BookOpen,
-  Users,
   Shield,
-  MessageCircle,
   Calendar,
   Clock,
-  Play,
-  Pause,
-  SkipForward,
-  SkipBack
+  Play
 } from 'lucide-react';
 
 interface KioskSettings {
@@ -53,7 +41,7 @@ interface KioskStats {
 const KioskInterface: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'services' | 'education' | 'emergency' | 'settings' | 'maintenance'>('home');
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [settings, setSettings] = useState<KioskSettings>({
     brightness: 80,
@@ -63,7 +51,7 @@ const KioskInterface: React.FC = () => {
     maintenanceMode: false,
     offlineMode: false
   });
-  const [stats, setStats] = useState<KioskStats>({
+  const [stats] = useState<KioskStats>({
     uptime: '2h 15m',
     sessionsToday: 12,
     totalSessions: 1247,

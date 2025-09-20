@@ -12,13 +12,9 @@ import {
   Calendar,
   AlertTriangle,
   Eye,
-  EyeOff,
   Lock,
   Unlock,
-  MessageSquare,
-  ExternalLink,
-  Filter,
-  SortAsc
+  MessageSquare
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 
@@ -59,7 +55,6 @@ const SafeSpaceLocator: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'distance' | 'rating' | 'name'>('distance');
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [showDiscreetMode, setShowDiscreetMode] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<SafeSpace | null>(null);
 

@@ -5,19 +5,11 @@ import {
   Shield, 
   Users, 
   Plus,
-  Eye,
-  EyeOff,
-  Filter,
   Search,
   Play,
   Pause,
   Volume2,
-  VolumeX,
-  Star,
   Flag,
-  Send,
-  Camera,
-  Video,
   Mic,
   MicOff
 } from 'lucide-react';
@@ -366,11 +358,11 @@ const StorytellingPlatform: React.FC = () => {
 
   useEffect(() => {
     loadStories();
-  }, []);
+  }, [loadStories]);
 
   useEffect(() => {
     filterAndSortStories();
-  }, [stories, selectedCategory, selectedLanguage, searchTerm, sortBy, showAnonymousOnly]);
+  }, [stories, selectedCategory, selectedLanguage, searchTerm, sortBy, showAnonymousOnly, filterAndSortStories]);
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">

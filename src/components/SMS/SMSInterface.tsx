@@ -7,10 +7,7 @@ import {
   Clock, 
   CheckCircle, 
   AlertCircle,
-  Wifi,
-  WifiOff,
   Smartphone,
-  Users,
   Shield
 } from 'lucide-react';
 import { smsIntegration, SMSMessage, USSDCode } from '../../utils/smsIntegration';
@@ -28,7 +25,6 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
   const [smsHistory, setSmsHistory] = useState<SMSMessage[]>([]);
   const [ussdCodes, setUssdCodes] = useState<USSDCode[]>([]);
   const [isSending, setIsSending] = useState(false);
-  const [selectedUssdCode, setSelectedUssdCode] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Play, 
-  Pause, 
   RotateCcw, 
   Trophy, 
   Star, 
@@ -612,8 +611,6 @@ const ConsentEducationGame: React.FC = () => {
   }
 
   if (!currentScenario) return null;
-
-  const selectedOptionData = getSelectedOption();
 
   return (
     <div className="max-w-4xl mx-auto p-6">

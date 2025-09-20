@@ -14,9 +14,7 @@ import {
   Info,
   ExternalLink,
   Search,
-  Filter,
-  Calendar,
-  Globe
+  Calendar
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 
@@ -325,7 +323,7 @@ const InclusiveYouthSupport: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">

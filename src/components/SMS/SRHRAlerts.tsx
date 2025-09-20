@@ -9,7 +9,6 @@ import {
   Edit,
   Trash2,
   CheckCircle,
-  AlertCircle,
   Smartphone
 } from 'lucide-react';
 import { smsIntegration } from '../../utils/smsIntegration';
