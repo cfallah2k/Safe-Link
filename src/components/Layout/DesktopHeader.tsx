@@ -194,15 +194,15 @@ const DesktopHeader: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Backdrop for closing dropdowns */}
-      {activeDropdown && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={() => setActiveDropdown(null)}
-        />
-      )}
     </header>
+
+    {/* Backdrop for closing dropdowns */}
+    {activeDropdown && (
+      <div 
+        className="fixed inset-0 z-40" 
+        onClick={() => setActiveDropdown(null)}
+      />
+    )}
   );
 };
 
