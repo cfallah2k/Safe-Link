@@ -145,6 +145,16 @@ const AccessibleQuizGame: React.FC = () => {
     setShowResult(true);
   }, [selectedAnswer, questions, currentQuestionIndex]);
 
+  const saveUserStats = async (result: QuizResult) => {
+    try {
+      const updatedStats = [...userStats, result];
+      setUserStats(updatedStats);
+      localStorage.setItem('quiz-stats', JSON.stringify(updatedStats));
+    } catch (error) {
+      console.error('Failed to save quiz stats:', error);
+    }
+  };
+
   const handleNextQuestion = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -281,15 +291,6 @@ const AccessibleQuizGame: React.FC = () => {
     }
   };
 
-  const saveUserStats = async (result: QuizResult) => {
-    try {
-      const updatedStats = [...userStats, result];
-      setUserStats(updatedStats);
-      localStorage.setItem('quiz-stats', JSON.stringify(updatedStats));
-    } catch (error) {
-      console.error('Failed to save quiz stats:', error);
-    }
-  };
 
   const handleAnswerSelect = (index: number) => {
     if (!showResult) {
