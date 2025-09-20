@@ -171,9 +171,9 @@ const SRHRAlerts: React.FC = () => {
     });
   };
 
-  const handleEditAlert = async (alert: SRHRAlert) => {
+  const handleEditAlert = async (alertItem: SRHRAlert) => {
     const updatedAlerts = alerts.map(a => 
-      a.id === alert.id ? { ...alert, nextReminder: calculateNextReminder(alert.frequency, alert.customDays) } : a
+      a.id === alertItem.id ? { ...alertItem, nextReminder: calculateNextReminder(alertItem.frequency, alertItem.customDays) } : a
     );
     await saveAlerts(updatedAlerts);
     setEditingAlert(null);
@@ -193,12 +193,12 @@ const SRHRAlerts: React.FC = () => {
     await saveAlerts(updatedAlerts);
   };
 
-  const handleSendTestAlert = async (alert: SRHRAlert) => {
+  const handleSendTestAlert = async (alertItem: SRHRAlert) => {
     try {
-      const success = await smsIntegration.sendSMS(alert.phoneNumber, alert.message);
+      const success = await smsIntegration.sendSMS(alertItem.phoneNumber, alertItem.message);
       if (success) {
         const updatedAlerts = alerts.map(a => 
-          a.id === alert.id 
+          a.id === alertItem.id 
             ? { ...a, lastSent: new Date().toISOString(), timesSent: a.timesSent + 1 }
             : a
         );
