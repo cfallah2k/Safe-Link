@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft,
-  Play,
-  Pause,
   SkipForward,
   SkipBack,
-  Volume2,
-  VolumeX,
   CheckCircle,
   Circle,
   BookOpen,
@@ -18,19 +14,11 @@ import {
   MapPin,
   Gamepad2,
   Settings,
-  Bell,
   Smartphone,
-  Monitor,
   Download,
   Accessibility,
   Globe,
   Lock,
-  FileText,
-  Video,
-  Mic,
-  Camera,
-  Wifi,
-  WifiOff,
   Hash
 } from 'lucide-react';
 
@@ -48,8 +36,6 @@ interface TutorialStep {
 const Tutorial: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
   const tutorialSteps: TutorialStep[] = [
@@ -293,7 +279,6 @@ const Tutorial: React.FC = () => {
           <div className="mb-6">
             <div className="flex items-center justify-center space-x-2 overflow-x-auto scrollbar-hide">
               {tutorialSteps.map((step, index) => {
-                const StepIcon = step.icon;
                 const isCompleted = completedSteps.has(index);
                 const isCurrent = index === currentStep;
                 

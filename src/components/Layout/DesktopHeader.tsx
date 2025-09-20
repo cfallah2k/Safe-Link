@@ -24,7 +24,6 @@ import {
   Monitor,
   Accessibility,
   ChevronDown,
-  X,
   GraduationCap,
   Eye,
   MousePointer,

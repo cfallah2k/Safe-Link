@@ -3,29 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft,
   Eye,
-  EyeOff,
   Volume2,
   VolumeX,
-  Type,
   Contrast,
-  Palette,
   ZoomIn,
   ZoomOut,
   RotateCcw,
   Play,
   Pause,
-  SkipForward,
-  SkipBack,
-  Mic,
-  MicOff,
   Settings,
   BookOpen,
   MessageCircle,
   MapPin,
   Heart,
   Shield,
-  CheckCircle,
-  AlertCircle,
   Info
 } from 'lucide-react';
 
@@ -42,7 +33,6 @@ interface AccessibilityFeature {
 const VisualAccessibility: React.FC = () => {
   const navigate = useNavigate();
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [currentText, setCurrentText] = useState('');
   const [fontSize, setFontSize] = useState(16);
   const [highContrast, setHighContrast] = useState(false);
   const [screenReader, setScreenReader] = useState(false);

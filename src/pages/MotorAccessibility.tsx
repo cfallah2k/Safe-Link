@@ -5,25 +5,15 @@ import {
   MousePointer,
   Keyboard,
   Mic,
-  MicOff,
-  Hand,
-  Zap,
   Target,
   Clock,
-  CheckCircle,
-  AlertCircle,
   Info,
   Settings,
   Volume2,
   VolumeX,
-  Play,
-  Pause,
-  SkipForward,
-  SkipBack,
   MessageCircle,
   MapPin,
   Heart,
-  Shield,
   BookOpen,
   Gamepad2
 } from 'lucide-react';
@@ -145,7 +135,7 @@ const MotorAccessibility: React.FC = () => {
     ];
     
     setVoiceCommands(commands);
-  }, [navigate]);
+  }, [navigate, speakText]);
 
   // Apply accessibility settings
   useEffect(() => {
