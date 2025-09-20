@@ -215,7 +215,11 @@ const Tutorial: React.FC = () => {
   ];
 
   const handleStepComplete = (stepIndex: number) => {
-    setCompletedSteps(prev => new Set([...prev, stepIndex]));
+    setCompletedSteps(prev => {
+      const newSet = new Set(prev);
+      newSet.add(stepIndex);
+      return newSet;
+    });
   };
 
   const handleNext = () => {
