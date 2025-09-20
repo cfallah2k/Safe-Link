@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  ArrowLeft,
   SkipForward,
   SkipBack,
   CheckCircle,
@@ -221,13 +220,9 @@ const Tutorial: React.FC = () => {
     }
   };
 
-  const handleSkip = () => {
-    navigate('/');
-  };
 
   const currentStepData = tutorialSteps[currentStep];
   const Icon = currentStepData.icon;
-  const progress = ((currentStep + 1) / tutorialSteps.length) * 100;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">

@@ -20,7 +20,7 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('general');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showSecretCode, setShowSecretCode] = useState(false);

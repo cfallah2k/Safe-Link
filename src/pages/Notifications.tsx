@@ -11,9 +11,7 @@ import {
   Shield,
   BookOpen,
   Users,
-  ArrowLeft,
-  Search,
-  CheckCheck
+  Search
 } from 'lucide-react';
 
 interface Notification {
@@ -31,7 +29,6 @@ interface Notification {
 const Notifications: React.FC = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   const [filter, setFilter] = useState<'all' | 'unread' | 'health' | 'safety' | 'education' | 'community' | 'system'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -123,7 +120,6 @@ const Notifications: React.FC = () => {
 
   useEffect(() => {
     setNotifications(sampleNotifications);
-    setUnreadCount(sampleNotifications.filter(n => !n.isRead).length);
   }, [sampleNotifications]);
 
   const getNotificationIcon = (type: string, category: string) => {
@@ -199,21 +195,13 @@ const Notifications: React.FC = () => {
           : notification
       )
     );
-    setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(notification => ({ ...notification, isRead: true }))
-    );
-    setUnreadCount(0);
-  };
 
   const deleteNotification = (id: string) => {
     const notification = notifications.find(n => n.id === id);
     setNotifications(prev => prev.filter(n => n.id !== id));
     if (notification && !notification.isRead) {
-      setUnreadCount(prev => Math.max(0, prev - 1));
     }
   };
 
