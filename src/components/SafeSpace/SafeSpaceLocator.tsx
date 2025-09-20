@@ -222,7 +222,6 @@ const SafeSpaceLocator: React.FC = () => {
   }, [sampleSafeSpaces]);
 
   const getUserLocation = () => {
-    setIsLoadingLocation(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -230,17 +229,14 @@ const SafeSpaceLocator: React.FC = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           });
-          setIsLoadingLocation(false);
         },
         (error) => {
           console.error('Error getting location:', error);
           setUserLocation({ lat: 6.3008, lng: -10.7972 }); // Default to Monrovia
-          setIsLoadingLocation(false);
         }
       );
     } else {
       setUserLocation({ lat: 6.3008, lng: -10.7972 });
-      setIsLoadingLocation(false);
     }
   };
 
