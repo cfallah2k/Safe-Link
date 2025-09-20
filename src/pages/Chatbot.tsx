@@ -7,11 +7,6 @@ const Chatbot: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col">
-      <Header 
-        title={t('chatbot.title')} 
-        subtitle={t('chatbot.subtitle')}
-        showPrivacy={false}
-      />
       <div className="flex-1">
         <ChatInterface />
       </div>

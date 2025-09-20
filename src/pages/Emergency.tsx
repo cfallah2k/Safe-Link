@@ -7,10 +7,6 @@ const Emergency: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        title={t('emergency.title')} 
-        subtitle={t('emergency.subtitle')}
-      />
       <main className="pb-6">
         <EmergencyPanel />
       </main>
