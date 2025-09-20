@@ -231,46 +231,6 @@ const Tutorial: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-4 sm:px-6 shadow-lg" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3 min-w-0 flex-1">
-            <button
-              onClick={() => navigate(-1)}
-              className="p-2 hover:bg-white/20 rounded-xl transition-colors"
-            >
-              <ArrowLeft className="w-6 h-6 text-white" />
-            </button>
-            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl flex-shrink-0">
-              <BookOpen className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h1 className="text-lg sm:text-xl font-bold text-white truncate">Tutorial</h1>
-              <p className="text-sm text-white/80 truncate">
-                Step {currentStep + 1} of {tutorialSteps.length}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <button
-              onClick={handleSkip}
-              className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors text-sm font-medium"
-            >
-              Skip Tutorial
-            </button>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mt-4">
-          <div className="w-full bg-white/20 rounded-full h-2">
-            <div 
-              className="bg-white h-2 rounded-full transition-all duration-300 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
-      </div>
 
       {/* Content */}
       <div className="flex-1 p-4 sm:p-6">

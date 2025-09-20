@@ -116,7 +116,7 @@ const DesktopHeader: React.FC = () => {
 
   return (
     <>
-    <header className="bg-white border-b border-gray-200 shadow-sm">
+    <header className="bg-white border-b border-gray-200 shadow-sm overflow-visible">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -131,7 +131,7 @@ const DesktopHeader: React.FC = () => {
           </div>
 
             {/* Navigation Dropdowns */}
-            <nav className="flex items-center space-x-1 overflow-x-auto">
+            <nav className="flex items-center space-x-1 overflow-x-auto overflow-visible">
             {dropdownMenus.map((menu) => {
               const Icon = menu.icon;
               const hasActiveItem = isAnyItemActive(menu.items);

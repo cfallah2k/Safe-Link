@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import AccessibleQuizGame from '../components/Games/AccessibleQuizGame';
-import Header from '../components/Layout/Header';
 
 const Games: React.FC = () => {
   const { t } = useTranslation();

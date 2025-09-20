@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import EmergencyPanel from '../components/Emergency/EmergencyPanel';
-import Header from '../components/Layout/Header';
 
 const Emergency: React.FC = () => {
   const { t } = useTranslation();

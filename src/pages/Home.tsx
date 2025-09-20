@@ -16,7 +16,6 @@ import {
   FileText,
   Smartphone
 } from 'lucide-react';
-import Header from '../components/Layout/Header';
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -112,10 +111,6 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      <Header 
-        title={t('home.welcome')} 
-        subtitle="Your safe space for SRHR information and support"
-      />
       
       <main className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
