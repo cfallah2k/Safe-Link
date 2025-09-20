@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import QuizGame from '../components/Games/QuizGame';
+import AccessibleQuizGame from '../components/Games/AccessibleQuizGame';
 import Header from '../components/Layout/Header';
 
 const Games: React.FC = () => {
@@ -13,7 +13,7 @@ const Games: React.FC = () => {
         subtitle={t('games.subtitle')}
       />
       <main className="pb-6">
-        <QuizGame />
+        <AccessibleQuizGame />
       </main>
     </div>
   );

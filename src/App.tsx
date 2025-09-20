@@ -15,6 +15,7 @@ import ConsentEducationGame from './components/Games/ConsentEducationGame';
 import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
 import KioskInterface from './components/Kiosk/KioskInterface';
 import AccessibilityButton from './components/Accessibility/AccessibilityButton';
+import AccessibilityDashboard from './components/Accessibility/AccessibilityDashboard';
 
 // Contexts
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
@@ -128,6 +129,7 @@ function App() {
                   <Route path="/emergency" element={<Emergency />} />
                   <Route path="/mentorship" element={<Mentorship />} />
                   <Route path="/offline" element={<OfflineMode />} />
+                  <Route path="/accessibility" element={<AccessibilityDashboard />} />
                   <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
