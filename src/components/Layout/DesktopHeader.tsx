@@ -10,19 +10,14 @@ import {
   Shield, 
   Users, 
   Settings,
-  Wifi,
-  WifiOff,
   Play,
   Download,
   FileText,
-  Globe,
   Smartphone,
   Bell,
   Heart,
   BookOpen,
   Lock,
-  Monitor,
-  Accessibility,
   ChevronDown,
   GraduationCap,
   Eye,
@@ -30,7 +25,6 @@ import {
   Volume2,
   Brain
 } from 'lucide-react';
-import { useOffline } from '../../hooks/useOffline';
 import NotificationSystem from '../UI/NotificationSystem';
 
 interface NavigationItem {
@@ -48,7 +42,6 @@ interface DropdownMenu {
 const DesktopHeader: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const { isOnline } = useOffline();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   // Organize navigation items into logical groups
@@ -92,13 +85,11 @@ const DesktopHeader: React.FC = () => {
       items: [
         { path: '/notifications', icon: Bell, label: 'Notifications' },
         { path: '/tutorial', icon: GraduationCap, label: 'Tutorial' },
-        { path: '/accessibility', icon: Accessibility, label: 'Accessibility Settings' },
         { path: '/visual-accessibility', icon: Eye, label: 'Visual Accessibility' },
         { path: '/motor-accessibility', icon: MousePointer, label: 'Motor Accessibility' },
         { path: '/hearing-accessibility', icon: Volume2, label: 'Hearing Accessibility' },
         { path: '/cognitive-accessibility', icon: Brain, label: 'Easy to Use' },
         { path: '/offline', icon: Download, label: 'Offline Mode' },
-        { path: '/kiosk', icon: Monitor, label: 'Kiosk Mode' },
         { path: '/settings', icon: Settings, label: t('navigation.settings') },
       ]
     }
@@ -124,7 +115,7 @@ const DesktopHeader: React.FC = () => {
   };
 
   return (
-    <header className="hidden lg:block bg-white border-b border-gray-200 shadow-sm">
+    <header className="bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -138,8 +129,8 @@ const DesktopHeader: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation Dropdowns */}
-          <nav className="flex items-center space-x-1">
+            {/* Navigation Dropdowns */}
+            <nav className="flex items-center space-x-1 overflow-x-auto">
             {dropdownMenus.map((menu) => {
               const Icon = menu.icon;
               const hasActiveItem = isAnyItemActive(menu.items);
@@ -149,7 +140,7 @@ const DesktopHeader: React.FC = () => {
                 <div key={menu.title} className="relative">
                   <button
                     onClick={() => handleDropdownToggle(menu.title)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                    className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
                       hasActiveItem || isOpen
                         ? 'bg-primary-50 text-primary-700 border border-primary-200'
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -164,7 +155,7 @@ const DesktopHeader: React.FC = () => {
 
                   {/* Dropdown Menu */}
                   {isOpen && (
-                    <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-lg border border-gray-200 z-50">
+                    <div className="absolute top-full left-0 mt-1 w-56 sm:w-64 bg-white rounded-xl shadow-lg border border-gray-200 z-50">
                       <div className="p-2">
                         {menu.items.map((item) => {
                           const ItemIcon = item.icon;
@@ -199,39 +190,6 @@ const DesktopHeader: React.FC = () => {
             {/* Notifications */}
             <NotificationSystem />
 
-            {/* Status indicators */}
-            <div className="flex items-center space-x-3">
-              {/* Online/Offline indicator */}
-              <div className="flex items-center space-x-2">
-                {isOnline ? (
-                  <Wifi className="w-4 h-4 text-green-500" />
-                ) : (
-                  <WifiOff className="w-4 h-4 text-red-500" />
-                )}
-                <span className={`text-sm font-medium ${isOnline ? 'text-green-600' : 'text-red-600'}`}>
-                  {isOnline ? 'Online' : 'Offline'}
-                </span>
-              </div>
-
-              {/* Privacy indicator */}
-              <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-medium text-green-700">
-                  {t('common.anonymous')}
-                </span>
-              </div>
-
-              {/* Language selector */}
-              <div className="flex items-center space-x-2">
-                <Globe className="w-4 h-4 text-gray-400" />
-                <select className="text-sm border-0 bg-transparent text-gray-600 focus:outline-none">
-                  <option value="en">English</option>
-                  <option value="kpelle">Kpelle</option>
-                  <option value="bassa">Bassa</option>
-                  <option value="kru">Kru</option>
-                  <option value="vai">Vai</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>

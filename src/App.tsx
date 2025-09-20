@@ -5,7 +5,6 @@ import './styles/accessibility.css';
 
 // Components
 import OfflineIndicator from './components/OfflineIndicator';
-import Navigation from './components/Layout/Navigation';
 import DesktopHeader from './components/Layout/DesktopHeader';
 import LoginForm from './components/Auth/LoginForm';
 import CreateCodeForm from './components/Auth/CreateCodeForm';
@@ -14,8 +13,6 @@ import StorytellingPlatform from './components/Storytelling/StorytellingPlatform
 import SafeSpaceLocator from './components/SafeSpace/SafeSpaceLocator';
 import ConsentEducationGame from './components/Games/ConsentEducationGame';
 import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
-import KioskInterface from './components/Kiosk/KioskInterface';
-import AccessibilityDashboard from './components/Accessibility/AccessibilityDashboard';
 
 // Contexts
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
@@ -113,13 +110,6 @@ function App() {
           {/* Desktop Header */}
           <DesktopHeader />
           
-          {/* Mobile-first responsive layout */}
-          <div className="flex flex-col lg:flex-row">
-            {/* Mobile Navigation - Hidden on desktop */}
-            <div className="lg:hidden">
-              <Navigation />
-            </div>
-            
             {/* Main content area with proper mobile spacing */}
             <main className="flex-1 lg:ml-0 min-h-screen-safe">
               <div className="w-full max-w-none">
@@ -137,11 +127,9 @@ function App() {
                   <Route path="/games" element={<Games />} />
                   <Route path="/consent-game" element={<ConsentEducationGame />} />
                   <Route path="/inclusive-support" element={<InclusiveYouthSupport />} />
-                  <Route path="/kiosk" element={<KioskInterface />} />
                   <Route path="/emergency" element={<Emergency />} />
                   <Route path="/mentorship" element={<Mentorship />} />
                   <Route path="/offline" element={<OfflineMode />} />
-                  <Route path="/accessibility" element={<AccessibilityDashboard />} />
                   <Route path="/notifications" element={<Notifications />} />
                   <Route path="/tutorial" element={<Tutorial />} />
                   <Route path="/visual-accessibility" element={<VisualAccessibility />} />
@@ -153,8 +141,6 @@ function App() {
                 </Routes>
               </div>
             </main>
-          </div>
-          
         </div>
       </Router>
     </AccessibilityProvider>

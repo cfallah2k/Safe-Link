@@ -380,7 +380,7 @@ const StorytellingPlatform: React.FC = () => {
           </div>
           <button
             onClick={() => setShowCreateForm(true)}
-            className="btn-primary flex items-center space-x-2"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
           >
             <Plus size={16} />
             <span>Share Story</span>
@@ -428,7 +428,7 @@ const StorytellingPlatform: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Categories</option>
               {categories.map(category => (
@@ -446,7 +446,7 @@ const StorytellingPlatform: React.FC = () => {
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Languages</option>
               {languages.map(lang => (
@@ -464,7 +464,7 @@ const StorytellingPlatform: React.FC = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
@@ -508,7 +508,7 @@ const StorytellingPlatform: React.FC = () => {
             <p className="text-gray-500 mb-4">Try adjusting your filters or be the first to share a story</p>
             <button
               onClick={() => setShowCreateForm(true)}
-              className="btn-primary"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
             >
               Share Your Story
             </button>
@@ -637,7 +637,7 @@ const StorytellingPlatform: React.FC = () => {
                     value={newStory.title}
                     onChange={(e) => setNewStory({ ...newStory, title: e.target.value })}
                     placeholder="Give your story a title..."
-                    className="input-field"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
 
@@ -678,7 +678,7 @@ const StorytellingPlatform: React.FC = () => {
                       value={newStory.content}
                       onChange={(e) => setNewStory({ ...newStory, content: e.target.value })}
                       placeholder="Share your experience, advice, or question..."
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       rows={6}
                     />
                   </div>
@@ -696,7 +696,7 @@ const StorytellingPlatform: React.FC = () => {
                           <p className="text-gray-600 mb-4">Record your story</p>
                           <button
                             onClick={isRecording ? stopRecording : startRecording}
-                            className={`btn-primary flex items-center space-x-2 mx-auto ${
+                            className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto ${
                               isRecording ? 'bg-red-500 hover:bg-red-600' : ''
                             }`}
                           >
@@ -717,7 +717,7 @@ const StorytellingPlatform: React.FC = () => {
                           </div>
                           <button
                             onClick={() => setRecordedAudio(null)}
-                            className="btn-outline"
+                            className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg"
                           >
                             Record Again
                           </button>
@@ -735,7 +735,7 @@ const StorytellingPlatform: React.FC = () => {
                     <select
                       value={newStory.category}
                       onChange={(e) => setNewStory({ ...newStory, category: e.target.value })}
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       {categories.map(category => (
                         <option key={category.value} value={category.value}>
@@ -752,7 +752,7 @@ const StorytellingPlatform: React.FC = () => {
                     <select
                       value={newStory.language}
                       onChange={(e) => setNewStory({ ...newStory, language: e.target.value })}
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       {languages.map(lang => (
                         <option key={lang.value} value={lang.value}>
@@ -771,7 +771,7 @@ const StorytellingPlatform: React.FC = () => {
                     <select
                       value={newStory.ageGroup}
                       onChange={(e) => setNewStory({ ...newStory, ageGroup: e.target.value })}
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       {ageGroups.map(group => (
                         <option key={group.value} value={group.value}>
@@ -788,7 +788,7 @@ const StorytellingPlatform: React.FC = () => {
                     <select
                       value={newStory.location}
                       onChange={(e) => setNewStory({ ...newStory, location: e.target.value })}
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Select County</option>
                       {liberianCounties.map(county => (
@@ -852,13 +852,13 @@ const StorytellingPlatform: React.FC = () => {
                 <div className="flex space-x-3 pt-4">
                   <button
                     onClick={() => setShowCreateForm(false)}
-                    className="flex-1 btn-outline"
+                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleCreateStory}
-                    className="flex-1 btn-primary"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
                   >
                     Share Story
                   </button>
