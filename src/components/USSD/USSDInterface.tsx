@@ -29,7 +29,8 @@ const USSDInterface: React.FC = () => {
     const sessionId = `demo_${Date.now()}`;
     const response = ussdService.startSession(phoneNumber || 'demo', language);
     setSessionId(sessionId);
-    setCurrentMenu(ussdService.getMenu('main'));
+    const mainMenu = ussdService.getMenu('main');
+    setCurrentMenu(mainMenu || null);
   }, [phoneNumber, language]);
 
   const handleInput = (value: string) => {
@@ -46,13 +47,14 @@ const USSDInterface: React.FC = () => {
     if (option) {
       if (option.action === 'menu' && option.targetId) {
         const newMenu = ussdService.getMenu(option.targetId);
-        setCurrentMenu(newMenu);
+        setCurrentMenu(newMenu || null);
       } else if (option.action === 'action' && option.handler) {
         // Show action result
         const result = option.handler();
         // For demo purposes, we'll show the result and then go back to main menu
         setTimeout(() => {
-          setCurrentMenu(ussdService.getMenu('main'));
+          const mainMenu = ussdService.getMenu('main');
+          setCurrentMenu(mainMenu || null);
         }, 3000);
       }
     }
@@ -69,9 +71,10 @@ const USSDInterface: React.FC = () => {
   const goBack = () => {
     if (currentMenu?.parentId) {
       const parentMenu = ussdService.getMenu(currentMenu.parentId);
-      setCurrentMenu(parentMenu);
+      setCurrentMenu(parentMenu || null);
     } else {
-      setCurrentMenu(ussdService.getMenu('main'));
+      const mainMenu = ussdService.getMenu('main');
+      setCurrentMenu(mainMenu || null);
     }
   };
 
@@ -188,7 +191,10 @@ const USSDInterface: React.FC = () => {
               <span>Back</span>
             </button>
             <button
-              onClick={() => setCurrentMenu(ussdService.getMenu('main'))}
+              onClick={() => {
+                const mainMenu = ussdService.getMenu('main');
+                setCurrentMenu(mainMenu || null);
+              }}
               className="p-2 bg-gray-800 text-green-400 rounded hover:bg-gray-700 flex items-center justify-center space-x-1"
             >
               <Home className="w-4 h-4" />
