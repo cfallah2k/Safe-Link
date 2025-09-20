@@ -147,7 +147,7 @@ const SRHRAlerts: React.FC = () => {
       return;
     }
 
-    const alert: SRHRAlert = {
+    const newSRHRAlert: SRHRAlert = {
       id: Date.now().toString(),
       type: newAlert.type || 'contraception',
       title: newAlert.title,
@@ -160,7 +160,7 @@ const SRHRAlerts: React.FC = () => {
       timesSent: 0
     };
 
-    const updatedAlerts = [...alerts, alert];
+    const updatedAlerts = [...alerts, newSRHRAlert];
     await saveAlerts(updatedAlerts);
     setShowCreateForm(false);
     setNewAlert({
