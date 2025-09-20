@@ -27,12 +27,12 @@ interface Question {
 }
 
 interface QuizResult {
+  id: string;
   score: number;
   totalQuestions: number;
-  correctAnswers: number;
   timeSpent: number;
+  date: string;
   category: string;
-  completedAt: number;
 }
 
 const AccessibleQuizGame: React.FC = () => {
@@ -430,7 +430,7 @@ const AccessibleQuizGame: React.FC = () => {
                         <span className="font-medium text-blue-900">Average Score</span>
                       </div>
                       <p className="text-2xl font-bold text-blue-600">
-                        {Math.round(userStats.reduce((acc, stat) => acc + (stat.correctAnswers / stat.totalQuestions * 100), 0) / userStats.length)}%
+                        {Math.round(userStats.reduce((acc, stat) => acc + (stat.score / stat.totalQuestions * 100), 0) / userStats.length)}%
                       </p>
                     </div>
                   </div>
@@ -443,11 +443,11 @@ const AccessibleQuizGame: React.FC = () => {
                           <div>
                             <p className="text-sm font-medium">{stat.category}</p>
                             <p className="text-xs text-gray-500">
-                              {formatTime(stat.timeSpent)} • {new Date(stat.completedAt).toLocaleDateString()}
+                              {formatTime(stat.timeSpent)} • {new Date(stat.date).toLocaleDateString()}
                             </p>
                           </div>
-                          <span className={`text-sm font-bold ${getScoreColor(stat.correctAnswers / stat.totalQuestions * 100)}`}>
-                            {Math.round(stat.correctAnswers / stat.totalQuestions * 100)}%
+                          <span className={`text-sm font-bold ${getScoreColor(stat.score / stat.totalQuestions * 100)}`}>
+                            {Math.round(stat.score / stat.totalQuestions * 100)}%
                           </span>
                         </div>
                       ))}
