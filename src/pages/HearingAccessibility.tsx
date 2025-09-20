@@ -9,7 +9,6 @@ import {
   Vibrate,
   Bell,
   BellOff,
-  Captions,
   Subtitles,
   Flashlight,
   FlashlightOff,
@@ -116,7 +115,7 @@ const HearingAccessibility: React.FC = () => {
       id: 'captions',
       title: 'Auto Captions',
       description: 'Show captions for all video content',
-      icon: Captions,
+      icon: Subtitles,
       isEnabled: captions,
       onToggle: () => setCaptions(!captions)
     },
