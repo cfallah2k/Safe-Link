@@ -104,7 +104,7 @@ function App() {
   return (
     <AccessibilityProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+        <div className="min-h-screen bg-gray-50 overflow-x-hidden" style={{ overflowY: 'visible' }}>
           <OfflineIndicator />
           
           {/* Desktop Header */}

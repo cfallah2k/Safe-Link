@@ -117,8 +117,8 @@ const DesktopHeader: React.FC = () => {
   return (
     <>
     <header className="bg-white border-b border-gray-200 shadow-sm overflow-visible">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ overflow: 'visible' }}>
+        <div className="flex items-center justify-between h-16" style={{ overflow: 'visible' }}>
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -156,7 +156,7 @@ const DesktopHeader: React.FC = () => {
 
                   {/* Dropdown Menu */}
                   {isOpen && (
-                    <div className="absolute top-full left-0 mt-1 w-56 sm:w-64 bg-white rounded-xl shadow-lg border border-gray-200 z-50">
+                    <div className="absolute top-full left-0 mt-1 w-56 sm:w-64 bg-white rounded-xl shadow-xl border-2 border-red-500 z-50" style={{ zIndex: 9999, minHeight: '200px' }}>
                       <div className="p-2">
                         {menu.items.map((item) => {
                           const ItemIcon = item.icon;
@@ -198,7 +198,7 @@ const DesktopHeader: React.FC = () => {
     {/* Backdrop for closing dropdowns */}
     {activeDropdown && (
       <div 
-        className="fixed inset-0 z-40" 
+        className="fixed inset-0 z-30" 
         onClick={() => setActiveDropdown(null)}
       />
     )}
