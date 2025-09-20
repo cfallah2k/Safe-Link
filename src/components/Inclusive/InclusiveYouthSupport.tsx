@@ -17,7 +17,6 @@ import {
   Calendar
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
-import UserVerification from '../Auth/UserVerification';
 
 interface InclusiveService {
   id: string;
@@ -70,9 +69,6 @@ const InclusiveYouthSupport: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showDiscreetMode, setShowDiscreetMode] = useState(false);
-  const [showVerification, setShowVerification] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [verificationService, setVerificationService] = useState<string>('');
 
   const inclusiveServices: InclusiveService[] = useMemo(() => [
     {
@@ -325,22 +321,8 @@ const InclusiveYouthSupport: React.FC = () => {
     window.open(`https://${website}`, '_blank');
   };
 
-  // Check if a service requires verification
-  const requiresVerification = (service: InclusiveService): boolean => {
-    const sensitiveTypes = ['counseling', 'medical', 'legal'];
-    return sensitiveTypes.includes(service.type);
-  };
 
 
-  // Handle verification completion
-  const handleVerificationComplete = (verified: boolean) => {
-    setIsVerified(verified);
-    setShowVerification(false);
-    
-    if (verified) {
-      alert('Verification successful! You can now access sensitive services.');
-    }
-  };
 
   useEffect(() => {
     loadData();
@@ -793,18 +775,6 @@ const InclusiveYouthSupport: React.FC = () => {
         </div>
       )}
 
-      {/* Verification Modal */}
-      {showVerification && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <UserVerification
-              onVerificationComplete={handleVerificationComplete}
-              serviceName={verificationService}
-              isEmergency={false}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
