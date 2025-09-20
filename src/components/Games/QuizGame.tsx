@@ -8,8 +8,7 @@ import {
   Star, 
   RotateCcw,
   BookOpen,
-  Target,
-  Clock
+  Target
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 
