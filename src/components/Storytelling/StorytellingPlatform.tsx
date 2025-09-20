@@ -293,7 +293,7 @@ const StorytellingPlatform: React.FC = () => {
   };
 
   const handleReportStory = async (storyId: string) => {
-    if (confirm('Are you sure you want to report this story? It will be reviewed by moderators.')) {
+    if (window.confirm('Are you sure you want to report this story? It will be reviewed by moderators.')) {
       // In a real app, this would send a report to moderators
       alert('Story reported. Thank you for helping keep our community safe.');
     }

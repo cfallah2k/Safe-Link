@@ -25,6 +25,7 @@ import {
   Shield,
   MessageCircle,
   Calendar,
+  Clock,
   Play,
   Pause,
   SkipForward,

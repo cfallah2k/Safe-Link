@@ -180,7 +180,7 @@ const SRHRAlerts: React.FC = () => {
   };
 
   const handleDeleteAlert = async (alertId: string) => {
-    if (confirm('Are you sure you want to delete this alert?')) {
+    if (window.confirm('Are you sure you want to delete this alert?')) {
       const updatedAlerts = alerts.filter(a => a.id !== alertId);
       await saveAlerts(updatedAlerts);
     }
