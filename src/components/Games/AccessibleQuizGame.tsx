@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { 
   CheckCircle, 
   XCircle, 
@@ -53,7 +53,7 @@ const AccessibleQuizGame: React.FC = () => {
   const optionsRef = useRef<HTMLDivElement>(null);
 
   // Sample questions
-  const sampleQuestions: Question[] = [
+  const sampleQuestions: Question[] = useMemo(() => [
     {
       id: '1',
       question: 'What is the most effective way to prevent HIV transmission?',
@@ -96,7 +96,7 @@ const AccessibleQuizGame: React.FC = () => {
       category: 'Vaccination',
       difficulty: 'medium'
     }
-  ];
+  ], []);
 
   const categories = [
     { value: 'all', label: 'All Topics' },
@@ -164,7 +164,7 @@ const AccessibleQuizGame: React.FC = () => {
     }
   };
 
-  const handleVoiceCommand = (command: any) => {
+  const handleVoiceCommand = useCallback((command: any) => {
     switch (command.action) {
       case 'quiz':
         if (!quizStarted) {
@@ -202,9 +202,9 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  };
+  }, [quizStarted, selectedAnswer, showResult]);
 
-  const handleKeyboardAction = (action: string) => {
+  const handleKeyboardAction = useCallback((action: string) => {
     switch (action) {
       case 'select-option-a':
         setSelectedAnswer(0);
@@ -229,7 +229,7 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  };
+  }, [selectedAnswer, showResult]);
 
   useEffect(() => {
     setQuestions(sampleQuestions);
@@ -256,7 +256,7 @@ const AccessibleQuizGame: React.FC = () => {
         console.error('Voice command error:', error);
       });
     }
-  }, [settings.voiceCommands]);
+  }, [settings.voiceCommands, handleVoiceCommand]);
 
   // Keyboard navigation integration
   useEffect(() => {
@@ -268,7 +268,7 @@ const AccessibleQuizGame: React.FC = () => {
     } else {
       keyboardNavigationService.disable();
     }
-  }, [settings.keyboardNavigation]);
+  }, [settings.keyboardNavigation, handleKeyboardAction]);
 
   const loadUserStats = async () => {
     try {
