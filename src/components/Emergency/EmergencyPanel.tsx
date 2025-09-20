@@ -223,7 +223,7 @@ const EmergencyPanel: React.FC = () => {
       timestamp: Date.now(),
       type: 'call',
       action: `Called ${contact.name}`,
-      location: userLocation || undefined
+      location: userLocation ? { lat: userLocation.latitude, lng: userLocation.longitude } : undefined
     };
 
     const newLogs = [...emergencyLogs, log];
