@@ -29,7 +29,8 @@ import {
   FileText,
   Image,
   Lightbulb,
-  HelpCircle
+  HelpCircle,
+  Eye
 } from 'lucide-react';
 
 const CognitiveAccessibility: React.FC = () => {
