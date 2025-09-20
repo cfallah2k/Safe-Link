@@ -121,11 +121,9 @@ const EmergencyPanel: React.FC = () => {
           accuracy: 0,
           timestamp: new Date().toISOString()
         });
-        setLocationPermissionGranted(false);
       }
     } catch (error) {
       console.error('Error getting location:', error);
-      setLocationPermissionGranted(false);
     }
   };
 
