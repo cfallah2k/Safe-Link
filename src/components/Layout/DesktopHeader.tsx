@@ -180,19 +180,18 @@ const DesktopHeader: React.FC = () => {
             })}
           </nav>
 
-          {/* Mobile Hamburger Menu Button - Visible on mobile */}
+          {/* Left side - Notifications */}
+          <div className="flex items-center">
+            <NotificationSystem />
+          </div>
+
+          {/* Right side - Mobile Hamburger Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-
-          {/* Right side - Status and Actions */}
-          <div className="flex items-center space-x-4">
-            {/* Notifications */}
-            <NotificationSystem />
-          </div>
         </div>
       </div>
     </header>
