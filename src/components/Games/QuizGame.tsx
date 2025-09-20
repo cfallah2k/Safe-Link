@@ -3,6 +3,7 @@ import {
   CheckCircle, 
   XCircle, 
   ArrowRight, 
+  ArrowLeft,
   Trophy, 
   Star, 
   RotateCcw,
@@ -2574,47 +2575,41 @@ const QuizGame: React.FC = () => {
               <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full mb-4">
                 <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
               </div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Quiz Completed!</h1>
+              <p className="text-gray-600 mb-6">Great job! Here's how you did:</p>
               
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Quiz Completed!</h1>
-              <p className="text-sm sm:text-base text-gray-600 mb-6">Great job on completing the SRHR knowledge quiz</p>
-          
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-blue-50 rounded-lg p-4">
-              <p className="text-2xl font-bold text-blue-600">{score}</p>
-              <p className="text-sm text-blue-800">Correct</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-2xl font-bold text-gray-600">{questions.length}</p>
-              <p className="text-sm text-gray-800">Total</p>
-            </div>
-            <div className="bg-green-50 rounded-lg p-4">
-              <p className={`text-2xl font-bold ${getScoreColor(percentage)}`}>{percentage}%</p>
-              <p className="text-sm text-gray-800">Score</p>
-            </div>
-          </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div className="bg-green-50 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-green-600">{percentage}%</div>
+                  <div className="text-sm text-green-700">Score</div>
+                </div>
+                <div className="bg-blue-50 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-blue-600">{score}</div>
+                  <div className="text-sm text-blue-700">Correct</div>
+                </div>
+                <div className="bg-purple-50 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-purple-600">{timeSpent}s</div>
+                  <div className="text-sm text-purple-700">Time</div>
+                </div>
+              </div>
 
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <div className="flex items-center justify-center space-x-2 mb-2">
-              <Clock className="w-5 h-5 text-gray-600" />
-              <span className="font-medium text-gray-900">Time Spent</span>
+              <div className="space-y-4">
+                <button
+                  onClick={resetQuiz}
+                  className="w-full btn-primary flex items-center justify-center space-x-2"
+                >
+                  <RotateCcw size={16} />
+                  <span>Take Another Quiz</span>
+                </button>
+                <button
+                  onClick={() => window.location.href = '/games'}
+                  className="w-full btn-outline flex items-center justify-center space-x-2"
+                >
+                  <ArrowLeft size={16} />
+                  <span>Back to Games</span>
+                </button>
+              </div>
             </div>
-            <p className="text-lg font-bold text-gray-600">{formatTime(timeSpent)}</p>
-          </div>
-
-          <div className="flex space-x-4">
-            <button
-              onClick={resetQuiz}
-              className="flex-1 btn-outline flex items-center justify-center space-x-2"
-            >
-              <RotateCcw size={16} />
-              <span>Take Another Quiz</span>
-            </button>
-            <button
-              onClick={() => window.location.href = '/'}
-              className="flex-1 btn-primary"
-            >
-              Back to Home
-            </button>
           </div>
         </div>
       </div>
