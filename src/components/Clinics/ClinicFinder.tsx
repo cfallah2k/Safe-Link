@@ -310,6 +310,7 @@ const ClinicFinder: React.FC = () => {
               </button>
             </div>
           </div>
+          </div>
         </div>
       </div>
 
