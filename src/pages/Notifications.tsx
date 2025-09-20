@@ -12,7 +12,6 @@ import {
   BookOpen,
   Users,
   ArrowLeft,
-  Filter,
   Search,
   CheckCheck
 } from 'lucide-react';
