@@ -7,14 +7,11 @@ import {
   Wifi,
   WifiOff,
   Download,
-  Upload,
-  Settings,
   BarChart3,
   Users,
   Globe,
   CheckCircle,
-  XCircle,
-  AlertCircle
+  XCircle
 } from 'lucide-react';
 import { useAccessibility } from '../../contexts/AccessibilityContext';
 import { smsService } from '../../services/smsService';

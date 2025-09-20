@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
 export interface AccessibilitySettings {
   // Visual Accessibility
@@ -94,7 +94,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ ch
     localStorage.removeItem('accessibility-settings');
   };
 
-  const applyAccessibilityStyles = () => {
+  const applyAccessibilityStyles = useCallback(() => {
     const root = document.documentElement;
     
     // Font size
@@ -139,11 +139,11 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ ch
     } else {
       root.classList.remove('low-bandwidth');
     }
-  };
+  }, [settings]);
 
   useEffect(() => {
     applyAccessibilityStyles();
-  }, [settings]);
+  }, [applyAccessibilityStyles]);
 
   // Auto-detect some settings
   useEffect(() => {
@@ -164,7 +164,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ ch
     if (isMobile && !settings.largeTouchTargets) {
       updateSetting('largeTouchTargets', true);
     }
-  }, []);
+  }, [settings.reducedMotion, settings.highContrast, settings.largeTouchTargets]);
 
   const value: AccessibilityContextType = {
     settings,

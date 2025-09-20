@@ -5,7 +5,6 @@ import {
   MousePointer, 
   Volume2, 
   Smartphone, 
-  Wifi,
   RotateCcw,
   Check,
   X

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   CheckCircle, 
   XCircle, 
@@ -45,7 +45,7 @@ const AccessibleQuizGame: React.FC = () => {
   const [timeSpent, setTimeSpent] = useState(0);
   const [quizStarted, setQuizStarted] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isSpeaking] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [userStats, setUserStats] = useState<QuizResult[]>([]);
   
@@ -108,7 +108,7 @@ const AccessibleQuizGame: React.FC = () => {
   useEffect(() => {
     setQuestions(sampleQuestions);
     loadUserStats();
-  }, []);
+  }, [sampleQuestions]);
 
   useEffect(() => {
     if (quizStarted && !quizCompleted) {
@@ -130,7 +130,7 @@ const AccessibleQuizGame: React.FC = () => {
         console.error('Voice command error:', error);
       });
     }
-  }, [settings.voiceCommands]);
+  }, [settings.voiceCommands, handleVoiceCommand]);
 
   // Keyboard navigation integration
   useEffect(() => {
@@ -142,9 +142,9 @@ const AccessibleQuizGame: React.FC = () => {
     } else {
       keyboardNavigationService.disable();
     }
-  }, [settings.keyboardNavigation]);
+  }, [settings.keyboardNavigation, handleKeyboardAction]);
 
-  const handleVoiceCommand = (command: any) => {
+  const handleVoiceCommand = useCallback((command: any) => {
     switch (command.action) {
       case 'quiz':
         if (!quizStarted) {
@@ -182,9 +182,9 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  };
+  }, [quizStarted, selectedAnswer, showResult]);
 
-  const handleKeyboardAction = (action: string) => {
+  const handleKeyboardAction = useCallback((action: string) => {
     switch (action) {
       case 'select-option-a':
         setSelectedAnswer(0);
@@ -209,7 +209,7 @@ const AccessibleQuizGame: React.FC = () => {
         }
         break;
     }
-  };
+  }, [selectedAnswer, showResult]);
 
   const readCurrentQuestion = () => {
     if (questions[currentQuestionIndex]) {
