@@ -216,25 +216,33 @@ const NotificationSystem: React.FC = () => {
           <div className="
             fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50
             sm:absolute sm:right-0 sm:top-full sm:mt-2 sm:inset-x-auto sm:transform-none
-            w-auto sm:w-80 lg:w-96 bg-white rounded-xl shadow-xl border border-gray-200 
+            w-auto sm:w-80 lg:w-96 bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-200/50 
             max-h-[80vh] sm:max-h-96 overflow-hidden
           ">
             {/* Header */}
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-4 sm:p-6 border-b border-gray-200/50 bg-gradient-to-r from-blue-50 to-purple-50">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-gradient-to-r from-primary-500 to-purple-500 rounded-xl">
+                    <Bell className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">Notifications</h3>
+                    <p className="text-sm text-gray-600">{unreadCount} unread</p>
+                  </div>
+                </div>
                 <div className="flex items-center space-x-2">
                   {unreadCount > 0 && (
                     <button
                       onClick={markAllAsRead}
-                      className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                      className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1 rounded-lg hover:bg-primary-50 transition-colors"
                     >
                       Mark all read
                     </button>
                   )}
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -250,52 +258,52 @@ const NotificationSystem: React.FC = () => {
                   <p className="text-gray-500 text-sm">No notifications</p>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-gray-100/50">
                   {notifications.map((notification) => {
                     const Icon = getNotificationIcon(notification.type, notification.category);
                     
                     return (
                       <div
                         key={notification.id}
-                        className={`p-4 hover:bg-gray-50 transition-colors ${
-                          !notification.isRead ? 'bg-blue-50' : ''
+                        className={`p-4 sm:p-5 hover:bg-gray-50/50 transition-all duration-200 ${
+                          !notification.isRead ? 'bg-gradient-to-r from-blue-50/50 to-purple-50/50 border-l-4 border-primary-500' : ''
                         }`}
                       >
                         <div className="flex items-start space-x-3">
                           {/* Icon */}
-                          <div className={`p-2 rounded-lg ${getNotificationColor(notification.type)} flex-shrink-0`}>
-                            <Icon className="w-4 h-4" />
+                          <div className={`p-3 rounded-xl shadow-sm ${getNotificationColor(notification.type)} flex-shrink-0`}>
+                            <Icon className="w-5 h-5" />
                           </div>
 
                           {/* Content */}
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between mb-1">
-                              <h4 className="text-sm font-medium text-gray-900 truncate">
+                            <div className="flex items-start justify-between mb-2">
+                              <h4 className="text-sm font-semibold text-gray-900 truncate">
                                 {notification.title}
                               </h4>
-                              <div className="flex items-center space-x-1 ml-2">
+                              <div className="flex items-center space-x-2 ml-2">
                                 {!notification.isRead && (
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                                  <div className="w-2 h-2 bg-primary-500 rounded-full flex-shrink-0 animate-pulse"></div>
                                 )}
                                 <button
                                   onClick={() => deleteNotification(notification.id)}
-                                  className="p-1 text-gray-400 hover:text-red-500 rounded"
+                                  className="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                                 >
                                   <X className="w-3 h-3" />
                                 </button>
                               </div>
                             </div>
 
-                            <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                            <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
                               {notification.message}
                             </p>
 
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-2">
-                                <span className={`text-xs px-2 py-1 rounded-full ${getCategoryColor(notification.category)}`}>
+                                <span className={`text-xs px-3 py-1 rounded-full font-medium ${getCategoryColor(notification.category)}`}>
                                   {notification.category}
                                 </span>
-                                <span className="text-xs text-gray-500">
+                                <span className="text-xs text-gray-500 font-medium">
                                   {formatTimeAgo(notification.timestamp)}
                                 </span>
                               </div>
@@ -303,7 +311,7 @@ const NotificationSystem: React.FC = () => {
                               {notification.actionUrl && (
                                 <button
                                   onClick={() => handleAction(notification)}
-                                  className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+                                  className="text-xs text-primary-600 hover:text-primary-700 font-semibold px-3 py-1 rounded-lg hover:bg-primary-50 transition-colors"
                                 >
                                   {notification.actionText}
                                 </button>

@@ -13,7 +13,8 @@ import {
   Phone,
   Play,
   Download,
-  FileText
+  FileText,
+  Smartphone
 } from 'lucide-react';
 import Header from '../components/Layout/Header';
 
@@ -44,6 +45,14 @@ const Home: React.FC = () => {
       description: 'Read in-depth SRHR guides',
       color: 'bg-blue-500',
       textColor: 'text-blue-600'
+    },
+    {
+      path: '/sms',
+      icon: Smartphone,
+      title: 'SMS & USSD',
+      description: 'Access via SMS and USSD codes',
+      color: 'bg-green-500',
+      textColor: 'text-green-600'
     },
     {
       path: '/clinics',

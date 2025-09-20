@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Send, Bot, User, Shield, Loader2 } from 'lucide-react';
+import { Send, Bot, User, Shield, Loader2, MessageCircle, Sparkles, Heart, Zap } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 import { useOffline } from '../../hooks/useOffline';
 
@@ -176,52 +176,72 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen-safe bg-gray-50 overflow-hidden">
-      {/* Header - Enhanced for mobile */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sm:px-6 flex-shrink-0" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
+    <div className="flex flex-col h-screen-safe bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden">
+      {/* Modern Header with gradient */}
+      <div className="bg-gradient-to-r from-primary-600 to-purple-600 text-white px-4 py-4 sm:px-6 flex-shrink-0 shadow-lg" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3 min-w-0 flex-1">
-            <div className="p-2 sm:p-3 bg-primary-100 rounded-xl flex-shrink-0">
-              <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
+            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl flex-shrink-0">
+              <Bot className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">SRHR Assistant</h1>
-              <p className="text-xs sm:text-sm text-gray-500 truncate">
-                {isOnline ? 'Online' : 'Offline'} • Anonymous
-              </p>
+              <h1 className="text-lg sm:text-xl font-bold text-white truncate">SRHR Assistant</h1>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
+                <p className="text-sm text-white/80 truncate">
+                  {isOnline ? 'Online' : 'Offline'} • Anonymous & Secure
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
-            <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
-            <span className="text-xs sm:text-sm text-green-600 font-medium hidden sm:inline">Secure</span>
+            <div className="p-2 bg-white/20 backdrop-blur-sm rounded-xl">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Messages - Enhanced mobile scrolling */}
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 smooth-scroll">
+      {/* Messages - Modern chat bubbles */}
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6 smooth-scroll">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`flex space-x-2 sm:space-x-3 max-w-[85%] sm:max-w-xs lg:max-w-md ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
-              <div className={`p-2 sm:p-3 rounded-full flex-shrink-0 ${message.isUser ? 'bg-primary-600' : 'bg-gray-200'}`}>
+            <div className={`flex space-x-3 max-w-[90%] sm:max-w-md lg:max-w-lg ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
+              {/* Avatar */}
+              <div className={`p-3 rounded-2xl flex-shrink-0 shadow-lg ${message.isUser 
+                ? 'bg-gradient-to-br from-primary-500 to-primary-600' 
+                : 'bg-gradient-to-br from-purple-500 to-pink-500'
+              }`}>
                 {message.isUser ? (
-                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  <User className="w-5 h-5 text-white" />
                 ) : (
-                  <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                  <Bot className="w-5 h-5 text-white" />
                 )}
               </div>
-              <div className={`rounded-xl px-3 py-2 sm:px-4 sm:py-3 ${message.isUser ? 'bg-primary-600 text-white' : 'bg-white text-gray-900 shadow-sm border border-gray-100'}`}>
+              
+              {/* Message bubble */}
+              <div className={`rounded-2xl px-4 py-3 shadow-lg backdrop-blur-sm ${
+                message.isUser 
+                  ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white' 
+                  : 'bg-white/90 text-gray-900 border border-gray-200/50'
+              }`}>
                 <p className="text-sm sm:text-base leading-relaxed break-words">{message.text}</p>
+                
+                {/* Suggestions with modern design */}
                 {message.suggestions && (
-                  <div className="mt-2 sm:mt-3 space-y-1 sm:space-y-2">
+                  <div className="mt-3 space-y-2">
                     {message.suggestions.map((suggestion, index) => (
                       <button
                         key={index}
                         onClick={() => handleSuggestionClick(suggestion)}
-                        className="block w-full text-left text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-lg text-gray-700 transition-colors touch-manipulation"
+                        className={`block w-full text-left text-xs sm:text-sm px-3 py-2 rounded-xl transition-all duration-200 touch-manipulation ${
+                          message.isUser
+                            ? 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
+                            : 'bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 text-gray-700 border border-gray-200'
+                        }`}
                       >
                         {suggestion}
                       </button>
@@ -235,14 +255,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
         
         {isLoading && (
           <div className="flex justify-start">
-            <div className="flex space-x-2 sm:space-x-3">
-              <div className="p-2 sm:p-3 rounded-full bg-gray-200 flex-shrink-0">
-                <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+            <div className="flex space-x-3">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0 shadow-lg">
+                <Bot className="w-5 h-5 text-white" />
               </div>
-              <div className="bg-white rounded-xl px-3 py-2 sm:px-4 sm:py-3 shadow-sm border border-gray-100">
-                <div className="flex items-center space-x-2">
-                  <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
-                  <span className="text-xs sm:text-sm text-gray-500">Thinking...</span>
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-lg border border-gray-200/50">
+                <div className="flex items-center space-x-3">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                  <span className="text-sm text-gray-600 font-medium">AI is thinking...</span>
                 </div>
               </div>
             </div>
@@ -252,42 +276,51 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input - Enhanced mobile input */}
-      <div className="bg-white border-t border-gray-200 p-3 sm:p-4 flex-shrink-0" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
-        <div className="flex space-x-2 sm:space-x-3">
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask about sexual and reproductive health..."
-            className="flex-1 input-field text-sm sm:text-base"
-            disabled={isLoading}
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={!inputText.trim() || isLoading}
-            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed p-3 sm:p-4"
-          >
-            <Send size={18} className="sm:w-5 sm:h-5" />
-          </button>
-        </div>
-        
-        {/* Common questions - Enhanced mobile layout */}
-        <div className="mt-3 sm:mt-4">
-          <p className="text-xs text-gray-500 mb-2 sm:mb-3">Quick questions:</p>
-          <div className="flex flex-wrap gap-2 sm:gap-3">
+      {/* Modern Input Area */}
+      <div className="bg-white/80 backdrop-blur-sm border-t border-gray-200/50 p-4 sm:p-6 flex-shrink-0 shadow-lg" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
+        {/* Quick questions with modern design */}
+        <div className="mb-4">
+          <div className="flex items-center space-x-2 mb-3">
+            <Sparkles className="w-4 h-4 text-purple-500" />
+            <p className="text-sm font-medium text-gray-600">Quick questions:</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
             {commonQuestions.slice(0, 3).map((question, index) => (
               <button
                 key={index}
                 onClick={() => handleSuggestionClick(question)}
-                className="text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-full text-gray-700 transition-colors touch-manipulation"
+                className="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 active:scale-95 rounded-full text-gray-700 transition-all duration-200 touch-manipulation border border-gray-200/50 shadow-sm"
               >
                 {question}
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Input field with modern design */}
+        <div className="flex space-x-3">
+          <div className="flex-1 relative">
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask about sexual and reproductive health..."
+              className="w-full px-4 py-3 bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-2xl text-sm sm:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 shadow-sm"
+              disabled={isLoading}
+            />
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <MessageCircle className="w-5 h-5 text-gray-400" />
+            </div>
+          </div>
+          <button
+            onClick={handleSendMessage}
+            disabled={!inputText.trim() || isLoading}
+            className="p-3 bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl shadow-lg transition-all duration-200 active:scale-95"
+          >
+            <Send size={20} className="text-white" />
+          </button>
         </div>
       </div>
     </div>

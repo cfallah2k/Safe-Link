@@ -7,12 +7,19 @@ import OfflineIndicator from './components/OfflineIndicator';
 import Navigation from './components/Layout/Navigation';
 import LoginForm from './components/Auth/LoginForm';
 import CreateCodeForm from './components/Auth/CreateCodeForm';
+import SRHRAlerts from './components/SMS/SRHRAlerts';
+import StorytellingPlatform from './components/Storytelling/StorytellingPlatform';
+import SafeSpaceLocator from './components/SafeSpace/SafeSpaceLocator';
+import ConsentEducationGame from './components/Games/ConsentEducationGame';
+import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
+import KioskInterface from './components/Kiosk/KioskInterface';
 
 // Pages
 import Home from './pages/Home';
 import Chatbot from './pages/Chatbot';
 import Videos from './pages/Videos';
 import Articles from './pages/Articles';
+import SMSInterface from './components/SMS/SMSInterface';
 import Clinics from './pages/Clinics';
 import Tracker from './pages/Tracker';
 import Games from './pages/Games';
@@ -102,9 +109,16 @@ function App() {
                 <Route path="/chatbot" element={<Chatbot />} />
                 <Route path="/videos" element={<Videos />} />
                 <Route path="/articles" element={<Articles />} />
+                <Route path="/sms" element={<SMSInterface />} />
+                <Route path="/sms-alerts" element={<SRHRAlerts />} />
+                <Route path="/stories" element={<StorytellingPlatform />} />
                 <Route path="/clinics" element={<Clinics />} />
+                <Route path="/safe-spaces" element={<SafeSpaceLocator />} />
                 <Route path="/tracker" element={<Tracker />} />
                 <Route path="/games" element={<Games />} />
+                <Route path="/consent-game" element={<ConsentEducationGame />} />
+                <Route path="/inclusive-support" element={<InclusiveYouthSupport />} />
+                <Route path="/kiosk" element={<KioskInterface />} />
                 <Route path="/emergency" element={<Emergency />} />
                 <Route path="/mentorship" element={<Mentorship />} />
                 <Route path="/offline" element={<OfflineMode />} />

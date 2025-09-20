@@ -17,7 +17,13 @@ import {
   Play,
   Download,
   FileText,
-  Globe
+  Globe,
+  Smartphone,
+  Bell,
+  Heart,
+  BookOpen,
+  Lock,
+  Monitor
 } from 'lucide-react';
 import { useState } from 'react';
 import { useOffline } from '../../hooks/useOffline';
@@ -34,9 +40,16 @@ const Navigation: React.FC = () => {
     { path: '/chatbot', icon: MessageCircle, label: t('navigation.chatbot') },
     { path: '/videos', icon: Play, label: 'Videos' },
     { path: '/articles', icon: FileText, label: 'Articles' },
+    { path: '/sms', icon: Smartphone, label: 'SMS & USSD' },
+    { path: '/sms-alerts', icon: Bell, label: 'SRHR Alerts' },
+    { path: '/stories', icon: BookOpen, label: 'Stories' },
     { path: '/clinics', icon: MapPin, label: t('navigation.clinics') },
+    { path: '/safe-spaces', icon: Lock, label: 'Safe Spaces' },
     { path: '/tracker', icon: Calendar, label: t('navigation.tracker') },
     { path: '/games', icon: Gamepad2, label: t('navigation.games') },
+    { path: '/consent-game', icon: Heart, label: 'Consent Game' },
+    { path: '/inclusive-support', icon: Users, label: 'Inclusive Support' },
+    { path: '/kiosk', icon: Monitor, label: 'Kiosk Mode' },
     { path: '/emergency', icon: Shield, label: t('navigation.emergency') },
     { path: '/mentorship', icon: Users, label: t('navigation.mentorship') },
     { path: '/offline', icon: Download, label: 'Offline Mode' },
