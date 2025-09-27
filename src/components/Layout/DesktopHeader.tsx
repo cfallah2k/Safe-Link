@@ -130,24 +130,23 @@ const DesktopHeader: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
-  // Get all navigation items for mobile menu
-  const getAllNavigationItems = (): NavigationItem[] => {
-    return dropdownMenus.flatMap(menu => menu.items);
-  };
 
   return (
     <>
     <header className="bg-white border-b border-gray-200 shadow-sm overflow-visible">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ overflow: 'visible' }}>
         <div className="flex items-center justify-between h-16" style={{ overflow: 'visible' }}>
-          {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Shield className="w-6 h-6 text-white" />
+          {/* Logo - Responsive sizing */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">Safe-Linkz</h1>
+            <div className="hidden sm:block">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">Safe-Linkz</h1>
               <p className="text-xs text-gray-500">Your Safe Space for SRHR</p>
+            </div>
+            <div className="sm:hidden">
+              <h1 className="text-lg font-bold text-gray-900">Safe-Linkz</h1>
             </div>
           </div>
 
@@ -180,23 +179,25 @@ const DesktopHeader: React.FC = () => {
             })}
           </nav>
 
-          {/* Left side - Notifications */}
-          <div className="flex items-center">
+          {/* Right side - Notifications and Mobile Menu */}
+          <div className="flex items-center space-x-2">
+            {/* Notifications - Always visible */}
             <NotificationSystem />
-          </div>
 
-          {/* Right side - Mobile Hamburger Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            {/* Mobile Hamburger Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-3 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors touch-manipulation min-h-[48px] min-w-[48px] flex items-center justify-center"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
     </header>
 
-    {/* Mobile Menu - Below header */}
+    {/* Mobile Menu - Organized like desktop dropdowns */}
     {isMobileMenuOpen && (
       <>
         {/* Mobile menu backdrop */}
@@ -204,31 +205,50 @@ const DesktopHeader: React.FC = () => {
           className="fixed inset-0 z-20 lg:hidden" 
           onClick={() => setIsMobileMenuOpen(false)}
         />
-        <div className="lg:hidden bg-white border-b border-gray-200 shadow-lg relative z-30">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="grid grid-cols-1 gap-2">
-            {getAllNavigationItems().map((item) => {
-              const ItemIcon = item.icon;
-              const active = isActive(item.path);
-              
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={handleItemClick}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                    active
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <ItemIcon className="w-5 h-5 flex-shrink-0" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              );
-            })}
+        <div className="lg:hidden bg-white border-b border-gray-200 shadow-lg relative z-30 max-h-[80vh] overflow-y-auto">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="space-y-6">
+              {dropdownMenus.map((menu) => {
+                const MenuIcon = menu.icon;
+                
+                return (
+                  <div key={menu.title} className="space-y-3">
+                    {/* Menu Section Header */}
+                    <div className="flex items-center space-x-2 px-3 py-2 bg-gray-50 rounded-lg">
+                      <MenuIcon className="w-5 h-5 text-gray-600" />
+                      <h3 className="text-sm font-semibold text-gray-800">
+                        {menu.title}
+                      </h3>
+                    </div>
+                    
+                    {/* Menu Items */}
+                    <div className="space-y-1 ml-4">
+                      {menu.items.map((item) => {
+                        const ItemIcon = item.icon;
+                        const active = isActive(item.path);
+                        
+                        return (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={handleItemClick}
+                            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 touch-manipulation min-h-[48px] ${
+                              active
+                                ? 'bg-primary-50 text-primary-700 border border-primary-200 shadow-sm'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 active:bg-gray-100'
+                            }`}
+                          >
+                            <ItemIcon className="w-5 h-5 flex-shrink-0" />
+                            <span className="text-sm font-medium">{item.label}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
         </div>
       </>
     )}
