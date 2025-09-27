@@ -11,7 +11,8 @@ import {
   Search,
   Download,
   Wifi,
-  WifiOff
+  WifiOff,
+  X
 } from 'lucide-react';
 import { useOffline } from '../hooks/useOffline';
 
@@ -35,6 +36,8 @@ const Videos: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [downloadedVideos, setDownloadedVideos] = useState<string[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const { isOnline } = useOffline();
 
   // Comprehensive SRHR video content with YouTube embeds
@@ -339,6 +342,16 @@ const Videos: React.FC = () => {
     // In a real app, this would trigger actual video download
   };
 
+  const handleViewDescription = (video: Video) => {
+    setSelectedVideo(video);
+    setShowDescriptionModal(true);
+  };
+
+  const closeDescriptionModal = () => {
+    setShowDescriptionModal(false);
+    setSelectedVideo(null);
+  };
+
 
   const formatViews = (views: number) => {
     if (views >= 1000) {
@@ -533,10 +546,7 @@ const Videos: React.FC = () => {
                     {/* Actions - View Description Button */}
                     <div className="flex space-x-3 pt-2">
                       <button
-                        onClick={() => {
-                          // Show full description in a modal or expand
-                          alert(`Description: ${video.description}`);
-                        }}
+                        onClick={() => handleViewDescription(video)}
                         className="flex-1 btn-primary text-sm sm:text-base py-3 flex items-center justify-center space-x-2"
                       >
                         <BookOpen className="w-4 h-4" />
@@ -605,6 +615,132 @@ const Videos: React.FC = () => {
           )}
         </div>
       </main>
+
+      {/* Description Modal */}
+      {showDescriptionModal && selectedVideo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-blue-500 to-green-500 text-white p-4 sm:p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <BookOpen className="w-6 h-6" />
+                  <h3 className="text-lg sm:text-xl font-semibold">Video Description</h3>
+                </div>
+                <button
+                  onClick={closeDescriptionModal}
+                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-4 sm:p-6 overflow-y-auto max-h-[60vh]">
+              {/* Video Title */}
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                {selectedVideo.title}
+              </h4>
+
+              {/* Video Stats */}
+              <div className="flex items-center space-x-4 mb-4 text-sm text-gray-600">
+                <div className="flex items-center space-x-1">
+                  <Eye className="w-4 h-4" />
+                  <span>{formatViews(selectedVideo.views)} views</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Star className="w-4 h-4 text-yellow-500" />
+                  <span>{selectedVideo.rating}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Clock className="w-4 h-4" />
+                  <span>{selectedVideo.duration}</span>
+                </div>
+              </div>
+
+              {/* Category and Difficulty */}
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="flex items-center space-x-2">
+                  {(() => {
+                    const CategoryIcon = getCategoryIcon(selectedVideo.category);
+                    return <CategoryIcon className="w-5 h-5 text-primary-600" />;
+                  })()}
+                  <span className="text-sm text-gray-500">{selectedVideo.category}</span>
+                </div>
+                <span className={`text-sm px-3 py-1 rounded-full ${getDifficultyColor(selectedVideo.difficulty)}`}>
+                  {selectedVideo.difficulty}
+                </span>
+              </div>
+
+              {/* Full Description */}
+              <div className="mb-6">
+                <h5 className="text-sm font-semibold text-gray-700 mb-2">Description</h5>
+                <p className="text-gray-600 leading-relaxed">
+                  {selectedVideo.description}
+                </p>
+              </div>
+
+              {/* Tags */}
+              <div className="mb-6">
+                <h5 className="text-sm font-semibold text-gray-700 mb-2">Tags</h5>
+                <div className="flex flex-wrap gap-2">
+                  {selectedVideo.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Video Embed */}
+              <div className="mb-6">
+                <h5 className="text-sm font-semibold text-gray-700 mb-2">Video Preview</h5>
+                <div className="aspect-video rounded-lg overflow-hidden">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?rel=0&modestbranding=1&showinfo=0`}
+                    title={selectedVideo.title}
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-gray-50 px-4 sm:px-6 py-4 flex justify-end space-x-3">
+              <button
+                onClick={closeDescriptionModal}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                Close
+              </button>
+              {selectedVideo.isOfflineAvailable && (
+                <button
+                  onClick={() => {
+                    handleDownload(selectedVideo.id);
+                    closeDescriptionModal();
+                  }}
+                  disabled={downloadedVideos.includes(selectedVideo.id)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    downloadedVideos.includes(selectedVideo.id)
+                      ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                      : 'bg-blue-500 text-white hover:bg-blue-600'
+                  }`}
+                >
+                  <Download className="w-4 h-4 inline mr-2" />
+                  {downloadedVideos.includes(selectedVideo.id) ? 'Downloaded' : 'Download'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
