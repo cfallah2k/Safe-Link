@@ -329,9 +329,10 @@ const SafeSpaceLocator: React.FC = () => {
     setIsVerified(verified);
     setShowVerification(false);
     
-    if (verified) {
-      // User is now verified, they can access the service
-      alert('Verification successful! You can now access sensitive services.');
+    if (verified && selectedSpace) {
+      // User is verified, they can now access directions
+      handleDirections(selectedSpace.coordinates);
+      setSelectedSpace(null);
     }
   };
 
@@ -707,8 +708,8 @@ const SafeSpaceLocator: React.FC = () => {
                   </button>
                   <button
                     onClick={() => {
-                      handleDirections(selectedSpace.coordinates);
-                      setSelectedSpace(null);
+                      setVerificationService(selectedSpace.name);
+                      setShowVerification(true);
                     }}
                     className="flex-1 btn-outline"
                   >

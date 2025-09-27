@@ -462,12 +462,14 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
             </div>
           </div>
         ) : (
-          <div className="p-4 space-y-4">
-            <div className="text-center py-4">
-              <Phone className="w-12 h-12 text-green-500 mx-auto mb-3" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Dialpad</h3>
-              <p className="text-gray-600 text-sm">Make calls and access services</p>
-            </div>
+          <div className="flex flex-col h-full">
+            {/* Dialpad Content - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
+              <div className="text-center py-4">
+                <Phone className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Dialpad</h3>
+                <p className="text-gray-600 text-sm">Make calls and access services</p>
+              </div>
 
             {/* Phone Number Display */}
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-3 sm:p-4 border border-gray-200/50">
@@ -578,6 +580,7 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
                   </div>
                 </button>
               </div>
+            </div>
             </div>
           </div>
         )}

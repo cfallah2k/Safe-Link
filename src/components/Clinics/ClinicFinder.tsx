@@ -12,6 +12,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
+import UserVerification from '../Auth/UserVerification';
 
 interface Clinic {
   id: string;
@@ -35,6 +36,8 @@ const ClinicFinder: React.FC = () => {
   const [sortBy, setSortBy] = useState<'distance' | 'rating' | 'name'>('distance');
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
+  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
 
   // Sample clinic data (in a real app, this would come from an API)
   const sampleClinics: Clinic[] = useMemo(() => [
@@ -236,6 +239,15 @@ const ClinicFinder: React.FC = () => {
     }
   };
 
+  const handleVerificationComplete = (verified: boolean) => {
+    setShowVerification(false);
+    if (verified && selectedClinic) {
+      // User is verified, they can now access directions
+      handleDirections(selectedClinic.coordinates);
+      setSelectedClinic(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -387,7 +399,10 @@ const ClinicFinder: React.FC = () => {
                       <span>Call Now</span>
                     </button>
                     <button
-                      onClick={() => handleDirections(clinic.coordinates)}
+                      onClick={() => {
+                        setSelectedClinic(clinic);
+                        setShowVerification(true);
+                      }}
                       className="flex-1 btn-outline flex items-center justify-center space-x-2 text-sm sm:text-base"
                     >
                       <Navigation size={16} />
@@ -435,6 +450,19 @@ const ClinicFinder: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Verification Modal */}
+      {showVerification && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <UserVerification
+              onVerificationComplete={handleVerificationComplete}
+              serviceName={selectedClinic?.name || 'Clinic'}
+              isEmergency={false}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

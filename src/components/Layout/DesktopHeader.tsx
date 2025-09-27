@@ -26,7 +26,8 @@ import {
   Brain,
   Menu,
   X,
-  Pill
+  Pill,
+  Navigation
 } from 'lucide-react';
 import NotificationSystem from '../UI/NotificationSystem';
 
@@ -58,6 +59,7 @@ const DesktopHeader: React.FC = () => {
         { path: '/', icon: Home, label: t('navigation.home') },
         { path: '/clinics', icon: MapPin, label: t('navigation.clinics') },
         { path: '/safe-spaces', icon: Lock, label: 'Safe Spaces' },
+        { path: '/secure-map', icon: Navigation, label: 'Secure Map' },
         { path: '/medication-order', icon: Pill, label: 'Order Medicine' },
         { path: '/emergency', icon: Shield, label: t('navigation.emergency') },
         { path: '/tracker', icon: Calendar, label: t('navigation.tracker') },
