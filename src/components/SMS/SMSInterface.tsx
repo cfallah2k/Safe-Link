@@ -167,25 +167,17 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
   return (
     <div className="flex flex-col h-screen-safe bg-gradient-to-br from-green-50 via-white to-blue-50 overflow-hidden">
 
-      {/* Header with Connection Status */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 py-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-3">
-            <Link
-              to="/offline"
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              title="Back to Offline Mode"
-            >
-              <ArrowLeft className="w-5 h-5 text-gray-600" />
-            </Link>
-            <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl">
-              <Phone className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">SMS & USSD Services</h2>
-              <p className="text-sm text-gray-600">Offline communication tools</p>
-            </div>
-          </div>
+      {/* Back Navigation */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 py-2">
+        <div className="flex items-center justify-between">
+          <Link
+            to="/offline"
+            className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            title="Back to Offline Mode"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-600" />
+            <span className="text-sm font-medium text-gray-700">Back to Offline Mode</span>
+          </Link>
           <div className="flex items-center space-x-2">
             {isOnline ? (
               <div className="flex items-center space-x-1 text-green-600">
@@ -478,25 +470,25 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
             </div>
 
             {/* Phone Number Display */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-3 sm:p-4 border border-gray-200/50">
               <div className="text-center">
-                <div className="text-2xl font-mono text-gray-900 mb-2">
+                <div className="text-lg sm:text-xl lg:text-2xl font-mono text-gray-900 mb-1 sm:mb-2 break-all">
                   {dialpadNumber || 'Enter number'}
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-xs sm:text-sm text-gray-500">
                   {dialpadNumber.length > 0 ? `${dialpadNumber.length} digits` : 'Ready to dial'}
                 </div>
               </div>
             </div>
 
             {/* Dialpad */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50">
-              <div className="grid grid-cols-3 gap-3">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-3 sm:p-4 border border-gray-200/50">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-sm mx-auto">
                 {['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map((digit) => (
                   <button
                     key={digit}
                     onClick={() => handleDialpadInput(digit)}
-                    className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 hover:from-green-100 hover:to-blue-100 rounded-2xl font-semibold text-gray-900 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
+                    className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 hover:from-green-100 hover:to-blue-100 rounded-xl sm:rounded-2xl font-semibold text-gray-900 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md text-lg sm:text-xl min-h-[60px] sm:min-h-[70px] lg:min-h-[80px]"
                   >
                     {digit}
                   </button>
@@ -504,23 +496,23 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
               </div>
               
               {/* Action buttons */}
-              <div className="flex space-x-3 mt-4">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-4 max-w-sm mx-auto">
                 <button
                   onClick={() => handleDialpadInput('clear')}
-                  className="flex-1 py-3 bg-red-100 text-red-600 rounded-xl font-medium hover:bg-red-200 transition-all duration-200"
+                  className="flex-1 py-2 sm:py-3 bg-red-100 text-red-600 rounded-xl font-medium hover:bg-red-200 transition-all duration-200 text-sm sm:text-base"
                 >
                   Clear
                 </button>
                 <button
                   onClick={() => handleDialpadInput('backspace')}
-                  className="flex-1 py-3 bg-orange-100 text-orange-600 rounded-xl font-medium hover:bg-orange-200 transition-all duration-200"
+                  className="flex-1 py-2 sm:py-3 bg-orange-100 text-orange-600 rounded-xl font-medium hover:bg-orange-200 transition-all duration-200 text-sm sm:text-base"
                 >
                   Backspace
                 </button>
                 <button
                   onClick={handleDialpadCall}
                   disabled={!dialpadNumber.trim()}
-                  className="flex-1 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl font-medium hover:from-green-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  className="flex-1 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl font-medium hover:from-green-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-sm sm:text-base"
                 >
                   Call
                 </button>
@@ -543,46 +535,46 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
             )}
 
             {/* Quick access numbers */}
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-2xl p-4">
-              <h4 className="font-semibold text-green-900 mb-3 flex items-center space-x-2">
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-2xl p-3 sm:p-4">
+              <h4 className="font-semibold text-green-900 mb-3 flex items-center space-x-2 text-sm sm:text-base">
                 <Heart className="w-4 h-4" />
                 <span>Quick Access Numbers</span>
               </h4>
               <div className="space-y-2">
                 <button
                   onClick={() => setDialpadNumber('911')}
-                  className="w-full text-left p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
+                  className="w-full text-left p-2 sm:p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Emergency</div>
-                      <div className="text-sm text-gray-600">911</div>
+                      <div className="font-medium text-gray-900 text-sm sm:text-base">Emergency</div>
+                      <div className="text-xs sm:text-sm text-gray-600">911</div>
                     </div>
-                    <Shield className="w-4 h-4 text-red-500" />
+                    <Shield className="w-4 h-4 text-red-500 flex-shrink-0" />
                   </div>
                 </button>
                 <button
                   onClick={() => setDialpadNumber('*123#')}
-                  className="w-full text-left p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
+                  className="w-full text-left p-2 sm:p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Health Info</div>
-                      <div className="text-sm text-gray-600">*123#</div>
+                      <div className="font-medium text-gray-900 text-sm sm:text-base">Health Info</div>
+                      <div className="text-xs sm:text-sm text-gray-600">*123#</div>
                     </div>
-                    <Users className="w-4 h-4 text-green-500" />
+                    <Users className="w-4 h-4 text-green-500 flex-shrink-0" />
                   </div>
                 </button>
                 <button
                   onClick={() => setDialpadNumber('*456#')}
-                  className="w-full text-left p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
+                  className="w-full text-left p-2 sm:p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Support</div>
-                      <div className="text-sm text-gray-600">*456#</div>
+                      <div className="font-medium text-gray-900 text-sm sm:text-base">Support</div>
+                      <div className="text-xs sm:text-sm text-gray-600">*456#</div>
                     </div>
-                    <Globe className="w-4 h-4 text-blue-500" />
+                    <Globe className="w-4 h-4 text-blue-500 flex-shrink-0" />
                   </div>
                 </button>
               </div>

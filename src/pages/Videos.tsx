@@ -462,15 +462,15 @@ const Videos: React.FC = () => {
             </p>
           </div>
 
-          {/* Video Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          {/* Video Grid - 2 videos per row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {filteredVideos.map((video) => {
               const CategoryIcon = getCategoryIcon(video.category);
               const isDownloaded = downloadedVideos.includes(video.id);
               
               return (
                 <div key={video.id} className="card group hover:shadow-xl transition-all duration-300">
-                  {/* YouTube Video Embed */}
+                  {/* YouTube Video Embed - Larger Size */}
                   <div className="relative mb-4">
                     <div className="aspect-video rounded-lg overflow-hidden">
                       <iframe
@@ -484,95 +484,70 @@ const Videos: React.FC = () => {
                     </div>
 
                     {/* Duration Badge */}
-                    <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
+                    <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-sm px-3 py-1 rounded">
                       {video.duration}
                     </div>
 
                     {/* Offline Badge */}
                     {video.isOfflineAvailable && (
-                      <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
+                      <div className="absolute top-2 left-2 bg-green-500 text-white text-sm px-3 py-1 rounded">
                         Offline
                       </div>
                     )}
                   </div>
 
-                  {/* Video Info */}
-                  <div className="space-y-3">
-                    {/* Title and Category */}
+                  {/* Video Info - Simplified */}
+                  <div className="space-y-4">
+                    {/* Title */}
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-sm sm:text-base mb-1 line-clamp-2">
+                      <h3 className="font-semibold text-gray-900 text-lg sm:text-xl mb-2 line-clamp-2">
                         {video.title}
                       </h3>
-                      <div className="flex items-center space-x-2">
-                        <CategoryIcon className="w-4 h-4 text-primary-600" />
-                        <span className="text-xs text-gray-500">{video.category}</span>
-                        <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(video.difficulty)}`}>
+                      <div className="flex items-center space-x-3">
+                        <CategoryIcon className="w-5 h-5 text-primary-600" />
+                        <span className="text-sm text-gray-500">{video.category}</span>
+                        <span className={`text-sm px-3 py-1 rounded-full ${getDifficultyColor(video.difficulty)}`}>
                           {video.difficulty}
                         </span>
                       </div>
                     </div>
 
-                    {/* Description */}
-                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
-                      {video.description}
-                    </p>
-
-                    {/* Stats */}
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <div className="flex items-center space-x-3">
+                    {/* Stats - Simplified */}
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-1">
-                          <Eye className="w-3 h-3" />
-                          <span>{formatViews(video.views)}</span>
+                          <Eye className="w-4 h-4" />
+                          <span>{formatViews(video.views)} views</span>
                         </div>
                         <div className="flex items-center space-x-1">
-                          <Star className="w-3 h-3 text-yellow-500" />
+                          <Star className="w-4 h-4 text-yellow-500" />
                           <span>{video.rating}</span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Clock className="w-3 h-3" />
+                        <Clock className="w-4 h-4" />
                         <span>{video.duration}</span>
                       </div>
                     </div>
 
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1">
-                      {video.tags.slice(0, 3).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {video.tags.length > 3 && (
-                        <span className="text-xs text-gray-400">
-                          +{video.tags.length - 3} more
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex space-x-2 pt-2">
+                    {/* Actions - View Description Button */}
+                    <div className="flex space-x-3 pt-2">
                       <button
                         onClick={() => {
-                          // Scroll to video or focus on it
-                          const videoElement = document.querySelector(`iframe[src*="${video.youtubeId}"]`);
-                          if (videoElement) {
-                            videoElement.scrollIntoView({ behavior: 'smooth' });
-                          }
+                          // Show full description in a modal or expand
+                          alert(`Description: ${video.description}`);
                         }}
-                        className="flex-1 btn-primary text-sm py-2 flex items-center justify-center space-x-2"
+                        className="flex-1 btn-primary text-sm sm:text-base py-3 flex items-center justify-center space-x-2"
                       >
-                        <Play className="w-4 h-4" />
-                        <span>Watch Video</span>
+                        <BookOpen className="w-4 h-4" />
+                        <span>View Description</span>
                       </button>
                       
                       {video.isOfflineAvailable && (
                         <button
                           onClick={() => handleDownload(video.id)}
                           disabled={isDownloaded}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                             isDownloaded
                               ? 'bg-green-100 text-green-700 cursor-not-allowed'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
