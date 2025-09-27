@@ -336,7 +336,7 @@ const HealthTracker: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6">
         {/* Add Entry Button */}
         {activeTab === 'tracker' && (
           <div className="mb-6">
@@ -351,44 +351,44 @@ const HealthTracker: React.FC = () => {
         )}
 
         {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+        <div className="flex space-x-1 bg-gray-100 rounded-lg p-1 mb-4 sm:mb-6">
           <button
             onClick={() => setActiveTab('tracker')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            className={`flex-1 py-2 px-2 sm:px-4 rounded-md font-medium transition-all duration-200 ${
               activeTab === 'tracker'
                 ? 'bg-white text-primary-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <div className="flex items-center justify-center space-x-2">
-              <Calendar className="w-4 h-4" />
-              <span>Tracker</span>
+            <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm">Tracker</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('education')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            className={`flex-1 py-2 px-2 sm:px-4 rounded-md font-medium transition-all duration-200 ${
               activeTab === 'education'
                 ? 'bg-white text-primary-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <div className="flex items-center justify-center space-x-2">
-              <BookOpen className="w-4 h-4" />
-              <span>Education</span>
+            <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+              <BookOpen className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm">Education</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('ngo')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            className={`flex-1 py-2 px-2 sm:px-4 rounded-md font-medium transition-all duration-200 ${
               activeTab === 'ngo'
                 ? 'bg-white text-primary-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <div className="flex items-center justify-center space-x-2">
-              <Users className="w-4 h-4" />
-              <span>NGO Partners</span>
+            <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+              <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm">NGO Partners</span>
             </div>
           </button>
         </div>
@@ -567,37 +567,37 @@ const HealthTracker: React.FC = () => {
 
       {/* Education Tab */}
       {activeTab === 'education' && (
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">SRHR Education Resources</h2>
-            <p className="text-gray-600 mb-6">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">SRHR Education Resources</h2>
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
               Learn about menstrual health, reproductive health, and safe practices. All information is medically accurate and culturally appropriate.
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {educationTopics.map((topic) => {
                 const TopicIcon = topic.icon;
                 return (
-                  <div key={topic.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div className="flex items-start space-x-4">
-                      <div className={`p-3 rounded-xl ${topic.color}`}>
-                        <TopicIcon className="w-6 h-6" />
+                  <div key={topic.id} className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-start space-x-3 sm:space-x-4">
+                      <div className={`p-2 sm:p-3 rounded-xl ${topic.color} flex-shrink-0`}>
+                        <TopicIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{topic.title}</h3>
-                        <p className="text-gray-600 mb-4">{topic.content}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{topic.title}</h3>
+                        <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">{topic.content}</p>
                         <div className="space-y-2">
-                          <h4 className="text-sm font-medium text-gray-700">Topics covered:</h4>
-                          <ul className="text-sm text-gray-600 space-y-1">
+                          <h4 className="text-xs sm:text-sm font-medium text-gray-700">Topics covered:</h4>
+                          <ul className="text-xs sm:text-sm text-gray-600 space-y-1">
                             {topic.articles.map((article, index) => (
                               <li key={index} className="flex items-center space-x-2">
-                                <div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div>
-                                <span>{article}</span>
+                                <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-primary-500 rounded-full flex-shrink-0"></div>
+                                <span className="break-words">{article}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <button className="mt-4 btn-outline text-sm">
+                        <button className="mt-3 sm:mt-4 btn-outline text-xs sm:text-sm px-3 py-2">
                           Learn More
                         </button>
                       </div>
@@ -608,19 +608,19 @@ const HealthTracker: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
             <div className="flex items-start space-x-3">
-              <Info className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold text-blue-900 mb-2">Educational Resources</h4>
-                <p className="text-blue-800 text-sm mb-3">
+              <Info className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-1 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm sm:text-base font-semibold text-blue-900 mb-2">Educational Resources</h4>
+                <p className="text-blue-800 text-xs sm:text-sm mb-3">
                   All educational content is reviewed by healthcare professionals and designed specifically for Liberian youth. 
                   Information is available in multiple languages including Liberian English and local dialects.
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Medically Reviewed</span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Culturally Appropriate</span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Multiple Languages</span>
+                <div className="flex flex-wrap gap-1 sm:gap-2">
+                  <span className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Medically Reviewed</span>
+                  <span className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Culturally Appropriate</span>
+                  <span className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Multiple Languages</span>
                 </div>
               </div>
             </div>
@@ -630,65 +630,65 @@ const HealthTracker: React.FC = () => {
 
       {/* NGO Partners Tab */}
       {activeTab === 'ngo' && (
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">NGO Partners & Services</h2>
-            <p className="text-gray-600 mb-6">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">NGO Partners & Services</h2>
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
               Connect with trusted organizations providing SRHR services across Liberia. All partners are verified and offer confidential, youth-friendly services.
             </p>
             
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {ngoPartners.map((ngo) => (
-                <div key={ngo.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start space-x-4">
-                      <div className="p-3 bg-green-100 rounded-xl">
-                        <Users className="w-6 h-6 text-green-600" />
+                <div key={ngo.id} className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
+                    <div className="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-0">
+                      <div className="p-2 sm:p-3 bg-green-100 rounded-xl flex-shrink-0">
+                        <Users className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{ngo.name}</h3>
-                        <p className="text-gray-600 mb-3">{ngo.description}</p>
-                        <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 break-words">{ngo.name}</h3>
+                        <p className="text-sm sm:text-base text-gray-600 mb-3 break-words">{ngo.description}</p>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-xs sm:text-sm text-gray-500">
                           <div className="flex items-center space-x-1">
-                            <MapPin size={14} />
-                            <span>{ngo.location}</span>
+                            <MapPin size={12} className="flex-shrink-0" />
+                            <span className="break-words">{ngo.location}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Phone size={14} />
-                            <span>{ngo.contact}</span>
+                            <Phone size={12} className="flex-shrink-0" />
+                            <span className="break-all">{ngo.contact}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Calendar size={14} />
-                            <span>{ngo.hours}</span>
+                            <Calendar size={12} className="flex-shrink-0" />
+                            <span className="break-words">{ngo.hours}</span>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                       <button
                         onClick={() => window.open(`tel:${ngo.contact}`, '_self')}
-                        className="btn-primary text-sm flex items-center space-x-2"
+                        className="btn-primary text-xs sm:text-sm flex items-center justify-center space-x-1 sm:space-x-2 px-3 py-2 sm:px-4 sm:py-2"
                       >
-                        <Phone size={14} />
+                        <Phone size={12} className="sm:w-3.5 sm:h-3.5" />
                         <span>Call</span>
                       </button>
                       <button
                         onClick={() => window.open(`https://${ngo.website}`, '_blank')}
-                        className="btn-outline text-sm flex items-center space-x-2"
+                        className="btn-outline text-xs sm:text-sm flex items-center justify-center space-x-1 sm:space-x-2 px-3 py-2 sm:px-4 sm:py-2"
                       >
-                        <ExternalLink size={14} />
+                        <ExternalLink size={12} className="sm:w-3.5 sm:h-3.5" />
                         <span>Website</span>
                       </button>
                     </div>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm font-medium text-gray-700 mb-3">Services Offered:</h4>
-                    <div className="flex flex-wrap gap-2">
+                    <h4 className="text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Services Offered:</h4>
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {ngo.services.map((service, index) => (
                         <span
                           key={index}
-                          className="px-3 py-1 bg-primary-50 text-primary-700 text-sm rounded-full border border-primary-200"
+                          className="px-2 sm:px-3 py-1 bg-primary-50 text-primary-700 text-xs sm:text-sm rounded-full border border-primary-200"
                         >
                           {service}
                         </span>
@@ -700,20 +700,20 @@ const HealthTracker: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6">
             <div className="flex items-start space-x-3">
-              <Shield className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold text-green-900 mb-2">Partner Verification</h4>
-                <p className="text-green-800 text-sm mb-3">
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 mt-1 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm sm:text-base font-semibold text-green-900 mb-2">Partner Verification</h4>
+                <p className="text-green-800 text-xs sm:text-sm mb-3">
                   All NGO partners are verified by the Ministry of Health and provide confidential, 
                   youth-friendly services. They follow international standards for SRHR care.
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Ministry Verified</span>
-                  <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Confidential</span>
-                  <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Youth-Friendly</span>
-                  <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Free Services</span>
+                <div className="flex flex-wrap gap-1 sm:gap-2">
+                  <span className="px-2 sm:px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Ministry Verified</span>
+                  <span className="px-2 sm:px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Confidential</span>
+                  <span className="px-2 sm:px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Youth-Friendly</span>
+                  <span className="px-2 sm:px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Free Services</span>
                 </div>
               </div>
             </div>

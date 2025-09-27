@@ -1,4 +1,47 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
 
+# Allow important pages
+Allow: /chatbot
+Allow: /articles
+Allow: /videos
+Allow: /clinics
+Allow: /safe-spaces
+Allow: /tracker
+Allow: /games
+Allow: /emergency
+Allow: /mentorship
+Allow: /sms
+Allow: /stories
+Allow: /notifications
+Allow: /tutorial
+Allow: /visual-accessibility
+Allow: /motor-accessibility
+Allow: /hearing-accessibility
+Allow: /cognitive-accessibility
+Allow: /settings
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
 Sitemap: https://safelink-srhr.netlify.app/sitemap.xml
+
+# Additional directives for better SEO
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2

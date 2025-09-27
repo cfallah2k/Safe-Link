@@ -36,6 +36,8 @@ import VisualAccessibility from './pages/VisualAccessibility';
 import MotorAccessibility from './pages/MotorAccessibility';
 import HearingAccessibility from './pages/HearingAccessibility';
 import CognitiveAccessibility from './pages/CognitiveAccessibility';
+import MedicationOrder from './pages/MedicationOrder';
+import SecureMap from './pages/SecureMap';
 
 // Utils
 import { secretCodeManager } from './utils/secretCode';
@@ -135,9 +137,11 @@ function App() {
                   <Route path="/visual-accessibility" element={<VisualAccessibility />} />
                   <Route path="/motor-accessibility" element={<MotorAccessibility />} />
                   <Route path="/hearing-accessibility" element={<HearingAccessibility />} />
-                  <Route path="/cognitive-accessibility" element={<CognitiveAccessibility />} />
-                  <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/cognitive-accessibility" element={<CognitiveAccessibility />} />
+            <Route path="/medication-order" element={<MedicationOrder />} />
+            <Route path="/secure-map" element={<SecureMap />} />
+            <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </div>
             </main>

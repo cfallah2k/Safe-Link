@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Send, Bot, User, MessageCircle, Sparkles } from 'lucide-react';
+import { Send, Bot, User, MessageCircle, Sparkles, Mic, MicOff, Upload, Camera, Download, Trash2, Save } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
 import { useOffline } from '../../hooks/useOffline';
 
@@ -9,7 +9,29 @@ interface Message {
   isUser: boolean;
   timestamp: number;
   suggestions?: string[];
+  context?: string;
+  followUpQuestions?: string[];
+  isVoice?: boolean;
+  audioBlob?: Blob;
+  attachments?: File[];
 }
+
+interface UserProfile {
+  name?: string;
+  age?: number;
+  gender?: string;
+  concerns?: string[];
+  experience?: string;
+  preferences?: string[];
+}
+
+// interface OnboardingStep {
+//   id: string;
+//   question: string;
+//   type: 'text' | 'multiple_choice' | 'voice';
+//   options?: string[];
+//   required: boolean;
+// }
 
 interface ChatInterfaceProps {
   onBack?: () => void;
@@ -20,8 +42,63 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationContext, setConversationContext] = useState<string>('');
+  const [isOnboarding, setIsOnboarding] = useState(true);
+  const [userProfile] = useState<UserProfile>({});
+  const [isRecording, setIsRecording] = useState(false);
+  const [showChatHistory, setShowChatHistory] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+
+  // AI Introduction and Onboarding Steps (for future implementation)
+  /*
+  const onboardingSteps: OnboardingStep[] = useMemo(() => [
+    {
+      id: 'introduction',
+      question: "Hello! I'm your confidential SRHR assistant. I'm here to provide safe, non-judgmental support for your sexual and reproductive health questions. Everything we discuss is completely private and confidential. Are you ready to begin?",
+      type: 'multiple_choice',
+      options: ['Yes, I\'m ready', 'I have questions about privacy', 'I\'m not sure'],
+      required: true
+    },
+    {
+      id: 'name',
+      question: "What would you like me to call you? (This can be a nickname or just 'you' - whatever makes you comfortable)",
+      type: 'text',
+      required: false
+    },
+    {
+      id: 'age_group',
+      question: "What age group are you in? (This helps me provide age-appropriate information)",
+      type: 'multiple_choice',
+      options: ['Under 18', '18-24', '25-34', '35-44', '45+', 'Prefer not to say'],
+      required: false
+    },
+    {
+      id: 'main_concerns',
+      question: "What brings you here today? (You can select multiple or add your own)",
+      type: 'multiple_choice',
+      options: ['Contraception', 'STI concerns', 'Relationships', 'Mental health', 'Body image', 'Something else'],
+      required: false
+    },
+    {
+      id: 'experience',
+      question: "How comfortable are you discussing sexual health topics?",
+      type: 'multiple_choice',
+      options: ['Very comfortable', 'Somewhat comfortable', 'A little uncomfortable', 'Very uncomfortable'],
+      required: false
+    },
+    {
+      id: 'preferences',
+      question: "How would you prefer to communicate with me?",
+      type: 'multiple_choice',
+      options: ['Text only', 'Voice messages', 'Both text and voice', 'I\'m not sure yet'],
+      required: false
+    }
+  ], []);
+  */
 
   // Common questions for quick access
   const commonQuestions = useMemo(() => [
@@ -145,18 +222,24 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
     // Load previous messages from offline storage
     loadPreviousMessages();
     
-    // Add welcome message
-    if (messages.length === 0) {
+    // Add welcome message and start onboarding
+    if (messages.length === 0 && isOnboarding) {
       const welcomeMessage: Message = {
         id: Date.now().toString(),
-        text: "Hello! I'm your anonymous SRHR assistant. I'm here to provide accurate, non-judgmental information about sexual and reproductive health. What would you like to know?",
+        text: "Hello! I'm your confidential SRHR assistant. I'm here to provide safe, non-judgmental support for your sexual and reproductive health questions. Everything we discuss is completely private and confidential. Are you ready to begin?",
         isUser: false,
         timestamp: Date.now(),
-        suggestions: commonQuestions.slice(0, 3)
+        suggestions: ['Yes, I\'m ready', 'I have questions about privacy', 'I\'m not sure'],
+        followUpQuestions: [
+          "I'm not sure what to ask - can you help me?",
+          "I have a specific concern I'd like to discuss",
+          "I want to learn about contraception",
+          "I'm worried about my health"
+        ]
       };
       setMessages([welcomeMessage]);
     }
-  }, [messages.length, commonQuestions]);
+  }, [messages.length, commonQuestions, isOnboarding]);
 
   useEffect(() => {
     scrollToBottom();
@@ -185,120 +268,316 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const getOfflineResponse = (question: string): string => {
+  const getOfflineResponse = (question: string, context?: string): { response: string; followUpQuestions?: string[] } => {
     const lowerQuestion = question.toLowerCase();
+    const hasContext = context && context.trim().length > 0;
     
-    // Check for keywords and return appropriate response
+    // Check for keywords and return appropriate response with follow-up questions
     if (lowerQuestion.includes('contraception') || lowerQuestion.includes('birth control')) {
-      return offlineResponses.contraception;
+      const baseResponse = offlineResponses.contraception;
+      const contextualResponse = hasContext && context.includes('contraception') 
+        ? `I see you're continuing our discussion about contraception. ${baseResponse}` 
+        : baseResponse;
+      
+      return {
+        response: contextualResponse,
+        followUpQuestions: [
+          "What are the different types of contraception?",
+          "How effective are condoms?",
+          "What is emergency contraception?",
+          "How do I choose the right method for me?"
+        ]
+      };
     } else if (lowerQuestion.includes('sti') || lowerQuestion.includes('std') || lowerQuestion.includes('infection')) {
-      return offlineResponses.sti;
+      return {
+        response: offlineResponses.sti,
+        followUpQuestions: [
+          "How do I get tested for STIs?",
+          "What are the symptoms of STIs?",
+          "How can I prevent STIs?",
+          "What should I do if I think I have an STI?"
+        ]
+      };
     } else if (lowerQuestion.includes('right') || lowerQuestion.includes('choice')) {
-      return offlineResponses.rights;
+      return {
+        response: offlineResponses.rights,
+        followUpQuestions: [
+          "What are my reproductive rights?",
+          "How do I access healthcare?",
+          "What if my rights are violated?",
+          "Where can I get help with rights issues?"
+        ]
+      };
     } else if (lowerQuestion.includes('safe') || lowerQuestion.includes('protection') || lowerQuestion.includes('condom')) {
-      return offlineResponses['safe sex'];
+      return {
+        response: offlineResponses['safe sex'],
+        followUpQuestions: [
+          "How do I talk to my partner about protection?",
+          "What if a condom breaks?",
+          "How effective are different protection methods?",
+          "What about consent and communication?"
+        ]
+      };
     } else if (lowerQuestion.includes('pregnant') || lowerQuestion.includes('pregnancy')) {
-      return offlineResponses.pregnancy;
+      return {
+        response: offlineResponses.pregnancy,
+        followUpQuestions: [
+          "What are my options if I'm pregnant?",
+          "How do I get prenatal care?",
+          "What should I expect during pregnancy?",
+          "Where can I get support?"
+        ]
+      };
     } else if (lowerQuestion.includes('partner') || lowerQuestion.includes('talk') || lowerQuestion.includes('communication')) {
-      return offlineResponses.partner;
+      return {
+        response: offlineResponses.partner,
+        followUpQuestions: [
+          "How do I start the conversation?",
+          "What if my partner doesn't want to talk?",
+          "How do I set boundaries?",
+          "What if I'm being pressured?"
+        ]
+      };
     } else if (lowerQuestion.includes('consent')) {
-      return offlineResponses.consent;
+      return {
+        response: offlineResponses.consent,
+        followUpQuestions: [
+          "How do I know if someone consents?",
+          "What if I'm not sure about consent?",
+          "How do I say no?",
+          "What if someone doesn't respect my no?"
+        ]
+      };
     } else if (lowerQuestion.includes('ready') && lowerQuestion.includes('sex')) {
-      return offlineResponses['ready for sex'];
+      return {
+        response: offlineResponses['ready for sex'],
+        followUpQuestions: [
+          "How do I know if I'm emotionally ready?",
+          "What about physical readiness?",
+          "How do I talk to my partner about this?",
+          "What if I'm not ready but feel pressured?"
+        ]
+      };
     } else if (lowerQuestion.includes('healthy') && lowerQuestion.includes('relationship')) {
-      return offlineResponses['healthy relationship'];
+      return {
+        response: offlineResponses['healthy relationship'],
+        followUpQuestions: [
+          "What are signs of an unhealthy relationship?",
+          "How do I build trust?",
+          "What about communication?",
+          "How do I know if I should end a relationship?"
+        ]
+      };
     } else if (lowerQuestion.includes('peer pressure')) {
-      return offlineResponses['peer pressure'];
+      return {
+        response: offlineResponses['peer pressure'],
+        followUpQuestions: [
+          "How do I say no to friends?",
+          "What if I lose friends by saying no?",
+          "How do I support a friend being pressured?",
+          "How do I build confidence to resist pressure?"
+        ]
+      };
     } else if (lowerQuestion.includes('menstruation') || lowerQuestion.includes('period')) {
-      return offlineResponses.menstruation;
-    } else if (lowerQuestion.includes('track') && lowerQuestion.includes('cycle')) {
-      return offlineResponses['track cycle'];
-    } else if (lowerQuestion.includes('types') && lowerQuestion.includes('contraception')) {
-      return offlineResponses['types contraception'];
-    } else if (lowerQuestion.includes('effective') && lowerQuestion.includes('condom')) {
-      return offlineResponses['condom effectiveness'];
-    } else if (lowerQuestion.includes('condom') && lowerQuestion.includes('break')) {
-      return offlineResponses['condom breaks'];
-    } else if (lowerQuestion.includes('test') && (lowerQuestion.includes('sti') || lowerQuestion.includes('std'))) {
-      return offlineResponses['sti testing'];
-    } else if (lowerQuestion.includes('hiv')) {
-      return offlineResponses.hiv;
-    } else if (lowerQuestion.includes('prevent') && lowerQuestion.includes('hiv')) {
-      return offlineResponses['prevent hiv'];
-    } else if (lowerQuestion.includes('emergency contraception') || lowerQuestion.includes('morning after')) {
-      return offlineResponses['emergency contraception'];
-    } else if (lowerQuestion.includes('healthy body')) {
-      return offlineResponses['healthy body'];
-    } else if (lowerQuestion.includes('body image') || lowerQuestion.includes('self esteem')) {
-      return offlineResponses['body image'];
-    } else if (lowerQuestion.includes('sexual harassment')) {
-      return offlineResponses['sexual harassment'];
-    } else if (lowerQuestion.includes('pressured') || lowerQuestion.includes('pressure')) {
-      return offlineResponses['being pressured'];
-    } else if (lowerQuestion.includes('parents') && lowerQuestion.includes('sex')) {
-      return offlineResponses['talk parents'];
-    } else if (lowerQuestion.includes('gender identity')) {
-      return offlineResponses['gender identity'];
-    } else if (lowerQuestion.includes('lgbtq') || lowerQuestion.includes('lgbt')) {
-      return offlineResponses['lgbtq support'];
-    } else if (lowerQuestion.includes('sexual orientation')) {
-      return offlineResponses['sexual orientation'];
-    } else if (lowerQuestion.includes('love') || lowerQuestion.includes('in love')) {
-      return offlineResponses['in love'];
-    } else if (lowerQuestion.includes('break up') || lowerQuestion.includes('breakup')) {
-      return offlineResponses['break up safely'];
-    } else if (lowerQuestion.includes('domestic violence')) {
-      return offlineResponses['domestic violence'];
-    } else if (lowerQuestion.includes('danger') || lowerQuestion.includes('help')) {
-      return offlineResponses['get help danger'];
+      return {
+        response: offlineResponses.menstruation,
+        followUpQuestions: [
+          "How do I track my menstrual cycle?",
+          "What if my period is irregular?",
+          "How do I manage period pain?",
+          "What products are safe to use?"
+        ]
+      };
     } else if (lowerQuestion.includes('mental health')) {
-      return offlineResponses['mental health'];
+      return {
+        response: offlineResponses['mental health'],
+        followUpQuestions: [
+          "How do I know if I need help?",
+          "What are signs of depression?",
+          "How do I support a friend in crisis?",
+          "Where can I get mental health support?"
+        ]
+      };
     } else if (lowerQuestion.includes('stress') || lowerQuestion.includes('anxiety')) {
-      return offlineResponses['stress anxiety'];
+      return {
+        response: offlineResponses['stress anxiety'],
+        followUpQuestions: [
+          "What are healthy ways to cope with stress?",
+          "How do I manage anxiety?",
+          "When should I seek professional help?",
+          "How do I support someone with anxiety?"
+        ]
+      };
     } else if (lowerQuestion.includes('depression')) {
-      return offlineResponses.depression;
-    } else if (lowerQuestion.includes('support') && lowerQuestion.includes('friend')) {
-      return offlineResponses['support friend crisis'];
+      return {
+        response: offlineResponses.depression,
+        followUpQuestions: [
+          "How do I know if I'm depressed?",
+          "What should I do if I think I'm depressed?",
+          "How do I help a friend with depression?",
+          "Where can I get help for depression?"
+        ]
+      };
     } else if (lowerQuestion.includes('self care')) {
-      return offlineResponses['self care'];
+      return {
+        response: offlineResponses['self care'],
+        followUpQuestions: [
+          "What are some self-care activities I can do?",
+          "How do I make time for self-care?",
+          "What if I feel guilty about self-care?",
+          "How do I know what self-care I need?"
+        ]
+      };
     } else if (lowerQuestion.includes('confidence')) {
-      return offlineResponses['build confidence'];
+      return {
+        response: offlineResponses['build confidence'],
+        followUpQuestions: [
+          "How do I overcome self-doubt?",
+          "What if I feel insecure about my body?",
+          "How do I build confidence in relationships?",
+          "What if others try to bring me down?"
+        ]
+      };
     } else if (lowerQuestion.includes('say no') || lowerQuestion.includes('saying no')) {
-      return offlineResponses['say no'];
+      return {
+        response: offlineResponses['say no'],
+        followUpQuestions: [
+          "How do I say no without feeling guilty?",
+          "What if someone doesn't accept my no?",
+          "How do I practice saying no?",
+          "What if I'm afraid of the consequences?"
+        ]
+      };
     } else if (lowerQuestion.includes('cyberbullying')) {
-      return offlineResponses.cyberbullying;
+      return {
+        response: offlineResponses.cyberbullying,
+        followUpQuestions: [
+          "What should I do if I'm being cyberbullied?",
+          "How do I report cyberbullying?",
+          "How do I support someone being cyberbullied?",
+          "How do I stay safe online?"
+        ]
+      };
     } else if (lowerQuestion.includes('safe online') || lowerQuestion.includes('online safety')) {
-      return offlineResponses['stay safe online'];
+      return {
+        response: offlineResponses['stay safe online'],
+        followUpQuestions: [
+          "How do I protect my privacy online?",
+          "What about sexting and online relationships?",
+          "How do I recognize online predators?",
+          "What should I do if someone makes me uncomfortable online?"
+        ]
+      };
     } else if (lowerQuestion.includes('sexting')) {
-      return offlineResponses.sexting;
+      return {
+        response: offlineResponses.sexting,
+        followUpQuestions: [
+          "What are the risks of sexting?",
+          "What if someone pressures me to sext?",
+          "What if my photos are shared without consent?",
+          "How do I talk to my partner about sexting?"
+        ]
+      };
     } else if (lowerQuestion.includes('privacy')) {
-      return offlineResponses['protect privacy'];
+      return {
+        response: offlineResponses['protect privacy'],
+        followUpQuestions: [
+          "How do I keep my health information private?",
+          "What about using shared devices?",
+          "How do I protect my conversations?",
+          "What if someone finds out I use this app?"
+        ]
+      };
     } else if (lowerQuestion.includes('pornography') || lowerQuestion.includes('porn')) {
-      return offlineResponses.pornography;
-    } else if (lowerQuestion.includes('affects relationship')) {
-      return offlineResponses['affects relationships'];
+      return {
+        response: offlineResponses.pornography,
+        followUpQuestions: [
+          "How does pornography affect relationships?",
+          "What if I'm addicted to pornography?",
+          "How do I talk to my partner about pornography?",
+          "What are healthy alternatives to pornography?"
+        ]
+      };
     } else if (lowerQuestion.includes('addiction')) {
-      return offlineResponses.addiction;
-    } else if (lowerQuestion.includes('help addiction')) {
-      return offlineResponses['help addiction'];
+      return {
+        response: offlineResponses.addiction,
+        followUpQuestions: [
+          "How do I know if I have an addiction?",
+          "What should I do if I think I'm addicted?",
+          "How do I help someone with an addiction?",
+          "Where can I get help for addiction?"
+        ]
+      };
     } else if (lowerQuestion.includes('trauma')) {
-      return offlineResponses.trauma;
-    } else if (lowerQuestion.includes('heal trauma')) {
-      return offlineResponses['heal trauma'];
+      return {
+        response: offlineResponses.trauma,
+        followUpQuestions: [
+          "How do I know if I've experienced trauma?",
+          "What should I do if I think I have trauma?",
+          "How do I support someone with trauma?",
+          "Where can I get help for trauma?"
+        ]
+      };
     } else if (lowerQuestion.includes('therapy')) {
-      return offlineResponses.therapy;
-    } else if (lowerQuestion.includes('find therapist')) {
-      return offlineResponses['find therapist'];
+      return {
+        response: offlineResponses.therapy,
+        followUpQuestions: [
+          "How do I find a therapist?",
+          "What if I can't afford therapy?",
+          "What should I expect in therapy?",
+          "How do I know if therapy is working?"
+        ]
+      };
     } else if (lowerQuestion.includes('self harm')) {
-      return offlineResponses['self harm'];
-    } else if (lowerQuestion.includes('help self harm')) {
-      return offlineResponses['help self harm'];
+      return {
+        response: offlineResponses['self harm'],
+        followUpQuestions: [
+          "What should I do if I'm self-harming?",
+          "How do I help someone who's self-harming?",
+          "What are alternatives to self-harm?",
+          "Where can I get immediate help?"
+        ]
+      };
     } else if (lowerQuestion.includes('suicide prevention')) {
-      return offlineResponses['suicide prevention'];
+      return {
+        response: offlineResponses['suicide prevention'],
+        followUpQuestions: [
+          "What are warning signs of suicide?",
+          "How do I help someone who's suicidal?",
+          "What should I do if I'm having suicidal thoughts?",
+          "Where can I get immediate help?"
+        ]
+      };
     } else if (lowerQuestion.includes('suicidal')) {
-      return offlineResponses['help suicidal'];
+      return {
+        response: offlineResponses['help suicidal'],
+        followUpQuestions: [
+          "What should I do right now if I'm suicidal?",
+          "How do I get immediate help?",
+          "What if I'm afraid to tell anyone?",
+          "How do I stay safe right now?"
+        ]
+      };
+    } else if (lowerQuestion.includes('not sure') || lowerQuestion.includes('help me') || lowerQuestion.includes('what to ask')) {
+      return {
+        response: "That's completely okay! Many people feel unsure about what to ask when it comes to sexual and reproductive health. I'm here to help guide you. You can start with something as simple as 'I want to learn about...' or 'I'm worried about...' or even just tell me what's on your mind. There are no silly questions, and everything we discuss is completely confidential.",
+        followUpQuestions: [
+          "I want to learn about contraception",
+          "I'm worried about my health",
+          "I have questions about relationships",
+          "I need help with something personal"
+        ]
+      };
     } else {
-      return "I understand you're asking about an important topic. While I have some general information available offline, for the most accurate and up-to-date information, I'd recommend visiting a health clinic or speaking with a healthcare provider. Is there anything specific I can help you with from my available knowledge?";
+      return {
+        response: "I understand you're asking about an important topic. While I have some general information available offline, for the most accurate and up-to-date information, I'd recommend visiting a health clinic or speaking with a healthcare provider. Is there anything specific I can help you with from my available knowledge?",
+        followUpQuestions: [
+          "What topics can you help me with?",
+          "How do I find a healthcare provider?",
+          "What if I need immediate help?",
+          "How do I stay safe and healthy?"
+        ]
+      };
     }
   };
 
@@ -318,14 +597,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
     setIsLoading(true);
 
     try {
-      let botResponse: string;
+      let responseData: { response: string; followUpQuestions?: string[] };
       
       if (isOnline) {
         // In a real app, this would call an API
         // For now, we'll use offline responses
-        botResponse = getOfflineResponse(inputText);
+        responseData = getOfflineResponse(inputText, conversationContext);
       } else {
-        botResponse = getOfflineResponse(inputText);
+        responseData = getOfflineResponse(inputText, conversationContext);
       }
 
       // Add a small delay to simulate thinking
@@ -333,15 +612,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: botResponse,
+        text: responseData.response,
         isUser: false,
         timestamp: Date.now(),
-        suggestions: commonQuestions.slice(0, 2)
+        suggestions: responseData.followUpQuestions || commonQuestions.slice(0, 2),
+        followUpQuestions: responseData.followUpQuestions
       };
 
       const finalMessages = [...newMessages, botMessage];
       setMessages(finalMessages);
       await saveMessages(finalMessages);
+      
+      // Update conversation context
+      updateConversationContext(inputText, responseData.response);
 
     } catch (error) {
       console.error('Failed to get response:', error);
@@ -362,6 +645,167 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
     inputRef.current?.focus();
   };
 
+  const updateConversationContext = (userMessage: string, aiResponse: string) => {
+    // Update context with recent conversation topics
+    const recentContext = `${userMessage.toLowerCase()} ${aiResponse.toLowerCase()}`;
+    setConversationContext(prev => {
+      const combined = `${prev} ${recentContext}`.trim();
+      // Keep only the last 200 characters to maintain context without overwhelming
+      return combined.slice(-200);
+    });
+  };
+
+  // Voice recording functions
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const chunks: Blob[] = [];
+
+      recorder.ondataavailable = (event) => {
+        chunks.push(event.data);
+      };
+
+      recorder.onstop = () => {
+        const audioBlob = new Blob(chunks, { type: 'audio/wav' });
+        // Convert voice to text (in a real app, this would use speech recognition API)
+        handleVoiceMessage(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error starting recording:', error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const handleVoiceMessage = async (audioBlob: Blob) => {
+    // In a real app, this would convert speech to text
+    const voiceMessage: Message = {
+      id: Date.now().toString(),
+      text: "[Voice message - transcription would appear here]",
+      isUser: true,
+      timestamp: Date.now(),
+      isVoice: true,
+      audioBlob: audioBlob
+    };
+
+    setMessages(prev => [...prev, voiceMessage]);
+    // Process the voice message and get AI response
+    await processVoiceMessage(audioBlob);
+  };
+
+  const processVoiceMessage = async (audioBlob: Blob) => {
+    setIsLoading(true);
+    try {
+      // Simulate voice processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const responseData = getOfflineResponse("voice message about sexual health", conversationContext);
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: responseData.response,
+        isUser: false,
+        timestamp: Date.now(),
+        suggestions: responseData.followUpQuestions || commonQuestions.slice(0, 2),
+        followUpQuestions: responseData.followUpQuestions
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Error processing voice message:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // File upload functions
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type === 'application/pdf') {
+        handlePDFUpload(file);
+      } else if (file.type.startsWith('image/')) {
+        handleImageUpload(file);
+      }
+    }
+  };
+
+  const handlePDFUpload = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      // In a real app, this would extract text from PDF
+      const message: Message = {
+        id: Date.now().toString(),
+        text: `[PDF uploaded: ${file.name}] I've received your document. I can help you understand any health information in it.`,
+        isUser: true,
+        timestamp: Date.now(),
+        attachments: [file]
+      };
+      setMessages(prev => [...prev, message]);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleImageUpload = (file: File) => {
+    const message: Message = {
+      id: Date.now().toString(),
+      text: `[Image uploaded: ${file.name}] I've received your image. I can help you understand any health-related content in it.`,
+      isUser: true,
+      timestamp: Date.now(),
+      attachments: [file]
+    };
+    setMessages(prev => [...prev, message]);
+  };
+
+  // Chat history functions
+  const saveConversation = () => {
+    const conversation = {
+      id: Date.now().toString(),
+      messages: messages,
+      timestamp: Date.now(),
+      userProfile: userProfile
+    };
+    
+    const savedConversations = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    savedConversations.push(conversation);
+    localStorage.setItem('chatHistory', JSON.stringify(savedConversations));
+    
+    alert('Conversation saved successfully!');
+  };
+
+  const exportConversation = () => {
+    const conversationText = messages.map(msg => 
+      `${msg.isUser ? 'You' : 'AI'}: ${msg.text}`
+    ).join('\n\n');
+    
+    const blob = new Blob([conversationText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conversation-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const deleteConversation = () => {
+    if (window.confirm('Are you sure you want to delete this conversation?')) {
+      setMessages([]);
+      setConversationContext('');
+      setIsOnboarding(true);
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -380,15 +824,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
             className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
           >
             <div className={`flex space-x-3 max-w-[90%] sm:max-w-md lg:max-w-lg ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
-              {/* Avatar */}
-              <div className={`p-3 rounded-2xl flex-shrink-0 shadow-lg ${message.isUser 
-                ? 'bg-gradient-to-br from-primary-500 to-primary-600' 
-                : 'bg-gradient-to-br from-purple-500 to-pink-500'
+              {/* Avatar - Circular for AI */}
+              <div className={`p-3 flex-shrink-0 shadow-lg ${message.isUser 
+                ? 'rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600' 
+                : 'rounded-full bg-gradient-to-br from-purple-500 to-pink-500 w-12 h-12 flex items-center justify-center'
               }`}>
                 {message.isUser ? (
                   <User className="w-5 h-5 text-white" />
                 ) : (
-                  <Bot className="w-5 h-5 text-white" />
+                  <Bot className="w-6 h-6 text-white" />
                 )}
               </div>
               
@@ -400,8 +844,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
               }`}>
                 <p className="text-sm sm:text-base leading-relaxed break-words">{message.text}</p>
                 
-                {/* Suggestions with modern design */}
-                {message.suggestions && (
+                {/* Follow-up questions with modern design */}
+                {message.followUpQuestions && message.followUpQuestions.length > 0 && (
+                  <div className="mt-4">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <Sparkles className="w-4 h-4 text-purple-500" />
+                      <p className="text-xs font-medium text-gray-600">You might also ask:</p>
+                    </div>
+                    <div className="space-y-2">
+                      {message.followUpQuestions.map((question, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleSuggestionClick(question)}
+                          className="block w-full text-left text-xs sm:text-sm px-3 py-2 rounded-xl transition-all duration-200 touch-manipulation bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 text-gray-700 border border-purple-200 hover:border-purple-300"
+                        >
+                          {question}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* General suggestions with modern design */}
+                {message.suggestions && !message.followUpQuestions && (
                   <div className="mt-3 space-y-2">
                     {message.suggestions.map((suggestion, index) => (
                       <button
@@ -446,20 +911,20 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Modern Input Area */}
-      <div className="bg-white/80 backdrop-blur-sm border-t border-gray-200/50 p-4 sm:p-6 flex-shrink-0 shadow-lg" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
-        {/* Quick questions with modern design */}
-        <div className="mb-4">
-          <div className="flex items-center space-x-2 mb-3">
-            <Sparkles className="w-4 h-4 text-purple-500" />
-            <p className="text-sm font-medium text-gray-600">Quick questions:</p>
+      {/* Enhanced Input Area with Voice and File Upload */}
+      <div className="bg-white/80 backdrop-blur-sm border-t border-gray-200/50 p-3 sm:p-4 flex-shrink-0 shadow-lg" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
+        {/* Quick questions with modern design - Reduced size */}
+        <div className="mb-3">
+          <div className="flex items-center space-x-2 mb-2">
+            <Sparkles className="w-3 h-3 text-purple-500" />
+            <p className="text-xs font-medium text-gray-600">Quick questions:</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {commonQuestions.slice(0, 3).map((question, index) => (
+          <div className="flex flex-wrap gap-1">
+            {commonQuestions.slice(0, 2).map((question, index) => (
               <button
                 key={index}
                 onClick={() => handleSuggestionClick(question)}
-                className="text-xs sm:text-sm px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 active:scale-95 rounded-full text-gray-700 transition-all duration-200 touch-manipulation border border-gray-200/50 shadow-sm"
+                className="text-xs px-3 py-1.5 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 active:scale-95 rounded-full text-gray-700 transition-all duration-200 touch-manipulation border border-gray-200/50 shadow-sm"
               >
                 {question}
               </button>
@@ -467,8 +932,48 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
           </div>
         </div>
 
-        {/* Input field with modern design */}
-        <div className="flex space-x-3">
+        {/* Enhanced Input field with voice and file options */}
+        <div className="flex space-x-2">
+          {/* Voice recording button */}
+          <button
+            onClick={isRecording ? stopRecording : startRecording}
+            className={`p-2 rounded-xl transition-all duration-200 ${
+              isRecording 
+                ? 'bg-red-500 hover:bg-red-600 text-white' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
+            disabled={isLoading}
+          >
+            {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
+          </button>
+
+          {/* File upload button */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl transition-all duration-200"
+            disabled={isLoading}
+          >
+            <Upload size={18} />
+          </button>
+
+          {/* Camera button */}
+          <button
+            onClick={() => cameraInputRef.current?.click()}
+            className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl transition-all duration-200"
+            disabled={isLoading}
+          >
+            <Camera size={18} />
+          </button>
+
+          {/* Chat history button */}
+          <button
+            onClick={() => setShowChatHistory(!showChatHistory)}
+            className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl transition-all duration-200"
+          >
+            <Save size={18} />
+          </button>
+
+          {/* Input field */}
           <div className="flex-1 relative">
             <input
               ref={inputRef}
@@ -477,22 +982,84 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask about sexual and reproductive health..."
-              className="w-full px-4 py-3 bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-2xl text-sm sm:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 shadow-sm"
+              className="w-full px-3 py-2 bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-xl text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 shadow-sm"
               disabled={isLoading}
             />
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              <MessageCircle className="w-5 h-5 text-gray-400" />
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+              <MessageCircle className="w-4 h-4 text-gray-400" />
             </div>
           </div>
+
+          {/* Send button */}
           <button
             onClick={handleSendMessage}
             disabled={!inputText.trim() || isLoading}
-            className="p-3 bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl shadow-lg transition-all duration-200 active:scale-95"
+            className="p-2 bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg transition-all duration-200 active:scale-95"
           >
-            <Send size={20} className="text-white" />
+            <Send size={18} className="text-white" />
           </button>
         </div>
+
+        {/* Hidden file inputs */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".pdf,image/*"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
       </div>
+
+      {/* Chat History Panel */}
+      {showChatHistory && (
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Chat History</h3>
+              <button
+                onClick={() => setShowChatHistory(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="space-y-3">
+              <button
+                onClick={saveConversation}
+                className="w-full flex items-center space-x-2 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+              >
+                <Save size={18} className="text-blue-600" />
+                <span className="text-blue-600 font-medium">Save Conversation</span>
+              </button>
+              
+              <button
+                onClick={exportConversation}
+                className="w-full flex items-center space-x-2 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+              >
+                <Download size={18} className="text-green-600" />
+                <span className="text-green-600 font-medium">Export Conversation</span>
+              </button>
+              
+              <button
+                onClick={deleteConversation}
+                className="w-full flex items-center space-x-2 p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
+              >
+                <Trash2 size={18} className="text-red-600" />
+                <span className="text-red-600 font-medium">Delete Conversation</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -435,34 +435,34 @@ const Articles: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="p-4 sm:p-6 lg:p-8">
+      <main className="p-3 sm:p-4 lg:p-8">
         <div className="max-w-7xl mx-auto">
           {/* Search and Filters */}
-          <div className="card mb-6 sm:mb-8">
-            <div className="space-y-4 sm:space-y-6">
+          <div className="card mb-4 sm:mb-6 lg:mb-8">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
               {/* Search Bar */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   type="text"
                   placeholder="Search articles, topics, or keywords..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input-field pl-10 text-sm sm:text-base"
+                  className="input-field pl-9 sm:pl-10 text-sm sm:text-base"
                 />
               </div>
 
               {/* Filters */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {/* Category Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Category
                   </label>
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="input-field text-sm sm:text-base"
+                    className="input-field text-xs sm:text-sm lg:text-base"
                   >
                     {categories.map(category => (
                       <option key={category.value} value={category.value}>
@@ -474,13 +474,13 @@ const Articles: React.FC = () => {
 
                 {/* Difficulty Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Difficulty Level
                   </label>
                   <select
                     value={selectedDifficulty}
                     onChange={(e) => setSelectedDifficulty(e.target.value)}
-                    className="input-field text-sm sm:text-base"
+                    className="input-field text-xs sm:text-sm lg:text-base"
                   >
                     {difficulties.map(difficulty => (
                       <option key={difficulty.value} value={difficulty.value}>
@@ -492,13 +492,13 @@ const Articles: React.FC = () => {
 
                 {/* Offline Status */}
                 <div className="flex items-end">
-                  <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg w-full">
+                  <div className="flex items-center space-x-2 p-2 sm:p-3 bg-gray-50 rounded-lg w-full">
                     {isOnline ? (
-                      <Wifi className="w-5 h-5 text-green-500" />
+                      <Wifi className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
                     ) : (
-                      <WifiOff className="w-5 h-5 text-red-500" />
+                      <WifiOff className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
                     )}
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-xs sm:text-sm font-medium text-gray-700">
                       {isOnline ? 'Online' : 'Offline Mode'}
                     </span>
                   </div>
@@ -508,86 +508,91 @@ const Articles: React.FC = () => {
           </div>
 
           {/* Results Count */}
-          <div className="mb-4 sm:mb-6">
-            <p className="text-sm sm:text-base text-gray-600">
+          <div className="mb-3 sm:mb-4 lg:mb-6">
+            <p className="text-xs sm:text-sm lg:text-base text-gray-600">
               Showing {filteredArticles.length} of {articles.length} articles
             </p>
           </div>
 
           {/* Articles Grid */}
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-3 sm:space-y-4 lg:space-y-6">
             {filteredArticles.map((article) => {
               const CategoryIcon = getCategoryIcon(article.category);
               const isBookmarked = bookmarkedArticles.includes(article.id);
               
               return (
                 <div key={article.id} className="card group hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-start space-x-4">
+                  <div className="flex items-start space-x-3 sm:space-x-4">
                     {/* Category Icon */}
-                    <div className="p-3 bg-primary-100 rounded-xl flex-shrink-0">
-                      <CategoryIcon className="w-6 h-6 text-primary-600" />
+                    <div className="p-2 sm:p-3 bg-primary-100 rounded-xl flex-shrink-0">
+                      <CategoryIcon className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
                     </div>
 
                     {/* Article Content */}
                     <div className="flex-1 min-w-0">
                       {/* Header */}
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2 sm:mb-3">
+                        <div className="flex-1 min-w-0 mb-2 sm:mb-0">
+                          <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
                             {article.title}
                           </h3>
-                          <div className="flex items-center space-x-3 text-xs sm:text-sm text-gray-500 mb-2">
-                            <span className={`px-2 py-1 rounded-full ${getDifficultyColor(article.difficulty)}`}>
-                              {article.difficulty}
-                            </span>
-                            <span>{article.category}</span>
-                            <span>By {article.author}</span>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-1 sm:space-y-0 text-xs sm:text-sm text-gray-500">
+                            <div className="flex items-center space-x-2">
+                              <span className={`px-2 py-1 rounded-full text-xs ${getDifficultyColor(article.difficulty)}`}>
+                                {article.difficulty}
+                              </span>
+                              <span className="hidden sm:inline">{article.category}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-xs">
+                              <span className="sm:hidden">{article.category}</span>
+                              <span>By {article.author}</span>
+                            </div>
                           </div>
                         </div>
                         
                         {/* Actions */}
-                        <div className="flex items-center space-x-2 ml-4">
+                        <div className="flex items-center space-x-1 sm:space-x-2">
                           <button
                             onClick={() => handleBookmark(article.id)}
-                            className={`p-2 rounded-lg transition-colors ${
+                            className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
                               isBookmarked 
                                 ? 'bg-yellow-100 text-yellow-600' 
                                 : 'bg-gray-100 text-gray-400 hover:text-yellow-500'
                             }`}
                           >
-                            <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+                            <Bookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-current' : ''}`} />
                           </button>
-                          <button className="p-2 bg-gray-100 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
-                            <Share2 className="w-4 h-4" />
+                          <button className="p-1.5 sm:p-2 bg-gray-100 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+                            <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                           </button>
                         </div>
                       </div>
 
                       {/* Excerpt */}
-                      <p className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-3">
+                      <p className="text-xs sm:text-sm lg:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-3">
                         {article.excerpt}
                       </p>
 
                       {/* Tags */}
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {article.tags.slice(0, 4).map((tag, index) => (
+                      <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
+                        {article.tags.slice(0, 3).map((tag, index) => (
                           <span
                             key={index}
-                            className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                            className="text-xs bg-gray-100 text-gray-600 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
                           >
                             {tag}
                           </span>
                         ))}
-                        {article.tags.length > 4 && (
+                        {article.tags.length > 3 && (
                           <span className="text-xs text-gray-400">
-                            +{article.tags.length - 4} more
+                            +{article.tags.length - 3} more
                           </span>
                         )}
                       </div>
 
                       {/* Footer */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-xs sm:text-sm text-gray-500">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
                           <div className="flex items-center space-x-1">
                             <Clock className="w-3 h-3" />
                             <span>{article.readTime}</span>
@@ -600,23 +605,24 @@ const Articles: React.FC = () => {
                             <Star className="w-3 h-3 text-yellow-500" />
                             <span>{article.rating}</span>
                           </div>
-                          <div className="text-gray-400">
+                          <div className="text-gray-400 text-xs sm:text-sm">
                             Updated {formatDate(article.lastUpdated)}
                           </div>
                         </div>
 
                         <div className="flex items-center space-x-2">
                           {article.isOfflineAvailable && (
-                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                            <span className="text-xs bg-green-100 text-green-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
                               Offline
                             </span>
                           )}
                           <button
                             onClick={() => handleRead(article)}
-                            className="btn-primary text-sm px-4 py-2 flex items-center space-x-2"
+                            className="btn-primary text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1 sm:space-x-2"
                           >
-                            <BookOpen className="w-4 h-4" />
-                            <span>Read Article</span>
+                            <BookOpen className="w-3 h-3 sm:w-4 sm:h-4" />
+                            <span className="hidden sm:inline">Read Article</span>
+                            <span className="sm:hidden">Read</span>
                           </button>
                         </div>
                       </div>
@@ -629,10 +635,10 @@ const Articles: React.FC = () => {
 
           {/* No Results */}
           {filteredArticles.length === 0 && (
-            <div className="text-center py-12 sm:py-16">
-              <Search className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-2">No articles found</h3>
-              <p className="text-sm sm:text-base text-gray-500 mb-4">
+            <div className="text-center py-8 sm:py-12 lg:py-16">
+              <Search className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 text-gray-300 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-base sm:text-lg lg:text-xl font-medium text-gray-900 mb-2">No articles found</h3>
+              <p className="text-xs sm:text-sm lg:text-base text-gray-500 mb-3 sm:mb-4">
                 Try adjusting your search terms or filters
               </p>
               <button
@@ -641,7 +647,7 @@ const Articles: React.FC = () => {
                   setSelectedCategory('all');
                   setSelectedDifficulty('all');
                 }}
-                className="btn-outline"
+                className="btn-outline text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2"
               >
                 Clear Filters
               </button>
@@ -650,16 +656,16 @@ const Articles: React.FC = () => {
 
           {/* Offline Notice */}
           {!isOnline && (
-            <div className="mt-6 sm:mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-4 sm:p-6">
-              <div className="flex items-start space-x-3 sm:space-x-4">
-                <WifiOff className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600 mt-1 flex-shrink-0" />
-                <div className="min-w-0">
-                  <h4 className="font-semibold text-yellow-900 mb-2 text-sm sm:text-base">Offline Mode</h4>
-                  <p className="text-yellow-800 text-xs sm:text-sm mb-3 leading-relaxed">
+            <div className="mt-4 sm:mt-6 lg:mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-3 sm:p-4 lg:p-6">
+              <div className="flex items-start space-x-2 sm:space-x-3 lg:space-x-4">
+                <WifiOff className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-yellow-600 mt-1 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-semibold text-yellow-900 mb-1 sm:mb-2 text-xs sm:text-sm lg:text-base">Offline Mode</h4>
+                  <p className="text-yellow-800 text-xs sm:text-sm mb-2 sm:mb-3 leading-relaxed">
                     You're currently offline. Only offline-available articles can be accessed.
                     Bookmark articles when online to save them for later reading.
                   </p>
-                  <div className="text-yellow-700 text-xs sm:text-sm">
+                  <div className="text-yellow-700 text-xs sm:text-sm space-y-1">
                     <p>• Bookmarked articles: {bookmarkedArticles.length}</p>
                     <p>• Offline-available articles: {articles.filter(a => a.isOfflineAvailable).length}</p>
                   </div>
