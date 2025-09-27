@@ -3,7 +3,6 @@ import {
   MapPin, 
   Phone, 
   Clock, 
-  Star, 
   Search, 
   Navigation,
   Heart,
@@ -345,10 +344,6 @@ const ClinicFinder: React.FC = () => {
                         <div className="flex items-center space-x-1">
                           <MapPin size={14} />
                           <span>{clinic.distance} km away</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Star size={14} className="text-yellow-500" />
-                          <span>{clinic.rating}</span>
                         </div>
                         <div className={`flex items-center space-x-1 ${clinic.isOpen ? 'text-green-600' : 'text-red-600'}`}>
                           <Clock size={14} />

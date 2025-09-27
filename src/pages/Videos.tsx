@@ -650,10 +650,6 @@ const Videos: React.FC = () => {
                   <span>{formatViews(selectedVideo.views)} views</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  <span>{selectedVideo.rating}</span>
-                </div>
-                <div className="flex items-center space-x-1">
                   <Clock className="w-4 h-4" />
                   <span>{selectedVideo.duration}</span>
                 </div>

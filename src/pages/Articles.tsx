@@ -6,7 +6,6 @@ import {
   Heart, 
   Shield, 
   Users, 
-  Star,
   Search,
   Wifi,
   WifiOff,
@@ -600,10 +599,6 @@ const Articles: React.FC = () => {
                           <div className="flex items-center space-x-1">
                             <Eye className="w-3 h-3" />
                             <span>{formatViews(article.views)}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-3 h-3 text-yellow-500" />
-                            <span>{article.rating}</span>
                           </div>
                           <div className="text-gray-400 text-xs sm:text-sm">
                             Updated {formatDate(article.lastUpdated)}

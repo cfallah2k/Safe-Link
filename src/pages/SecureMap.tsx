@@ -4,7 +4,6 @@ import {
   Clock, 
   AlertCircle,
   Search,
-  Star,
   Heart,
   Users,
   Home,
@@ -324,47 +323,48 @@ const SecureMap: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="p-3 sm:p-4 lg:p-8">
+      <main className="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Secure Map Navigation</h1>
-            <p className="text-sm sm:text-base text-gray-600">
+          <div className="mb-4 sm:mb-6 lg:mb-8">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Secure Map Navigation</h1>
+            <p className="text-xs sm:text-sm lg:text-base text-gray-600">
               Find safe spaces with secure OTP verification for your protection
             </p>
           </div>
 
           {/* Search and Filters */}
-          <div className="card mb-4 sm:mb-6">
+          <div className="card mb-3 sm:mb-4 lg:mb-6">
             <div className="space-y-3 sm:space-y-4">
               {/* Search Bar */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search safe spaces..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
 
               {/* Type Filters */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {typeOptions.map(option => {
                   const Icon = option.icon;
                   return (
                     <button
                       key={option.value}
                       onClick={() => setSelectedType(option.value)}
-                      className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      className={`flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                         selectedType === option.value
                           ? 'bg-blue-500 text-white'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
-                      <Icon className="w-4 h-4" />
-                      <span>{option.label}</span>
+                      <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">{option.label}</span>
+                      <span className="sm:hidden">{option.label.split(' ')[0]}</span>
                     </button>
                   );
                 })}
@@ -373,63 +373,60 @@ const SecureMap: React.FC = () => {
           </div>
 
           {/* Safe Houses List */}
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-2 sm:space-y-3 lg:space-y-4">
             {filteredSafeHouses.map(safeHouse => {
               const TypeIcon = getTypeIcon(safeHouse.type);
               const capacityStatus = getCapacityStatus(safeHouse.currentOccupancy, safeHouse.capacity);
               
               return (
                 <div key={safeHouse.id} className="card group hover:shadow-lg transition-all duration-200">
-                  <div className="flex items-start space-x-3 sm:space-x-4">
+                  <div className="flex items-start space-x-2 sm:space-x-3 lg:space-x-4">
                     {/* Icon */}
-                    <div className={`p-3 rounded-xl shadow-sm ${getTypeColor(safeHouse.type)} flex-shrink-0`}>
-                      <TypeIcon className="w-6 h-6" />
+                    <div className={`p-2 sm:p-3 rounded-xl shadow-sm ${getTypeColor(safeHouse.type)} flex-shrink-0`}>
+                      <TypeIcon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
+                          <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 mb-1 line-clamp-1">
                             {safeHouse.name}
                           </h3>
-                          <p className="text-sm text-gray-600 mb-2">{safeHouse.address}</p>
-                          <div className="flex items-center space-x-2 mb-2">
-                            <span className={`text-xs px-2 py-1 rounded-full ${getTypeColor(safeHouse.type)}`}>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-1">{safeHouse.address}</p>
+                          <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-2">
+                            <span className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${getTypeColor(safeHouse.type)}`}>
                               {safeHouse.type.replace('-', ' ').toUpperCase()}
                             </span>
-                            <span className={`text-xs px-2 py-1 rounded-full ${getSecurityColor(safeHouse.securityLevel)}`}>
+                            <span className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${getSecurityColor(safeHouse.securityLevel)}`}>
                               {safeHouse.securityLevel.toUpperCase()} SECURITY
                             </span>
-                            <span className={`text-xs px-2 py-1 rounded-full ${capacityStatus.color}`}>
+                            <span className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${capacityStatus.color}`}>
                               {capacityStatus.status}
                             </span>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-sm font-semibold text-gray-900">{safeHouse.distance} km</p>
-                          <div className="flex items-center space-x-1 mt-1">
-                            <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                            <span className="text-xs text-gray-600">{safeHouse.rating}</span>
-                          </div>
+                        <div className="text-right ml-2">
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900">{safeHouse.distance} km</p>
                         </div>
                       </div>
 
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                      <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
                         {safeHouse.description}
                       </p>
 
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-xs text-gray-500">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs text-gray-500">
                           <span className="flex items-center space-x-1">
                             <Users className="w-3 h-3" />
                             <span>{safeHouse.currentOccupancy}/{safeHouse.capacity}</span>
                           </span>
                           <span className="flex items-center space-x-1">
                             <Clock className="w-3 h-3" />
-                            <span>{safeHouse.operatingHours}</span>
+                            <span className="hidden sm:inline">{safeHouse.operatingHours}</span>
+                            <span className="sm:hidden">{safeHouse.operatingHours.split(' ')[0]}</span>
                           </span>
-                          <span className={safeHouse.isOpen ? 'text-green-600' : 'text-red-600'}>
+                          <span className={`${safeHouse.isOpen ? 'text-green-600' : 'text-red-600'}`}>
                             {safeHouse.isOpen ? 'Open' : 'Closed'}
                           </span>
                         </div>
@@ -444,7 +441,7 @@ const SecureMap: React.FC = () => {
                                 requestOTP(safeHouse);
                               }
                             }}
-                            className="text-xs bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors"
+                            className="text-xs sm:text-sm bg-blue-500 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium"
                           >
                             Get Directions
                           </button>
@@ -459,26 +456,26 @@ const SecureMap: React.FC = () => {
 
           {/* Navigation Modal */}
           {isNavigating && selectedSafeHouse && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Navigation to {selectedSafeHouse.name}</h3>
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-1">Navigation to {selectedSafeHouse.name}</h3>
                   <button
                     onClick={() => {
                       setIsNavigating(false);
                       setSelectedSafeHouse(null);
                     }}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-600 p-1"
                   >
                     ×
                   </button>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-2 sm:space-y-3">
                   {navigationSteps.map((step, index) => (
                     <div
                       key={index}
-                      className={`p-3 rounded-lg border-2 ${
+                      className={`p-2 sm:p-3 rounded-lg border-2 ${
                         index === currentStep
                           ? 'border-blue-500 bg-blue-50'
                           : index < currentStep
@@ -486,8 +483,8 @@ const SecureMap: React.FC = () => {
                           : 'border-gray-200 bg-gray-50'
                       }`}
                     >
-                      <div className="flex items-start space-x-3">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                      <div className="flex items-start space-x-2 sm:space-x-3">
+                        <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
                           index === currentStep
                             ? 'bg-blue-500 text-white'
                             : index < currentStep
@@ -496,10 +493,10 @@ const SecureMap: React.FC = () => {
                         }`}>
                           {index + 1}
                         </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{step.instruction}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs sm:text-sm font-medium text-gray-900 line-clamp-2">{step.instruction}</p>
                           {step.distance > 0 && (
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 mt-1">
                               {step.distance} km • {step.duration} min
                             </p>
                           )}
@@ -510,25 +507,25 @@ const SecureMap: React.FC = () => {
                 </div>
 
                 {estimatedArrival && (
-                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-700">
+                  <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-blue-50 rounded-lg">
+                    <p className="text-xs sm:text-sm text-blue-700">
                       <strong>Estimated Arrival:</strong> {estimatedArrival.toLocaleTimeString()}
                     </p>
                   </div>
                 )}
 
-                <div className="flex space-x-3 mt-6">
+                <div className="flex space-x-2 sm:space-x-3 mt-4 sm:mt-6">
                   <button
                     onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
                     disabled={currentStep === 0}
-                    className="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-gray-100 text-gray-600 py-2 sm:py-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-medium"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setCurrentStep(Math.min(navigationSteps.length - 1, currentStep + 1))}
                     disabled={currentStep === navigationSteps.length - 1}
-                    className="flex-1 bg-blue-500 text-white py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-blue-500 text-white py-2 sm:py-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-medium"
                   >
                     Next
                   </button>
@@ -539,8 +536,8 @@ const SecureMap: React.FC = () => {
 
           {/* Unified Verification Form Modal */}
           {showVerificationForm && selectedSafeHouse && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+              <div className="max-w-md w-full max-h-[95vh] overflow-y-auto">
                 <UnifiedVerificationForm
                   onVerificationComplete={(verified) => {
                     if (verified) {
@@ -571,24 +568,24 @@ const SecureMap: React.FC = () => {
 
           {/* OTP Verification Modal */}
           {showOTPModal && otpVerification && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-2xl p-6 max-w-md w-full">
-                <div className="text-center mb-6">
-                  <Shield className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">OTP Verification Required</h3>
-                  <p className="text-sm text-gray-600 mb-2">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[95vh] overflow-y-auto">
+                <div className="text-center mb-4 sm:mb-6">
+                  <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-blue-500 mx-auto mb-2 sm:mb-3" />
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">OTP Verification Required</h3>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2">
                     Enter the OTP sent to your phone to get directions to:
                   </p>
                   {selectedSafeHouse && (
-                    <p className="text-sm font-medium text-blue-600">
+                    <p className="text-xs sm:text-sm font-medium text-blue-600 line-clamp-1">
                       {selectedSafeHouse.name}
                     </p>
                   )}
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                       OTP Code
                     </label>
                     <input
@@ -596,13 +593,13 @@ const SecureMap: React.FC = () => {
                       value={otpCode}
                       onChange={(e) => setOtpCode(e.target.value)}
                       placeholder="Enter 6-digit code"
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      className="w-full px-3 py-2.5 sm:py-3 border border-gray-200 rounded-lg text-center text-base sm:text-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                       maxLength={6}
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                       Secure Code <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -610,7 +607,7 @@ const SecureMap: React.FC = () => {
                       value={secureCode}
                       onChange={(e) => setSecureCode(e.target.value)}
                       placeholder="Enter your secure access code"
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      className="w-full px-3 py-2.5 sm:py-3 border border-gray-200 rounded-lg text-center text-base sm:text-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       Contact your support team if you don't have a secure code
@@ -618,8 +615,8 @@ const SecureMap: React.FC = () => {
                   </div>
 
                   {otpVerification.attempts > 0 && (
-                    <div className="p-3 bg-red-50 rounded-lg">
-                      <p className="text-sm text-red-600">
+                    <div className="p-2 sm:p-3 bg-red-50 rounded-lg">
+                      <p className="text-xs sm:text-sm text-red-600">
                         Invalid OTP. {otpVerification.maxAttempts - otpVerification.attempts} attempts remaining.
                       </p>
                     </div>
@@ -632,7 +629,7 @@ const SecureMap: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex space-x-3 mt-6">
+                <div className="flex space-x-2 sm:space-x-3 mt-4 sm:mt-6">
                   <button
                     onClick={() => {
                       setShowOTPModal(false);
@@ -640,7 +637,7 @@ const SecureMap: React.FC = () => {
                       setSecureCode('');
                       setOtpVerification(null);
                     }}
-                    className="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg"
+                    className="flex-1 bg-gray-100 text-gray-600 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-medium"
                   >
                     Cancel
                   </button>
@@ -652,7 +649,7 @@ const SecureMap: React.FC = () => {
                       }
                     }}
                     disabled={otpCode.length !== 6 || !secureCode.trim() || otpVerification.attempts >= otpVerification.maxAttempts}
-                    className="flex-1 bg-blue-500 text-white py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-blue-500 text-white py-2.5 sm:py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-medium"
                   >
                     Verify & Get Directions
                   </button>

@@ -7,7 +7,6 @@ import {
   Phone, 
   MapPin, 
   BookOpen, 
-  Star,
   Lock,
   Eye,
   CheckCircle,
@@ -496,10 +495,6 @@ const InclusiveYouthSupport: React.FC = () => {
                           <div className="flex items-center space-x-1">
                             <Calendar size={12} />
                             <span className="truncate">{service.hours}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Star size={12} className="text-yellow-500" />
-                            <span>{service.rating}</span>
                           </div>
                           {service.isAnonymous && (
                             <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">

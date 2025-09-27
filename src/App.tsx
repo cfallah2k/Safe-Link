@@ -5,6 +5,8 @@ import './styles/accessibility.css';
 
 // Components
 import OfflineIndicator from './components/OfflineIndicator';
+import UpdateNotification from './components/UI/UpdateNotification';
+import useServiceWorkerUpdate from './hooks/useServiceWorkerUpdate';
 import DesktopHeader from './components/Layout/DesktopHeader';
 import LoginForm from './components/Auth/LoginForm';
 import CreateCodeForm from './components/Auth/CreateCodeForm';
@@ -46,6 +48,7 @@ import { smsIntegration } from './utils/smsIntegration';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showCreateCode, setShowCreateCode] = useState(false);
+  const { isUpdateAvailable, updateServiceWorker, dismissUpdate } = useServiceWorkerUpdate();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -108,6 +111,14 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50 overflow-x-hidden" style={{ overflowY: 'visible' }}>
           <OfflineIndicator />
+          
+          {/* Update Notification */}
+          {isUpdateAvailable && (
+            <UpdateNotification
+              onUpdate={updateServiceWorker}
+              onDismiss={dismissUpdate}
+            />
+          )}
           
           {/* Desktop Header */}
           <DesktopHeader />

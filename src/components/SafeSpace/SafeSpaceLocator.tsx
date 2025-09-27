@@ -3,7 +3,6 @@ import {
   MapPin, 
   Phone, 
   Clock, 
-  Star, 
   Search, 
   Navigation,
   Shield,
@@ -511,10 +510,6 @@ const SafeSpaceLocator: React.FC = () => {
                         <div className="flex items-center space-x-1">
                           <MapPin size={14} />
                           <span>{space.distance} km away</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Star size={14} className="text-yellow-500" />
-                          <span>{space.rating}</span>
                         </div>
                         <div className={`flex items-center space-x-1 ${space.isOpen ? 'text-green-600' : 'text-red-600'}`}>
                           <Clock size={14} />

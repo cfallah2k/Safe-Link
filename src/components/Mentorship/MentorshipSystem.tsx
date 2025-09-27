@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   Users, 
   MessageCircle, 
-  Star, 
   Shield, 
   Send,
   XCircle,
@@ -332,11 +331,6 @@ const MentorshipSystem: React.FC = () => {
                   <h3 className="font-semibold text-gray-900">{mentor.name}</h3>
                   <p className="text-sm text-gray-600">{mentor.experience}</p>
                 </div>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Star className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm font-medium">{mentor.rating}</span>
-                <span className="text-xs text-gray-500">({mentor.reviews})</span>
               </div>
             </div>
 

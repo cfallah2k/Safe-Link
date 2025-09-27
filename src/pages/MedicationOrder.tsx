@@ -3,7 +3,6 @@ import {
   Pill, 
   CheckCircle, 
   Search,
-  Star
 } from 'lucide-react';
 
 interface Medication {
@@ -396,11 +395,6 @@ const MedicationOrder: React.FC = () => {
                           </div>
                           <div className="text-right">
                             <p className="text-lg font-bold text-gray-900">${medication.price}</p>
-                            <div className="flex items-center space-x-1 mt-1">
-                              <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                              <span className="text-xs text-gray-600">{medication.rating}</span>
-                              <span className="text-xs text-gray-400">({medication.reviews})</span>
-                            </div>
                           </div>
                         </div>
 
@@ -456,11 +450,6 @@ const MedicationOrder: React.FC = () => {
                           <p className="text-sm text-gray-600 mb-1">{pharmacy.address}</p>
                           <div className="flex items-center space-x-3 text-xs text-gray-500">
                             <span>{pharmacy.distance} km away</span>
-                            <span>•</span>
-                            <span className="flex items-center space-x-1">
-                              <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                              <span>{pharmacy.rating}</span>
-                            </span>
                             <span>•</span>
                             <span className={pharmacy.isOpen ? 'text-green-600' : 'text-red-600'}>
                               {pharmacy.isOpen ? 'Open' : 'Closed'}
