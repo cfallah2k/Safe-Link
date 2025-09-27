@@ -6,26 +6,49 @@ import {
   Hash, 
   Clock, 
   CheckCircle, 
-  AlertCircle
+  AlertCircle,
+  Info,
+  Wifi,
+  WifiOff,
+  Shield,
+  Heart,
+  Users,
+  Globe,
+  ArrowLeft,
+  Download
 } from 'lucide-react';
-import { smsIntegration, SMSMessage, USSDCode } from '../../utils/smsIntegration';
+import { Link } from 'react-router-dom';
+import { smsIntegration, SMSMessage } from '../../utils/smsIntegration';
 
 interface SMSInterfaceProps {
   onBack?: () => void;
 }
 
 const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
-  const [activeTab, setActiveTab] = useState<'sms' | 'ussd'>('sms');
+  const [activeTab, setActiveTab] = useState<'sms' | 'ussd' | 'dialpad'>('sms');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [message, setMessage] = useState('');
   const [smsHistory, setSmsHistory] = useState<SMSMessage[]>([]);
-  const [ussdCodes, setUssdCodes] = useState<USSDCode[]>([]);
   const [isSending, setIsSending] = useState(false);
+  const [dialpadNumber, setDialpadNumber] = useState('');
+  const [selectedProvider, setSelectedProvider] = useState<'mtn' | 'orange' | 'all'>('all');
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadSMSHistory();
-    loadUSSDCodes();
+    
+    // Monitor online status
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   useEffect(() => {
@@ -37,10 +60,6 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
     setSmsHistory(history);
   };
 
-  const loadUSSDCodes = () => {
-    const codes = smsIntegration.getUSSDCodes();
-    setUssdCodes(codes);
-  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -79,6 +98,41 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
     }
   };
 
+  const handleDialpadInput = (digit: string) => {
+    if (digit === 'clear') {
+      setDialpadNumber('');
+    } else if (digit === 'backspace') {
+      setDialpadNumber(prev => prev.slice(0, -1));
+    } else {
+      setDialpadNumber(prev => prev + digit);
+    }
+  };
+
+  const handleDialpadCall = () => {
+    if (dialpadNumber.trim()) {
+      // In a real app, this would initiate a call
+      alert(`Calling ${dialpadNumber}...`);
+    }
+  };
+
+  const getProviderServices = () => {
+    const mtnServices = [
+      { code: '*123#', name: 'MTN Health Info', description: 'Access SRHR information via MTN' },
+      { code: '*456#', name: 'MTN Emergency', description: 'Emergency SRHR support' },
+      { code: '*789#', name: 'MTN Counseling', description: 'Mental health and counseling' }
+    ];
+
+    const orangeServices = [
+      { code: '*111#', name: 'Orange Health', description: 'Health information services' },
+      { code: '*222#', name: 'Orange Support', description: 'Support and guidance' },
+      { code: '*333#', name: 'Orange Emergency', description: 'Emergency assistance' }
+    ];
+
+    if (selectedProvider === 'mtn') return mtnServices;
+    if (selectedProvider === 'orange') return orangeServices;
+    return [...mtnServices, ...orangeServices];
+  };
+
   const formatTime = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString([], { 
       hour: '2-digit', 
@@ -113,33 +167,79 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
   return (
     <div className="flex flex-col h-screen-safe bg-gradient-to-br from-green-50 via-white to-blue-50 overflow-hidden">
 
-      {/* Tab Navigation */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 py-2">
+      {/* Header with Connection Status */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 py-3">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-3">
+            <Link
+              to="/offline"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Back to Offline Mode"
+            >
+              <ArrowLeft className="w-5 h-5 text-gray-600" />
+            </Link>
+            <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl">
+              <Phone className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">SMS & USSD Services</h2>
+              <p className="text-sm text-gray-600">Offline communication tools</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            {isOnline ? (
+              <div className="flex items-center space-x-1 text-green-600">
+                <Wifi className="w-4 h-4" />
+                <span className="text-xs font-medium">Online</span>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-1 text-orange-600">
+                <WifiOff className="w-4 h-4" />
+                <span className="text-xs font-medium">Offline</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
         <div className="flex space-x-1">
           <button
             onClick={() => setActiveTab('sms')}
-            className={`flex-1 py-2 px-4 rounded-xl font-medium transition-all duration-200 ${
+            className={`flex-1 py-2 px-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'sms'
                 ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg'
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center justify-center space-x-1">
               <MessageSquare className="w-4 h-4" />
-              <span>SMS</span>
+              <span className="text-sm">SMS</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('ussd')}
-            className={`flex-1 py-2 px-4 rounded-xl font-medium transition-all duration-200 ${
+            className={`flex-1 py-2 px-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'ussd'
                 ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg'
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center justify-center space-x-1">
               <Hash className="w-4 h-4" />
-              <span>USSD</span>
+              <span className="text-sm">USSD</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('dialpad')}
+            className={`flex-1 py-2 px-3 rounded-xl font-medium transition-all duration-200 ${
+              activeTab === 'dialpad'
+                ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <div className="flex items-center justify-center space-x-1">
+              <Phone className="w-4 h-4" />
+              <span className="text-sm">Dialpad</span>
             </div>
           </button>
         </div>
@@ -228,12 +328,51 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
               </div>
             </div>
           </div>
-        ) : (
+        ) : activeTab === 'ussd' ? (
           <div className="p-4 space-y-4">
             <div className="text-center py-4">
               <Hash className="w-12 h-12 text-green-500 mx-auto mb-3" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">USSD Codes</h3>
-              <p className="text-gray-600 text-sm">Dial these codes on your phone for quick access</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">USSD Services</h3>
+              <p className="text-gray-600 text-sm">Access SRHR services via mobile networks</p>
+            </div>
+
+            {/* Provider Selection */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Select Network Provider
+              </label>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setSelectedProvider('all')}
+                  className={`flex-1 py-2 px-3 rounded-xl font-medium transition-all duration-200 ${
+                    selectedProvider === 'all'
+                      ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  All Networks
+                </button>
+                <button
+                  onClick={() => setSelectedProvider('mtn')}
+                  className={`flex-1 py-2 px-3 rounded-xl font-medium transition-all duration-200 ${
+                    selectedProvider === 'mtn'
+                      ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  MTN
+                </button>
+                <button
+                  onClick={() => setSelectedProvider('orange')}
+                  className={`flex-1 py-2 px-3 rounded-xl font-medium transition-all duration-200 ${
+                    selectedProvider === 'orange'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Orange
+                </button>
+              </div>
             </div>
 
             <div>
@@ -250,25 +389,32 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
             </div>
 
             <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400 pr-2">
-              {ussdCodes.map((code) => (
+              {getProviderServices().map((service, index) => (
                 <div
-                  key={code.code}
+                  key={index}
                   className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-200"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl">
+                        <div className={`p-2 rounded-xl ${
+                          service.code.includes('123') || service.code.includes('111') 
+                            ? 'bg-gradient-to-r from-green-500 to-blue-500'
+                            : service.code.includes('456') || service.code.includes('222')
+                            ? 'bg-gradient-to-r from-red-500 to-pink-500'
+                            : 'bg-gradient-to-r from-purple-500 to-indigo-500'
+                        }`}>
                           <Hash className="w-4 h-4 text-white" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900">{code.code}</h4>
-                          <p className="text-sm text-gray-600">{code.description}</p>
+                          <h4 className="font-semibold text-gray-900">{service.code}</h4>
+                          <p className="text-sm text-gray-600">{service.name}</p>
+                          <p className="text-xs text-gray-500">{service.description}</p>
                         </div>
                       </div>
                     </div>
                     <button
-                      onClick={() => handleUSSDCode(code.code)}
+                      onClick={() => handleUSSDCode(service.code)}
                       className="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl hover:from-green-600 hover:to-blue-600 transition-all duration-200 active:scale-95"
                     >
                       Dial
@@ -278,18 +424,167 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
               ))}
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+            {/* Provider-specific guidance */}
+            <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-2xl p-4">
               <div className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
+                <Info className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="font-semibold text-blue-900 mb-2">How to Use USSD</h4>
+                  <h4 className="font-semibold text-blue-900 mb-2">
+                    {selectedProvider === 'mtn' ? 'MTN Services' : 
+                     selectedProvider === 'orange' ? 'Orange Services' : 
+                     'Network Services'}
+                  </h4>
                   <ul className="text-blue-800 text-sm space-y-1">
                     <li>• Dial the code on your phone</li>
                     <li>• Follow the menu prompts</li>
                     <li>• Access SRHR information offline</li>
                     <li>• No internet connection required</li>
+                    {selectedProvider === 'mtn' && (
+                      <li>• MTN: Available on all MTN numbers</li>
+                    )}
+                    {selectedProvider === 'orange' && (
+                      <li>• Orange: Available on all Orange numbers</li>
+                    )}
                   </ul>
                 </div>
+              </div>
+            </div>
+
+            {/* Back to Offline Mode */}
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 border border-gray-200 rounded-2xl p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Download className="w-5 h-5 text-gray-600" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Offline Mode</h4>
+                    <p className="text-sm text-gray-600">Access your downloaded content and offline features</p>
+                  </div>
+                </div>
+                <Link
+                  to="/offline"
+                  className="px-4 py-2 bg-gradient-to-r from-gray-500 to-blue-500 text-white rounded-xl hover:from-gray-600 hover:to-blue-600 transition-all duration-200"
+                >
+                  Go to Offline Mode
+                </Link>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-4 space-y-4">
+            <div className="text-center py-4">
+              <Phone className="w-12 h-12 text-green-500 mx-auto mb-3" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Dialpad</h3>
+              <p className="text-gray-600 text-sm">Make calls and access services</p>
+            </div>
+
+            {/* Phone Number Display */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50">
+              <div className="text-center">
+                <div className="text-2xl font-mono text-gray-900 mb-2">
+                  {dialpadNumber || 'Enter number'}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {dialpadNumber.length > 0 ? `${dialpadNumber.length} digits` : 'Ready to dial'}
+                </div>
+              </div>
+            </div>
+
+            {/* Dialpad */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50">
+              <div className="grid grid-cols-3 gap-3">
+                {['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map((digit) => (
+                  <button
+                    key={digit}
+                    onClick={() => handleDialpadInput(digit)}
+                    className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 hover:from-green-100 hover:to-blue-100 rounded-2xl font-semibold text-gray-900 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
+                  >
+                    {digit}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Action buttons */}
+              <div className="flex space-x-3 mt-4">
+                <button
+                  onClick={() => handleDialpadInput('clear')}
+                  className="flex-1 py-3 bg-red-100 text-red-600 rounded-xl font-medium hover:bg-red-200 transition-all duration-200"
+                >
+                  Clear
+                </button>
+                <button
+                  onClick={() => handleDialpadInput('backspace')}
+                  className="flex-1 py-3 bg-orange-100 text-orange-600 rounded-xl font-medium hover:bg-orange-200 transition-all duration-200"
+                >
+                  Backspace
+                </button>
+                <button
+                  onClick={handleDialpadCall}
+                  disabled={!dialpadNumber.trim()}
+                  className="flex-1 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl font-medium hover:from-green-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  Call
+                </button>
+              </div>
+            </div>
+
+            {/* Offline Mode Notice */}
+            {!isOnline && (
+              <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-2xl p-4 mb-4">
+                <div className="flex items-center space-x-3">
+                  <WifiOff className="w-5 h-5 text-orange-600" />
+                  <div>
+                    <h4 className="font-semibold text-orange-900">Offline Mode Active</h4>
+                    <p className="text-sm text-orange-800">
+                      You're offline. SMS and USSD services work without internet connection.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Quick access numbers */}
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-2xl p-4">
+              <h4 className="font-semibold text-green-900 mb-3 flex items-center space-x-2">
+                <Heart className="w-4 h-4" />
+                <span>Quick Access Numbers</span>
+              </h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => setDialpadNumber('911')}
+                  className="w-full text-left p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-gray-900">Emergency</div>
+                      <div className="text-sm text-gray-600">911</div>
+                    </div>
+                    <Shield className="w-4 h-4 text-red-500" />
+                  </div>
+                </button>
+                <button
+                  onClick={() => setDialpadNumber('*123#')}
+                  className="w-full text-left p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-gray-900">Health Info</div>
+                      <div className="text-sm text-gray-600">*123#</div>
+                    </div>
+                    <Users className="w-4 h-4 text-green-500" />
+                  </div>
+                </button>
+                <button
+                  onClick={() => setDialpadNumber('*456#')}
+                  className="w-full text-left p-3 bg-white/80 rounded-xl hover:bg-white transition-all duration-200"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-gray-900">Support</div>
+                      <div className="text-sm text-gray-600">*456#</div>
+                    </div>
+                    <Globe className="w-4 h-4 text-blue-500" />
+                  </div>
+                </button>
               </div>
             </div>
           </div>

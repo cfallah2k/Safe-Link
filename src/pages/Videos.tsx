@@ -554,15 +554,19 @@ const Videos: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex space-x-2 pt-2">
-                      <a
-                        href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={() => {
+                          // Scroll to video or focus on it
+                          const videoElement = document.querySelector(`iframe[src*="${video.youtubeId}"]`);
+                          if (videoElement) {
+                            videoElement.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }}
                         className="flex-1 btn-primary text-sm py-2 flex items-center justify-center space-x-2"
                       >
                         <Play className="w-4 h-4" />
-                        <span>Watch on YouTube</span>
-                      </a>
+                        <span>Watch Video</span>
+                      </button>
                       
                       {video.isOfflineAvailable && (
                         <button

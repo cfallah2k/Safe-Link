@@ -61,6 +61,14 @@ const SecureMap: React.FC = () => {
   const [otpCode, setOtpCode] = useState('');
   const [secureCode, setSecureCode] = useState('');
   const [otpVerification, setOtpVerification] = useState<OTPVerification | null>(null);
+  const [showVerificationForm, setShowVerificationForm] = useState(false);
+  const [verificationForm, setVerificationForm] = useState({
+    name: '',
+    age: '',
+    reason: '',
+    emergencyContact: '',
+    agreeToTerms: false
+  });
   const [navigationSteps, setNavigationSteps] = useState<NavigationStep[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -222,9 +230,23 @@ const SecureMap: React.FC = () => {
     // Store the selected safe house for navigation after OTP verification
     setSelectedSafeHouse(safeHouse);
     
+    // Show verification form first
+    setShowVerificationForm(true);
+  };
+
+  const handleVerificationFormSubmit = () => {
+    // Validate form
+    if (!verificationForm.name || !verificationForm.age || !verificationForm.reason || !verificationForm.emergencyContact || !verificationForm.agreeToTerms) {
+      alert('Please fill in all required fields and agree to the terms.');
+      return;
+    }
+
+    // Close verification form and proceed to OTP
+    setShowVerificationForm(false);
+    
     // Simulate OTP generation
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + safeHouse.otpExpiry * 60 * 1000);
+    const expiresAt = new Date(Date.now() + (selectedSafeHouse?.otpExpiry || 30) * 60 * 1000);
     
     setOtpVerification({
       code,
@@ -236,7 +258,7 @@ const SecureMap: React.FC = () => {
     setShowOTPModal(true);
     
     // In a real app, this would send the OTP via SMS
-    console.log(`OTP for ${safeHouse.name}: ${code}`);
+    console.log(`OTP for ${selectedSafeHouse?.name}: ${code}`);
   };
 
   const verifyOTP = (enteredCode: string, enteredSecureCode: string) => {
@@ -541,6 +563,114 @@ const SecureMap: React.FC = () => {
                     className="flex-1 bg-blue-500 text-white py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Verification Form Modal */}
+          {showVerificationForm && selectedSafeHouse && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+                <div className="text-center mb-6">
+                  <Shield className="w-12 h-12 text-blue-500 mx-auto mb-3" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Access Verification Required</h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Please fill out this form to access directions to:
+                  </p>
+                  <p className="text-sm font-medium text-blue-600">
+                    {selectedSafeHouse.name}
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Full Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={verificationForm.name}
+                      onChange={(e) => setVerificationForm({...verificationForm, name: e.target.value})}
+                      placeholder="Enter your full name"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Age <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      value={verificationForm.age}
+                      onChange={(e) => setVerificationForm({...verificationForm, age: e.target.value})}
+                      placeholder="Enter your age"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Reason for Visit <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={verificationForm.reason}
+                      onChange={(e) => setVerificationForm({...verificationForm, reason: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    >
+                      <option value="">Select a reason</option>
+                      <option value="emergency">Emergency shelter</option>
+                      <option value="counseling">Counseling services</option>
+                      <option value="medical">Medical assistance</option>
+                      <option value="support">Support group</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Emergency Contact <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      value={verificationForm.emergencyContact}
+                      onChange={(e) => setVerificationForm({...verificationForm, emergencyContact: e.target.value})}
+                      placeholder="Enter emergency contact number"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="flex items-start space-x-2">
+                    <input
+                      type="checkbox"
+                      id="agreeToTerms"
+                      checked={verificationForm.agreeToTerms}
+                      onChange={(e) => setVerificationForm({...verificationForm, agreeToTerms: e.target.checked})}
+                      className="mt-1"
+                    />
+                    <label htmlFor="agreeToTerms" className="text-sm text-gray-600">
+                      I agree to the terms and conditions and understand that this information will be used for security purposes only.
+                    </label>
+                  </div>
+                </div>
+
+                <div className="flex space-x-3 mt-6">
+                  <button
+                    onClick={() => {
+                      setShowVerificationForm(false);
+                      setSelectedSafeHouse(null);
+                    }}
+                    className="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleVerificationFormSubmit}
+                    className="flex-1 bg-blue-500 text-white py-2 rounded-lg"
+                  >
+                    Continue to Verification
                   </button>
                 </div>
               </div>

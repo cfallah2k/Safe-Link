@@ -12,8 +12,14 @@ import {
   RefreshCw,
   Settings,
   Trash2,
-  Eye
+  Eye,
+  Smartphone,
+  Phone,
+  MessageSquare,
+  ArrowRight,
+  Wifi
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useOffline } from '../hooks/useOffline';
 
 interface OfflineContent {
@@ -200,24 +206,97 @@ const OfflineMode: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <main className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
-          {/* Offline Status Banner */}
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-4 sm:p-6 text-white mb-6 sm:mb-8">
+          {/* Connection Status Banner */}
+          <div className={`rounded-xl p-4 sm:p-6 text-white mb-6 sm:mb-8 ${
+            isOnline 
+              ? 'bg-gradient-to-r from-green-500 to-blue-500' 
+              : 'bg-gradient-to-r from-orange-500 to-red-500'
+          }`}>
             <div className="flex items-center space-x-3 sm:space-x-4">
-              <WifiOff className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" />
+              {isOnline ? (
+                <Wifi className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" />
+              ) : (
+                <WifiOff className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" />
+              )}
               <div className="flex-1">
-                <h2 className="text-lg sm:text-xl font-bold mb-1">You're Offline</h2>
+                <h2 className="text-lg sm:text-xl font-bold mb-1">
+                  {isOnline ? 'You\'re Online' : 'You\'re Offline'}
+                </h2>
                 <p className="text-sm sm:text-base opacity-90">
-                  Safe-Linkz is working in offline mode. You can access all your downloaded content.
+                  {isOnline 
+                    ? 'SafeLink is connected. You can access all features and sync your content.'
+                    : 'SafeLink is working in offline mode. You can access all your downloaded content and offline services.'
+                  }
                 </p>
               </div>
-              {!isOnline && (
-                <div className="flex items-center space-x-2 bg-white bg-opacity-20 rounded-lg px-3 py-2">
-                  <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium">Offline</span>
-                </div>
-              )}
+              <div className={`flex items-center space-x-2 rounded-lg px-3 py-2 ${
+                isOnline 
+                  ? 'bg-white bg-opacity-20' 
+                  : 'bg-white bg-opacity-20'
+              }`}>
+                <div className={`w-2 h-2 rounded-full ${
+                  isOnline ? 'bg-green-400' : 'bg-red-400 animate-pulse'
+                }`}></div>
+                <span className="text-sm font-medium">
+                  {isOnline ? 'Online' : 'Offline'}
+                </span>
+              </div>
             </div>
           </div>
+
+          {/* Offline Services Quick Access */}
+          {!isOnline && (
+            <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+              <div className="flex items-center space-x-3 mb-4">
+                <Smartphone className="w-6 h-6 text-blue-600" />
+                <h3 className="text-lg font-semibold text-blue-900">Offline Communication Services</h3>
+              </div>
+              <p className="text-blue-800 text-sm mb-4">
+                Even when offline, you can still access essential communication services through SMS and USSD codes.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Link
+                  to="/sms"
+                  className="group bg-white rounded-xl p-4 border border-blue-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg">
+                      <MessageSquare className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        SMS & USSD Services
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        Send messages and access health info via USSD codes
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                  </div>
+                </Link>
+                
+                <Link
+                  to="/sms-alerts"
+                  className="group bg-white rounded-xl p-4 border border-blue-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
+                      <Phone className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        SRHR Alerts
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        Get important health alerts and notifications
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                  </div>
+                </Link>
+              </div>
+            </div>
+          )}
 
           {/* Storage Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 mb-6 sm:mb-8">
