@@ -17,7 +17,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { offlineStorage } from '../../utils/offlineStorage';
-import UserVerification from '../Auth/UserVerification';
+import UnifiedVerificationForm from '../Auth/UnifiedVerificationForm';
 
 interface SafeSpace {
   id: string;
@@ -739,18 +739,19 @@ const SafeSpaceLocator: React.FC = () => {
         </div>
       </div>
 
-      {/* Verification Modal */}
+      {/* Unified Verification Modal */}
       {showVerification && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <UserVerification
+          <div className="max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <UnifiedVerificationForm
               onVerificationComplete={handleVerificationComplete}
               serviceName={verificationService}
               isEmergency={false}
+              showOTP={false}
             />
           </div>
         </div>
-        )}
+      )}
       </div>
     </div>
   );
