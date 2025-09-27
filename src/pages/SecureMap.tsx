@@ -64,7 +64,7 @@ const SecureMap: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
-  const [showRoute, setShowRoute] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [estimatedArrival, setEstimatedArrival] = useState<Date | null>(null);
 
   // Sample safe houses database
@@ -290,7 +290,6 @@ const SecureMap: React.FC = () => {
     ];
     
     setNavigationSteps(steps);
-    setShowRoute(true);
     
     // Calculate estimated arrival
     const totalDuration = steps.reduce((total, step) => total + step.duration, 0);
@@ -467,7 +466,6 @@ const SecureMap: React.FC = () => {
                   <button
                     onClick={() => {
                       setIsNavigating(false);
-                      setShowRoute(false);
                       setSelectedSafeHouse(null);
                     }}
                     className="text-gray-400 hover:text-gray-600"

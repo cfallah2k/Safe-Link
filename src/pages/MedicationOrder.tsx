@@ -52,7 +52,6 @@ const MedicationOrder: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacy | null>(null);
   const [cart, setCart] = useState<OrderItem[]>([]);
-  const [showPrescription, setShowPrescription] = useState(false);
   const [isOrdering, setIsOrdering] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
@@ -413,7 +412,7 @@ const MedicationOrder: React.FC = () => {
                           <div className="flex items-center space-x-2">
                             {medication.requiresPrescription && (
                               <button
-                                onClick={() => setShowPrescription(true)}
+                                onClick={() => {/* Handle prescription upload */}}
                                 className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-3 py-1 rounded-lg hover:bg-blue-50 transition-colors"
                               >
                                 Upload Prescription
