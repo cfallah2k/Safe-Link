@@ -858,7 +858,6 @@ const HealthTracker: React.FC = () => {
         </div>
         )}
       </div>
-    </div>
   );
 };
 
