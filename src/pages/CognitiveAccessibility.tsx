@@ -252,37 +252,15 @@ const CognitiveAccessibility: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-4 py-4 sm:px-6 shadow-lg" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3 min-w-0 flex-1">
-            <button
-              onClick={() => navigate(-1)}
-              className="p-2 hover:bg-white/20 rounded-xl transition-colors"
-              aria-label="Go back"
-            >
-              <ArrowLeft className="w-6 h-6 text-white" />
-            </button>
-            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl flex-shrink-0">
-              <Brain className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h1 className="text-lg sm:text-xl font-bold text-white truncate">Easy to Use</h1>
-              <p className="text-sm text-white/80 truncate">
-                Made simple for everyone to understand
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <button
-              onClick={() => speakText('Easy to Use page loaded. This page is made simple for everyone to understand.')}
-              className="p-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors"
-              aria-label="Read page description"
-            >
-              {isSpeaking ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
-            </button>
-          </div>
-        </div>
+      {/* Back Button */}
+      <div className="p-4 sm:p-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="w-6 h-6 text-gray-600" />
+        </button>
       </div>
 
       {/* Content */}

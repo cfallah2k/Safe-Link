@@ -177,30 +177,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
 
   return (
     <div className="flex flex-col h-screen-safe bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden">
-      {/* Modern Header with gradient */}
-      <div className="bg-gradient-to-r from-primary-600 to-purple-600 text-white px-4 py-4 sm:px-6 flex-shrink-0 shadow-lg" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3 min-w-0 flex-1">
-            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl flex-shrink-0">
-              <Bot className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h1 className="text-lg sm:text-xl font-bold text-white truncate">SRHR Assistant</h1>
-              <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-                <p className="text-sm text-white/80 truncate">
-                  {isOnline ? 'Online' : 'Offline'} • Anonymous & Secure
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <div className="p-2 bg-white/20 backdrop-blur-sm rounded-xl">
-              <Shield className="w-5 h-5 text-white" />
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Messages - Modern chat bubbles */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6 smooth-scroll">

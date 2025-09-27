@@ -14,7 +14,6 @@ import {
   Bookmark,
   Share2
 } from 'lucide-react';
-import Header from '../components/Layout/Header';
 import { useOffline } from '../hooks/useOffline';
 
 interface Article {
@@ -436,11 +435,6 @@ const Articles: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        title="Educational Articles" 
-        subtitle="Expert-written SRHR content and guides"
-      />
-      
       <main className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
           {/* Search and Filters */}

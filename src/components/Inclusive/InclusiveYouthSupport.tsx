@@ -331,28 +331,12 @@ const InclusiveYouthSupport: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Header */}
+        {/* Discreet Mode Toggle */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
-            <div className="flex items-center space-x-3">
-              <div className="p-3 bg-gradient-to-r from-rainbow-500 to-purple-500 rounded-xl">
-                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {showDiscreetMode ? 'Youth Support Services' : 'Inclusive Youth Support'}
-                </h1>
-                <p className="text-sm sm:text-base text-gray-600">
-                  {showDiscreetMode 
-                    ? 'Comprehensive support services for all youth' 
-                    : 'Safe, inclusive SRHR services for LGBTQ+ and all youth'
-                  }
-                </p>
-              </div>
-            </div>
+          <div className="flex justify-end">
             <button
               onClick={() => setShowDiscreetMode(!showDiscreetMode)}
-              className={`p-3 rounded-xl transition-colors self-start sm:self-auto ${
+              className={`p-3 rounded-xl transition-colors ${
                 showDiscreetMode 
                   ? 'bg-green-100 text-green-600' 
                   : 'bg-gray-100 text-gray-600'

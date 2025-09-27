@@ -337,11 +337,9 @@ const HealthTracker: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Health Tracker</h1>
-          {activeTab === 'tracker' && (
+        {/* Add Entry Button */}
+        {activeTab === 'tracker' && (
+          <div className="mb-6">
             <button
               onClick={() => setShowEntryForm(true)}
               className="btn-primary flex items-center space-x-2"
@@ -349,8 +347,8 @@ const HealthTracker: React.FC = () => {
               <Plus size={16} />
               <span>Add Entry</span>
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Tab Navigation */}
         <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
