@@ -21,7 +21,7 @@ interface Video {
   description: string;
   duration: string;
   category: string;
-  thumbnail: string;
+  youtubeId: string;
   views: number;
   rating: number;
   isDownloaded: boolean;
@@ -37,7 +37,7 @@ const Videos: React.FC = () => {
   const [downloadedVideos, setDownloadedVideos] = useState<string[]>([]);
   const { isOnline } = useOffline();
 
-  // Comprehensive SRHR video content
+  // Comprehensive SRHR video content with YouTube embeds
   const videos: Video[] = useMemo(() => [
     // STI Prevention Videos
     {
@@ -46,7 +46,7 @@ const Videos: React.FC = () => {
       description: 'Learn about common sexually transmitted infections, how they spread, and effective prevention methods.',
       duration: '8:45',
       category: 'STI Prevention',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual STI prevention video ID
       views: 15420,
       rating: 4.8,
       isDownloaded: false,
@@ -60,7 +60,7 @@ const Videos: React.FC = () => {
       description: 'Comprehensive guide to HIV/AIDS, including transmission, prevention, testing, and current treatment options.',
       duration: '12:30',
       category: 'STI Prevention',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual HIV/AIDS video ID
       views: 8930,
       rating: 4.9,
       isDownloaded: false,
@@ -74,7 +74,7 @@ const Videos: React.FC = () => {
       description: 'Understanding HPV, the HPV vaccine, and cervical cancer screening for women\'s health.',
       duration: '10:15',
       category: 'STI Prevention',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual HPV video ID
       views: 12350,
       rating: 4.7,
       isDownloaded: false,
@@ -90,7 +90,7 @@ const Videos: React.FC = () => {
       description: 'Overview of all contraceptive methods, their effectiveness, and how to choose the right one for you.',
       duration: '15:20',
       category: 'Contraception',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual contraception video ID
       views: 18750,
       rating: 4.8,
       isDownloaded: false,
@@ -104,7 +104,7 @@ const Videos: React.FC = () => {
       description: 'Everything you need to know about emergency contraception, including timing and effectiveness.',
       duration: '6:30',
       category: 'Contraception',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual emergency contraception video ID
       views: 9650,
       rating: 4.6,
       isDownloaded: false,
@@ -118,7 +118,7 @@ const Videos: React.FC = () => {
       description: 'Detailed information about intrauterine devices and contraceptive implants for long-term protection.',
       duration: '11:45',
       category: 'Contraception',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual IUD video ID
       views: 11200,
       rating: 4.7,
       isDownloaded: false,
@@ -134,7 +134,7 @@ const Videos: React.FC = () => {
       description: 'Learn about the menstrual cycle, ovulation, and how to track your fertility naturally.',
       duration: '9:15',
       category: 'Reproductive Health',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual menstrual cycle video ID
       views: 22300,
       rating: 4.8,
       isDownloaded: false,
@@ -148,7 +148,7 @@ const Videos: React.FC = () => {
       description: 'Comprehensive guide to pregnancy, including physical changes, prenatal care, and preparation for birth.',
       duration: '18:30',
       category: 'Reproductive Health',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual pregnancy video ID
       views: 15680,
       rating: 4.9,
       isDownloaded: false,
@@ -162,7 +162,7 @@ const Videos: React.FC = () => {
       description: 'Information about menopause, symptoms, treatment options, and maintaining health during this life stage.',
       duration: '13:20',
       category: 'Reproductive Health',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual menopause video ID
       views: 8750,
       rating: 4.6,
       isDownloaded: false,
@@ -178,7 +178,7 @@ const Videos: React.FC = () => {
       description: 'Learn about building healthy relationships, effective communication, and setting personal boundaries.',
       duration: '14:45',
       category: 'Mental Health',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual relationships video ID
       views: 19800,
       rating: 4.8,
       isDownloaded: false,
@@ -192,7 +192,7 @@ const Videos: React.FC = () => {
       description: 'Comprehensive guide to sexual consent, including enthusiastic consent and recognizing coercion.',
       duration: '12:15',
       category: 'Mental Health',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual consent video ID
       views: 16750,
       rating: 4.9,
       isDownloaded: false,
@@ -206,7 +206,7 @@ const Videos: React.FC = () => {
       description: 'Building positive body image and self-esteem for better mental health and sexual confidence.',
       duration: '10:30',
       category: 'Mental Health',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual body image video ID
       views: 13400,
       rating: 4.7,
       isDownloaded: false,
@@ -222,7 +222,7 @@ const Videos: React.FC = () => {
       description: 'Learn about gender identity, gender expression, and supporting transgender and non-binary individuals.',
       duration: '16:20',
       category: 'Gender & Sexuality',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual gender identity video ID
       views: 12800,
       rating: 4.8,
       isDownloaded: false,
@@ -236,7 +236,7 @@ const Videos: React.FC = () => {
       description: 'Exploring different sexual orientations and creating inclusive, supportive environments.',
       duration: '11:45',
       category: 'Gender & Sexuality',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual sexual orientation video ID
       views: 15200,
       rating: 4.7,
       isDownloaded: false,
@@ -252,7 +252,7 @@ const Videos: React.FC = () => {
       description: 'Understanding reproductive rights, healthcare access, and legal protections for sexual health.',
       duration: '13:30',
       category: 'Legal Rights',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual reproductive rights video ID
       views: 9650,
       rating: 4.6,
       isDownloaded: false,
@@ -266,7 +266,7 @@ const Videos: React.FC = () => {
       description: 'Recognizing sexual harassment and violence, prevention strategies, and where to get help.',
       duration: '15:45',
       category: 'Legal Rights',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual sexual harassment video ID
       views: 11200,
       rating: 4.8,
       isDownloaded: false,
@@ -282,7 +282,7 @@ const Videos: React.FC = () => {
       description: 'Age-appropriate information about sexual health, relationships, and making informed decisions.',
       duration: '12:00',
       category: 'Youth Education',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual teen health video ID
       views: 18750,
       rating: 4.8,
       isDownloaded: false,
@@ -296,7 +296,7 @@ const Videos: React.FC = () => {
       description: 'How to handle peer pressure and make confident decisions about your sexual health and relationships.',
       duration: '9:30',
       category: 'Youth Education',
-      thumbnail: '/api/placeholder/300/200',
+      youtubeId: 'dQw4w9WgXcQ', // Replace with actual peer pressure video ID
       views: 14300,
       rating: 4.7,
       isDownloaded: false,
@@ -339,10 +339,6 @@ const Videos: React.FC = () => {
     // In a real app, this would trigger actual video download
   };
 
-  const handlePlay = (video: Video) => {
-    // In a real app, this would open the video player
-    console.log('Playing video:', video.title);
-  };
 
   const formatViews = (views: number) => {
     if (views >= 1000) {
@@ -474,24 +470,18 @@ const Videos: React.FC = () => {
               
               return (
                 <div key={video.id} className="card group hover:shadow-xl transition-all duration-300">
-                  {/* Video Thumbnail */}
+                  {/* YouTube Video Embed */}
                   <div className="relative mb-4">
-                    <div className="aspect-video bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex items-center justify-center">
-                      <div className="text-center">
-                        <CategoryIcon className="w-12 h-12 text-primary-600 mx-auto mb-2" />
-                        <p className="text-xs text-gray-500">Video Thumbnail</p>
-                      </div>
+                    <div className="aspect-video rounded-lg overflow-hidden">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${video.youtubeId}?rel=0&modestbranding=1&showinfo=0`}
+                        title={video.title}
+                        className="w-full h-full"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
                     </div>
-                    
-                    {/* Play Button Overlay */}
-                    <button
-                      onClick={() => handlePlay(video)}
-                      className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    >
-                      <div className="bg-white rounded-full p-3 shadow-lg">
-                        <Play className="w-6 h-6 text-primary-600 ml-1" />
-                      </div>
-                    </button>
 
                     {/* Duration Badge */}
                     <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
@@ -564,13 +554,15 @@ const Videos: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex space-x-2 pt-2">
-                      <button
-                        onClick={() => handlePlay(video)}
+                      <a
+                        href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex-1 btn-primary text-sm py-2 flex items-center justify-center space-x-2"
                       >
                         <Play className="w-4 h-4" />
-                        <span>Watch</span>
-                      </button>
+                        <span>Watch on YouTube</span>
+                      </a>
                       
                       {video.isOfflineAvailable && (
                         <button

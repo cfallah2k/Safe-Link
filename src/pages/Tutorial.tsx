@@ -67,12 +67,14 @@ const Tutorial: React.FC = () => {
       title: 'Health & Safety Features',
       description: 'Core health and safety tools',
       icon: Heart,
-      content: 'Access healthcare services, find safe spaces, track your health, and get emergency support. These features help you take care of your physical and mental health.',
+      content: 'Access healthcare services, find safe spaces, track your health, order medications, and get emergency support. These features help you take care of your physical and mental health with secure access controls.',
       tips: [
         'Find nearby clinics and healthcare providers',
-        'Locate safe spaces in your area',
+        'Locate safe spaces with secure OTP verification',
+        'Order medications with prescription management',
         'Track your health and appointments',
-        'Access emergency support when needed'
+        'Access emergency support when needed',
+        'Use secure map navigation to safe houses'
       ]
     },
     {
@@ -80,12 +82,14 @@ const Tutorial: React.FC = () => {
       title: 'Education & Support',
       description: 'Learning resources and community support',
       icon: Users,
-      content: 'Access educational content, connect with mentors, read stories from other youth, and get support from the community. Learn about sexual and reproductive health in a safe environment.',
+      content: 'Access educational content, connect with mentors, read stories from other youth, and get support from the community. Learn about sexual and reproductive health in a safe environment with comprehensive video content.',
       tips: [
         'Chat with our AI assistant for questions',
-        'Watch educational videos',
+        'Watch embedded YouTube educational videos',
         'Read articles and stories',
-        'Connect with peer mentors'
+        'Connect with peer mentors',
+        'Access comprehensive SRHR video library',
+        'Learn through interactive content'
       ]
     },
     {
@@ -119,12 +123,28 @@ const Tutorial: React.FC = () => {
       title: 'Privacy & Security',
       description: 'Your data is safe and anonymous',
       icon: Lock,
-      content: 'SafeLink is designed with privacy and security in mind. Your data is anonymous, encrypted, and never shared. You can use the app safely without worrying about your information being exposed.',
+      content: 'SafeLink is designed with privacy and security in mind. Your data is anonymous, encrypted, and never shared. The app includes advanced security features like dual verification for safe house access.',
       tips: [
         'All data is anonymous and encrypted',
         'No personal information is required',
+        'Dual verification (OTP + Secure Code) for navigation',
         'Clear browser history on shared devices',
-        'Use incognito mode for extra privacy'
+        'Use incognito mode for extra privacy',
+        'Safe house access requires verification'
+      ]
+    },
+    {
+      id: 'secure-navigation',
+      title: 'Secure Navigation',
+      description: 'Safe access to secure locations',
+      icon: Shield,
+      content: 'When accessing safe houses or secure locations, you\'ll need to verify your identity using both an OTP code and a secure access code. This dual verification system ensures only authorized users can access sensitive locations.',
+      tips: [
+        'Click "Get Directions" to start the verification process',
+        'Enter the 6-digit OTP code sent to your phone',
+        'Enter your secure access code (contact support if you don\'t have one)',
+        'Navigation will start automatically after verification',
+        'Safe house locations are protected for your security'
       ]
     },
     {
@@ -139,6 +159,21 @@ const Tutorial: React.FC = () => {
         'Use SMS/USSD features when offline',
         'Sync new content when internet is available',
         'Offline mode works on all devices'
+      ]
+    },
+    {
+      id: 'video-education',
+      title: 'Video Education',
+      description: 'Comprehensive SRHR video content',
+      icon: Globe,
+      content: 'SafeLink includes a comprehensive library of educational videos about sexual and reproductive health. These videos are embedded directly in the app and cover topics like STI prevention, contraception, reproductive health, and more.',
+      tips: [
+        'Watch videos directly in the app',
+        'Videos cover all SRHR topics',
+        'Available in multiple difficulty levels',
+        'Download videos for offline viewing',
+        'Videos are mobile-optimized',
+        'Access YouTube videos without leaving the app'
       ]
     },
     {

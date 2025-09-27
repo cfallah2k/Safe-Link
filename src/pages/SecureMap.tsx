@@ -59,6 +59,7 @@ const SecureMap: React.FC = () => {
   const [selectedSafeHouse, setSelectedSafeHouse] = useState<SafeHouse | null>(null);
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [otpCode, setOtpCode] = useState('');
+  const [secureCode, setSecureCode] = useState('');
   const [otpVerification, setOtpVerification] = useState<OTPVerification | null>(null);
   const [navigationSteps, setNavigationSteps] = useState<NavigationStep[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -218,6 +219,9 @@ const SecureMap: React.FC = () => {
   };
 
   const requestOTP = async (safeHouse: SafeHouse) => {
+    // Store the selected safe house for navigation after OTP verification
+    setSelectedSafeHouse(safeHouse);
+    
     // Simulate OTP generation
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + safeHouse.otpExpiry * 60 * 1000);
@@ -235,13 +239,20 @@ const SecureMap: React.FC = () => {
     console.log(`OTP for ${safeHouse.name}: ${code}`);
   };
 
-  const verifyOTP = (enteredCode: string) => {
+  const verifyOTP = (enteredCode: string, enteredSecureCode: string) => {
     if (!otpVerification) return false;
     
-    if (enteredCode === otpVerification.code) {
+    // Check both OTP and secure code
+    if (enteredCode === otpVerification.code && enteredSecureCode === 'SAFE2024') {
       setShowOTPModal(false);
       setOtpCode('');
+      setSecureCode('');
       setOtpVerification(null);
+      
+      // Start navigation after successful verification
+      if (selectedSafeHouse) {
+        startNavigation(selectedSafeHouse);
+      }
       return true;
     } else {
       setOtpVerification({
@@ -434,19 +445,18 @@ const SecureMap: React.FC = () => {
                         </div>
 
                         <div className="flex items-center space-x-2">
-                          {safeHouse.requiresOTP && (
-                            <button
-                              onClick={() => requestOTP(safeHouse)}
-                              className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-3 py-1 rounded-lg hover:bg-blue-50 transition-colors"
-                            >
-                              Get OTP
-                            </button>
-                          )}
                           <button
-                            onClick={() => startNavigation(safeHouse)}
-                            className="text-xs bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition-colors"
+                            onClick={() => {
+                              if (safeHouse.requiresOTP) {
+                                requestOTP(safeHouse);
+                              } else {
+                                // For non-OTP locations, still require verification for security
+                                requestOTP(safeHouse);
+                              }
+                            }}
+                            className="text-xs bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors"
                           >
-                            Navigate
+                            Get Directions
                           </button>
                         </div>
                       </div>
@@ -543,10 +553,15 @@ const SecureMap: React.FC = () => {
               <div className="bg-white rounded-2xl p-6 max-w-md w-full">
                 <div className="text-center mb-6">
                   <Shield className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">OTP Verification</h3>
-                  <p className="text-sm text-gray-600">
-                    Enter the OTP sent to your phone to access the safe space
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">OTP Verification Required</h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Enter the OTP sent to your phone to get directions to:
                   </p>
+                  {selectedSafeHouse && (
+                    <p className="text-sm font-medium text-blue-600">
+                      {selectedSafeHouse.name}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-4">
@@ -562,6 +577,22 @@ const SecureMap: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                       maxLength={6}
                     />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Secure Code <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={secureCode}
+                      onChange={(e) => setSecureCode(e.target.value)}
+                      placeholder="Enter your secure access code"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Contact your support team if you don't have a secure code
+                    </p>
                   </div>
 
                   {otpVerification.attempts > 0 && (
@@ -584,6 +615,7 @@ const SecureMap: React.FC = () => {
                     onClick={() => {
                       setShowOTPModal(false);
                       setOtpCode('');
+                      setSecureCode('');
                       setOtpVerification(null);
                     }}
                     className="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg"
@@ -592,15 +624,15 @@ const SecureMap: React.FC = () => {
                   </button>
                   <button
                     onClick={() => {
-                      if (verifyOTP(otpCode)) {
-                        // OTP verified successfully
-                        console.log('OTP verified successfully');
+                      if (verifyOTP(otpCode, secureCode)) {
+                        // Both OTP and secure code verified successfully - navigation will start automatically
+                        console.log('OTP and secure code verified successfully - starting navigation');
                       }
                     }}
-                    disabled={otpCode.length !== 6 || otpVerification.attempts >= otpVerification.maxAttempts}
+                    disabled={otpCode.length !== 6 || !secureCode.trim() || otpVerification.attempts >= otpVerification.maxAttempts}
                     className="flex-1 bg-blue-500 text-white py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Verify
+                    Verify & Get Directions
                   </button>
                 </div>
               </div>
