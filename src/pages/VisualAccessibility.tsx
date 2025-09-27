@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   Eye,
   Volume2,
-  VolumeX,
   Contrast,
   ZoomIn,
   ZoomOut,

@@ -6,19 +6,15 @@ import {
   Hash, 
   Clock, 
   CheckCircle, 
-  AlertCircle,
-  Smartphone,
-  Shield
+  AlertCircle
 } from 'lucide-react';
 import { smsIntegration, SMSMessage, USSDCode } from '../../utils/smsIntegration';
-import { useOffline } from '../../hooks/useOffline';
 
 interface SMSInterfaceProps {
   onBack?: () => void;
 }
 
 const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
-  const { isOnline } = useOffline();
   const [activeTab, setActiveTab] = useState<'sms' | 'ussd'>('sms');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [message, setMessage] = useState('');

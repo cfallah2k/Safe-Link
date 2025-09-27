@@ -12,8 +12,6 @@ import {
   MapPin,
   Heart,
   Shield,
-  Volume2,
-  VolumeX,
   Play,
   Pause,
   Target,

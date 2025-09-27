@@ -2,15 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft,
-  MousePointer,
   Keyboard,
   Mic,
   Target,
   Clock,
   Info,
   Settings,
-  Volume2,
-  VolumeX,
   MessageCircle,
   MapPin,
   Heart,
@@ -26,7 +23,6 @@ interface VoiceCommand {
 
 const MotorAccessibility: React.FC = () => {
   const navigate = useNavigate();
-  const [isListening, setIsListening] = useState(false);
   const [voiceCommands, setVoiceCommands] = useState<VoiceCommand[]>([]);
   const [largeTouchTargets, setLargeTouchTargets] = useState(false);
   const [keyboardNavigation, setKeyboardNavigation] = useState(false);
@@ -64,7 +60,7 @@ const MotorAccessibility: React.FC = () => {
       recognition.lang = 'en-US';
 
       recognition.onstart = () => {
-        setIsListening(true);
+        // Voice recognition started
       };
 
       recognition.onresult = (event: any) => {
@@ -80,7 +76,7 @@ const MotorAccessibility: React.FC = () => {
       };
 
       recognition.onend = () => {
-        setIsListening(false);
+        // Voice recognition ended
       };
 
       if (voiceControl) {

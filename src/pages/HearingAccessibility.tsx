@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft,
   Volume2,
-  VolumeX,
   Eye,
   Vibrate,
   Subtitles,
