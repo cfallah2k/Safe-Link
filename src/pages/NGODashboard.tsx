@@ -180,52 +180,52 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ userData, onLogout }) => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8">
+        <div className="flex-1 p-2 sm:p-4 lg:p-6 xl:p-8">
           {/* Programs Tab */}
           {activeTab === 'programs' && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Program Management</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Program Management</h2>
                 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Total Beneficiaries</p>
-                        <p className="text-2xl font-semibold text-gray-900">{ngoData.ngoMetrics.totalBeneficiaries.toLocaleString()}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Total Beneficiaries</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-gray-900">{ngoData.ngoMetrics.totalBeneficiaries.toLocaleString()}</p>
                       </div>
-                      <Users className="w-8 h-8 text-blue-500" />
+                      <Users className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 flex-shrink-0" />
                     </div>
                   </div>
                   
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Active Programs</p>
-                        <p className="text-2xl font-semibold text-green-600">{ngoData.ngoMetrics.activePrograms}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Active Programs</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-green-600">{ngoData.ngoMetrics.activePrograms}</p>
                       </div>
-                      <Target className="w-8 h-8 text-green-500" />
+                      <Target className="w-6 h-6 sm:w-8 sm:h-8 text-green-500 flex-shrink-0" />
                     </div>
                   </div>
                   
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Completed Programs</p>
-                        <p className="text-2xl font-semibold text-blue-600">{ngoData.ngoMetrics.completedPrograms}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Completed Programs</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-blue-600">{ngoData.ngoMetrics.completedPrograms}</p>
                       </div>
-                      <CheckCircle className="w-8 h-8 text-blue-500" />
+                      <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 flex-shrink-0" />
                     </div>
                   </div>
                   
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Community Reach</p>
-                        <p className="text-2xl font-semibold text-orange-600">{ngoData.ngoMetrics.communityReach.toLocaleString()}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Community Reach</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-orange-600">{ngoData.ngoMetrics.communityReach.toLocaleString()}</p>
                       </div>
-                      <Globe className="w-8 h-8 text-orange-500" />
+                      <Globe className="w-6 h-6 sm:w-8 sm:h-8 text-orange-500 flex-shrink-0" />
                     </div>
                   </div>
                 </div>

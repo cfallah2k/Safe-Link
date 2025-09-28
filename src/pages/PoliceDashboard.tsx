@@ -191,52 +191,52 @@ const PoliceDashboard: React.FC<PoliceDashboardProps> = ({ userData, onLogout })
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8">
+        <div className="flex-1 p-2 sm:p-4 lg:p-6 xl:p-8">
           {/* Emergency Alerts Tab */}
           {activeTab === 'emergency' && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Emergency Response Center</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Emergency Response Center</h2>
                 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Active Alerts</p>
-                        <p className="text-2xl font-semibold text-red-600">{emergencyData.activeAlerts}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Active Alerts</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-red-600">{emergencyData.activeAlerts}</p>
                       </div>
-                      <AlertTriangle className="w-8 h-8 text-red-500" />
+                      <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-red-500 flex-shrink-0" />
                     </div>
                   </div>
                   
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Resolved Today</p>
-                        <p className="text-2xl font-semibold text-green-600">{emergencyData.resolvedToday}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Resolved Today</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-green-600">{emergencyData.resolvedToday}</p>
                       </div>
-                      <CheckCircle className="w-8 h-8 text-green-500" />
+                      <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-green-500 flex-shrink-0" />
                     </div>
                   </div>
                   
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Avg Response Time</p>
-                        <p className="text-2xl font-semibold text-blue-600">{emergencyData.averageResponseTime}m</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Avg Response Time</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-blue-600">{emergencyData.averageResponseTime}m</p>
                       </div>
-                      <Clock className="w-8 h-8 text-blue-500" />
+                      <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 flex-shrink-0" />
                     </div>
                   </div>
                   
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">Total Cases</p>
-                        <p className="text-2xl font-semibold text-gray-900">{emergencyData.totalCases}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">Total Cases</p>
+                        <p className="text-lg sm:text-2xl font-semibold text-gray-900">{emergencyData.totalCases}</p>
                       </div>
-                      <FileText className="w-8 h-8 text-gray-500" />
+                      <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-gray-500 flex-shrink-0" />
                     </div>
                   </div>
                 </div>

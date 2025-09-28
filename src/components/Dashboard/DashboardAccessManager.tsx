@@ -16,6 +16,7 @@ const DashboardAccessManager: React.FC = () => {
     const role = urlParams.get('role');
     
     if (role) {
+      // Stakeholders go DIRECTLY to their role-specific login page
       setCurrentRole(role);
       setShowPortalLogin(true);
     }
@@ -43,6 +44,7 @@ const DashboardAccessManager: React.FC = () => {
     );
   }
 
+  // Stakeholders go DIRECTLY to their role-specific login page
   if (showPortalLogin && currentRole) {
     return (
       <PortalLogin
@@ -51,13 +53,14 @@ const DashboardAccessManager: React.FC = () => {
         onBack={() => {
           setShowPortalLogin(false);
           setCurrentRole('');
-          // Clear URL parameters
-          window.history.replaceState({}, document.title, '/dashboard');
+          // Clear URL parameters and go back to main login
+          window.history.replaceState({}, document.title, '/');
         }}
       />
     );
   }
 
+  // Only show DashboardAccess for direct /dashboard access (not for stakeholders)
   return (
     <DashboardAccess onDashboardAccess={handleDashboardAccess} />
   );

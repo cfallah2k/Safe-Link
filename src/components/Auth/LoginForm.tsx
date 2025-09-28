@@ -20,7 +20,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
     e.preventDefault();
     setError('');
 
-    // First check if it's a stakeholder code - INSTANT REDIRECT
+    // First check if it's a stakeholder code
     const stakeholderCodes: { [key: string]: string } = {
       'SAFELINK_ADMIN_2024': 'ADMIN',
       'SAFELINK_POLICE_2024': 'POLICE', 
@@ -29,9 +29,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
       'SAFELINK_NGO_2024': 'NGO'
     };
 
-    // INSTANT REDIRECT for stakeholders - no loading, no delays
+    // Show loading state for stakeholders before redirect
     if (stakeholderCodes[code]) {
-      window.location.href = `/dashboard?role=${stakeholderCodes[code]}`;
+      setIsLoading(true);
+      // Brief loading state to make it feel real
+      setTimeout(() => {
+        window.location.href = `/dashboard?role=${stakeholderCodes[code]}`;
+      }, 800); // 800ms loading before redirect
       return;
     }
 
@@ -74,20 +78,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
     value = value.substring(0, 25);
     setCode(value);
     setError('');
-
-    // INSTANT REDIRECT for complete stakeholder codes
-    const stakeholderCodes: { [key: string]: string } = {
-      'SAFELINK_ADMIN_2024': 'ADMIN',
-      'SAFELINK_POLICE_2024': 'POLICE', 
-      'SAFELINK_SAFE_2024': 'SAFEHOUSE',
-      'SAFELINK_MED_2024': 'MEDICAL',
-      'SAFELINK_NGO_2024': 'NGO'
-    };
-
-    if (stakeholderCodes[value]) {
-      // INSTANT REDIRECT - no waiting, no loading
-      window.location.href = `/dashboard?role=${stakeholderCodes[value]}`;
-    }
   };
 
   const formatCodeDisplay = (value: string) => {

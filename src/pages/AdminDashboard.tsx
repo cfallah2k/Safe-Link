@@ -142,15 +142,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ userData, onLogout }) =
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8">
+        <div className="flex-1 p-2 sm:p-4 lg:p-6 xl:p-8">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">System Overview</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">System Overview</h2>
                 
                 {/* Stats Cards - Mobile Responsive */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
                   <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
                       <div className="min-w-0 flex-1">
