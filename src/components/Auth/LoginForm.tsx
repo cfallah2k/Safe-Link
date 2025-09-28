@@ -21,7 +21,23 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
     setError('');
 
     try {
-      // Validate the secret code
+      // First check if it's a stakeholder code
+      const stakeholderCodes: { [key: string]: string } = {
+        'SAFELINK_ADMIN_2024': 'ADMIN',
+        'SAFELINK_POLICE_2024': 'POLICE', 
+        'SAFELINK_SAFE_2024': 'SAFEHOUSE',
+        'SAFELINK_MED_2024': 'MEDICAL',
+        'SAFELINK_NGO_2024': 'NGO'
+      };
+
+      // Check if the entered code is a stakeholder code
+      if (stakeholderCodes[code]) {
+        // Redirect to dashboard system
+        window.location.href = `/dashboard?role=${stakeholderCodes[code]}`;
+        return;
+      }
+
+      // Otherwise, validate as regular user code
       if (secretCodeManager.validateSecretCode(code)) {
         secretCodeManager.updateLastUsed();
         onLogin(code);
@@ -39,8 +55,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
     let value = e.target.value.toUpperCase();
     // Remove any non-alphanumeric characters
     value = value.replace(/[^A-Z0-9]/g, '');
-    // Limit to 8 characters
-    value = value.substring(0, 8);
+    // Allow up to 20 characters for stakeholder codes
+    value = value.substring(0, 20);
     setCode(value);
     setError('');
   };
@@ -88,7 +104,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
                   onChange={handleCodeChange}
                   placeholder={t('auth.codePlaceholder')}
                   className="input-field pr-20"
-                  maxLength={9} // 8 chars + 1 space
+                  maxLength={21} // 20 chars + 1 space
                   required
                 />
                 <button
@@ -106,7 +122,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
 
             <button
               type="submit"
-              disabled={isLoading || code.length !== 8}
+              disabled={isLoading || (code.length !== 8 && !code.startsWith('SAFELINK_'))}
               className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {isLoading ? (
