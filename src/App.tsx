@@ -75,6 +75,29 @@ function App() {
     const hasValidCode = secretCodeManager.hasValidSecretCode();
     setIsAuthenticated(hasValidCode);
     setIsLoading(false);
+    
+    // Handle stakeholder URL changes
+    const handleStakeholderAccess = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const role = urlParams.get('role');
+      const validStakeholderRoles = ['ADMIN', 'POLICE', 'SAFEHOUSE', 'MEDICAL', 'NGO'];
+      
+      if (role && validStakeholderRoles.includes(role) && window.location.pathname === '/dashboard') {
+        console.log('🔍 Stakeholder URL detected:', role, '- Ensuring Router access');
+        // Force re-render to ensure Router is accessible
+        setIsLoading(false);
+      }
+    };
+    
+    // Listen for URL changes
+    window.addEventListener('popstate', handleStakeholderAccess);
+    
+    // Check initial URL
+    handleStakeholderAccess();
+    
+    return () => {
+      window.removeEventListener('popstate', handleStakeholderAccess);
+    };
 
     // Initialize SMS integration
     smsIntegration.processOfflineQueue();
@@ -152,11 +175,23 @@ function App() {
     );
   }
 
-  if (!isAuthenticated) {
+  // Check for stakeholder access first
+  const urlParams = new URLSearchParams(window.location.search);
+  const role = urlParams.get('role');
+  const validStakeholderRoles = ['ADMIN', 'POLICE', 'SAFEHOUSE', 'MEDICAL', 'NGO'];
+  const isStakeholderAccess = role && validStakeholderRoles.includes(role) && window.location.pathname === '/dashboard';
+  
+  if (!isAuthenticated && !isStakeholderAccess) {
+    // Regular users need authentication
+    console.log('🔍 Regular user - Showing login form');
     if (showCreateCode) {
       return <CreateCodeForm onBack={() => setShowCreateCode(false)} onCodeCreated={handleCreateCode} />;
     }
     return <LoginForm onLogin={handleLogin} onCreateNew={() => setShowCreateCode(true)} />;
+  }
+  
+  if (isStakeholderAccess) {
+    console.log('🔍 Stakeholder detected:', role, '- Allowing access to Router');
   }
 
   return (
@@ -212,8 +247,8 @@ function App() {
                   <Route path="/medication-order" element={<MedicationOrder />} />
                   <Route path="/secure-map" element={<SecureMap />} />
                   <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
-            <Route path="/dashboard" element={<DashboardAccessManager />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+                  <Route path="/dashboard" element={<DashboardAccessManager />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </div>
             </main>
