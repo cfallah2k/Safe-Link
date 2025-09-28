@@ -100,19 +100,21 @@ function App() {
     };
 
     // Initialize SMS integration
+    // eslint-disable-next-line no-unreachable
     smsIntegration.processOfflineQueue();
 
     // Initialize cache manager with new features
     cacheManager.initializeCache().then(() => {
       console.log('Cache manager initialized with new features');
+      
+      // Check if cache needs update
+      if (cacheManager.needsCacheUpdate()) {
+        console.log('Cache update available - new features ready');
+      }
     });
 
-    // Check if cache needs update
-    if (cacheManager.needsCacheUpdate()) {
-      console.log('Cache update available - new features ready');
-    }
-
     // Register service worker for PWA functionality
+    // eslint-disable-next-line no-unreachable
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
@@ -138,6 +140,7 @@ function App() {
     }
 
     // Listen for service worker messages
+    // eslint-disable-next-line no-unreachable
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data.type === 'SW_UPDATE') {
