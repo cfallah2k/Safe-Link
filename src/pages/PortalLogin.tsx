@@ -14,7 +14,6 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [error, setError] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
 
   // Role-specific configurations
   const roleConfig = {
@@ -61,7 +60,6 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     // In production, this would send real OTP
-    setOtpSent(true);
     setShowOtpInput(true);
     setIsSendingOtp(false);
   };
