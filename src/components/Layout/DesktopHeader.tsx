@@ -27,7 +27,8 @@ import {
   Menu,
   X,
   Pill,
-  Navigation
+  Navigation,
+  QrCode
 } from 'lucide-react';
 import NotificationSystem from '../UI/NotificationSystem';
 
@@ -93,6 +94,7 @@ const DesktopHeader: React.FC = () => {
       items: [
         { path: '/notifications', icon: Bell, label: 'Notifications' },
         { path: '/tutorial', icon: GraduationCap, label: 'Tutorial' },
+        { path: '/qr-verification', icon: QrCode, label: 'QR Code Verification' },
         { path: '/visual-accessibility', icon: Eye, label: 'Visual Accessibility' },
         { path: '/motor-accessibility', icon: MousePointer, label: 'Motor Accessibility' },
         { path: '/hearing-accessibility', icon: Volume2, label: 'Hearing Accessibility' },

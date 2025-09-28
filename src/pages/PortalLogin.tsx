@@ -171,10 +171,10 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
             </div>
 
             <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
+            <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number
+              </label>
                 <input
                   type="tel"
                   id="phoneNumber"
@@ -201,26 +201,26 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
                   required
                   disabled={isSendingOtp}
                 />
-              </div>
+            </div>
 
-              <button
-                type="submit"
+            <button
+              type="submit"
                 disabled={!phoneNumber.trim() || !email.trim() || isSendingOtp}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
-              >
-                {isSendingOtp ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+            >
+              {isSendingOtp ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                     <span>Signing In...</span>
-                  </>
-                ) : (
-                  <>
+                </>
+              ) : (
+                <>
                     <LogIn size={18} />
                     <span>Sign In</span>
-                  </>
-                )}
-              </button>
-            </form>
+                </>
+              )}
+            </button>
+          </form>
 
             <div className="text-center">
               <p className="text-sm text-gray-600 mb-3">Don't have an account?</p>
@@ -319,53 +319,53 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
               </p>
             </div>
 
-            <form onSubmit={handleOtpSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="otpCode" className="block text-sm font-medium text-gray-700 mb-2">
+          <form onSubmit={handleOtpSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="otpCode" className="block text-sm font-medium text-gray-700 mb-2">
                   Verification Code
-                </label>
-                <input
-                  type="text"
-                  id="otpCode"
-                  value={otpCode}
+              </label>
+              <input
+                type="text"
+                id="otpCode"
+                value={otpCode}
                   onChange={(e) => setOtpCode(e.target.value)}
                   placeholder="Enter 6-digit code"
                   className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-center text-lg tracking-widest"
-                  maxLength={6}
-                  required
-                  disabled={isVerifyingOtp}
-                />
-              </div>
+                maxLength={6}
+                required
+                disabled={isVerifyingOtp}
+              />
+            </div>
 
-              <div className="flex space-x-2">
-                <button
-                  type="button"
-                  onClick={resendOtp}
-                  disabled={isSendingOtp}
-                  className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors text-sm"
-                >
-                  {isSendingOtp ? 'Sending...' : 'Resend OTP'}
-                </button>
-                
-                <button
-                  type="submit"
-                  disabled={otpCode.length !== 6 || isVerifyingOtp}
-                  className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
-                >
-                  {isVerifyingOtp ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                      <span>Verifying...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle size={18} />
-                      <span>Verify</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
+            <div className="flex space-x-2">
+              <button
+                type="button"
+                onClick={resendOtp}
+                disabled={isSendingOtp}
+                className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors text-sm"
+              >
+                {isSendingOtp ? 'Sending...' : 'Resend OTP'}
+              </button>
+              
+              <button
+                type="submit"
+                disabled={otpCode.length !== 6 || isVerifyingOtp}
+                className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+              >
+                {isVerifyingOtp ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                    <span>Verifying...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle size={18} />
+                    <span>Verify</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
           </div>
         )}
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './i18n';
 import './styles/accessibility.css';
 
@@ -17,7 +17,6 @@ import ConsentEducationGame from './components/Games/ConsentEducationGame';
 import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
 import DashboardAccessManager from './components/Dashboard/DashboardAccessManager';
 import AppDownloadModal from './components/AppDownloadModal';
-import FloatingDownloadButton from './components/FloatingDownloadButton';
 import AppInstallBanner from './components/AppInstallBanner';
 
 // Contexts
@@ -44,6 +43,7 @@ import HearingAccessibility from './pages/HearingAccessibility';
 import CognitiveAccessibility from './pages/CognitiveAccessibility';
 import MedicationOrder from './pages/MedicationOrder';
 import SecureMap from './pages/SecureMap';
+import QRVerification from './pages/QRVerification';
 
 // Utils
 import { secretCodeManager } from './utils/secretCode';
@@ -52,6 +52,14 @@ import { smsIntegration } from './utils/smsIntegration';
 // Hooks
 import { useAppDownloadModal } from './hooks/useAppDownloadModal';
 import { cacheManager } from './utils/cacheManager';
+
+// Component to conditionally render header
+const ConditionalHeader: React.FC = () => {
+  const location = useLocation();
+  const shouldShowHeader = !location.pathname.startsWith('/dashboard');
+  
+  return shouldShowHeader ? <DesktopHeader /> : null;
+};
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -171,8 +179,8 @@ function App() {
             />
           )}
           
-          {/* Desktop Header */}
-          <DesktopHeader />
+          {/* Desktop Header - Hide for dashboard pages */}
+          <ConditionalHeader />
           
             {/* Main content area with proper mobile spacing */}
             <main className="flex-1 lg:ml-0 min-h-screen-safe">
@@ -196,26 +204,20 @@ function App() {
                   <Route path="/offline" element={<OfflineMode />} />
                   <Route path="/notifications" element={<Notifications />} />
                   <Route path="/tutorial" element={<Tutorial />} />
+                  <Route path="/qr-verification" element={<QRVerification />} />
                   <Route path="/visual-accessibility" element={<VisualAccessibility />} />
                   <Route path="/motor-accessibility" element={<MotorAccessibility />} />
                   <Route path="/hearing-accessibility" element={<HearingAccessibility />} />
-            <Route path="/cognitive-accessibility" element={<CognitiveAccessibility />} />
-            <Route path="/medication-order" element={<MedicationOrder />} />
-            <Route path="/secure-map" element={<SecureMap />} />
-            <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
+                  <Route path="/cognitive-accessibility" element={<CognitiveAccessibility />} />
+                  <Route path="/medication-order" element={<MedicationOrder />} />
+                  <Route path="/secure-map" element={<SecureMap />} />
+                  <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
             <Route path="/dashboard" element={<DashboardAccessManager />} />
             <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </div>
             </main>
             
-            {/* Floating Download Button - Only show for authenticated users */}
-            {isAuthenticated && (
-              <FloatingDownloadButton
-                onDownload={handleDownload}
-                onClose={closeModal}
-              />
-            )}
             
             {/* App Download Modal */}
             <AppDownloadModal

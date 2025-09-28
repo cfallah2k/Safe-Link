@@ -14,7 +14,8 @@ import {
   Play,
   Download,
   FileText,
-  Smartphone
+  Smartphone,
+  QrCode
 } from 'lucide-react';
 import PWAInstallPrompt from '../components/PWAInstallPrompt';
 
@@ -102,6 +103,14 @@ const Home: React.FC = () => {
       description: 'Access downloaded content',
       color: 'bg-gray-500',
       textColor: 'text-gray-600'
+    },
+    {
+      path: '/qr-verification',
+      icon: QrCode,
+      title: 'QR Code Verification',
+      description: 'Generate QR code for stakeholder verification',
+      color: 'bg-blue-500',
+      textColor: 'text-blue-600'
     }
   ];
 
