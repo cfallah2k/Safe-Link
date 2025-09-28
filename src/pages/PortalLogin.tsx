@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Smartphone, ArrowLeft, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Shield, Smartphone, ArrowLeft, AlertTriangle, CheckCircle, LogIn, UserPlus, Send } from 'lucide-react';
 
 interface PortalLoginProps {
   role: string;
@@ -9,11 +9,14 @@ interface PortalLoginProps {
 
 const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [otpCode, setOtpCode] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [error, setError] = useState('');
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'login' | 'signup' | 'otp'>('login');
 
   // Role-specific configurations
   const roleConfig = {
@@ -51,16 +54,39 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
 
   const currentRole = roleConfig[role as keyof typeof roleConfig];
 
-  const handlePhoneSubmit = async (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsSendingOtp(true);
 
-    // Simulate OTP sending
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Check if user exists (simulate API call)
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // For demo purposes, assume user exists if phone number is provided
+    if (phoneNumber && email) {
+      setCurrentStep('otp');
+      setShowOtpInput(true);
+    } else {
+      setError('Please provide both phone number and email.');
+    }
+    setIsSendingOtp(false);
+  };
 
-    // In production, this would send real OTP
-    setShowOtpInput(true);
+  const handleSignupSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsSendingOtp(true);
+
+    // Simulate account creation
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    if (phoneNumber && email) {
+      setIsNewUser(true);
+      setCurrentStep('otp');
+      setShowOtpInput(true);
+    } else {
+      setError('Please provide both phone number and email.');
+    }
     setIsSendingOtp(false);
   };
 
@@ -77,6 +103,8 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
       const userData = {
         role,
         phoneNumber,
+        email,
+        isNewUser,
         loginTime: new Date().toISOString(),
         permissions: getRolePermissions(role)
       };
@@ -137,98 +165,211 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
           </div>
         )}
 
-        {/* Phone Number Form */}
-        {!showOtpInput ? (
-          <form onSubmit={handlePhoneSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number
-              </label>
-              <div className="relative">
+        {/* Login/Signup Options */}
+        {currentStep === 'login' && (
+          <div className="space-y-4">
+            <div className="text-center mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Sign In to Your Account</h2>
+              <p className="text-sm text-gray-600">Enter your credentials to access your dashboard</p>
+            </div>
+
+            <form onSubmit={handleLoginSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  Phone Number
+                </label>
                 <input
                   type="tel"
                   id="phoneNumber"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="Enter your phone number"
-                  className="w-full px-3 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
                   required
                   disabled={isSendingOtp}
                 />
-                <Smartphone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                  required
+                  disabled={isSendingOtp}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={!phoneNumber.trim() || !email.trim() || isSendingOtp}
+                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+              >
+                {isSendingOtp ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                    <span>Signing In...</span>
+                  </>
+                ) : (
+                  <>
+                    <LogIn size={18} />
+                    <span>Sign In</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="text-center">
+              <p className="text-sm text-gray-600 mb-3">Don't have an account?</p>
+              <button
+                onClick={() => setCurrentStep('signup')}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                Create New Account
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Sign Up Form */}
+        {currentStep === 'signup' && (
+          <div className="space-y-4">
+            <div className="text-center mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Create New Account</h2>
+              <p className="text-sm text-gray-600">Set up your {currentRole.title} account</p>
             </div>
 
-            <button
-              type="submit"
-              disabled={!phoneNumber.trim() || isSendingOtp}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
-            >
-              {isSendingOtp ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                  <span>Sending OTP...</span>
-                </>
-              ) : (
-                <>
-                  <Shield size={18} />
-                  <span>Send OTP</span>
-                </>
-              )}
-            </button>
-          </form>
-        ) : (
-          /* OTP Verification Form */
-          <form onSubmit={handleOtpSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="otpCode" className="block text-sm font-medium text-gray-700 mb-2">
-                Enter OTP Code
-              </label>
-              <input
-                type="text"
-                id="otpCode"
-                value={otpCode}
-                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                placeholder="Enter 6-digit OTP"
-                className="w-full px-3 py-3 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-lg font-mono tracking-widest"
-                maxLength={6}
-                required
-                disabled={isVerifyingOtp}
-              />
-              <p className="text-xs text-gray-500 mt-1 text-center">
+            <form onSubmit={handleSignupSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="Enter your phone number"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                  required
+                  disabled={isSendingOtp}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                  required
+                  disabled={isSendingOtp}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={!phoneNumber.trim() || !email.trim() || isSendingOtp}
+                className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+              >
+                {isSendingOtp ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                    <span>Creating Account...</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus size={18} />
+                    <span>Create Account</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="text-center">
+              <p className="text-sm text-gray-600 mb-3">Already have an account?</p>
+              <button
+                onClick={() => setCurrentStep('login')}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                Sign In Instead
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* OTP Verification */}
+        {currentStep === 'otp' && (
+          <div className="space-y-4">
+            <div className="text-center mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Verify Your Account</h2>
+              <p className="text-sm text-gray-600">
+                {isNewUser ? 'We sent a verification code to your phone' : 'Enter the OTP sent to your phone'}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
                 OTP sent to {phoneNumber}
               </p>
             </div>
 
-            <div className="flex space-x-2">
-              <button
-                type="button"
-                onClick={resendOtp}
-                disabled={isSendingOtp}
-                className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors text-sm"
-              >
-                {isSendingOtp ? 'Sending...' : 'Resend OTP'}
-              </button>
-              
-              <button
-                type="submit"
-                disabled={otpCode.length !== 6 || isVerifyingOtp}
-                className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
-              >
-                {isVerifyingOtp ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                    <span>Verifying...</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle size={18} />
-                    <span>Verify</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
+            <form onSubmit={handleOtpSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="otpCode" className="block text-sm font-medium text-gray-700 mb-2">
+                  Verification Code
+                </label>
+                <input
+                  type="text"
+                  id="otpCode"
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value)}
+                  placeholder="Enter 6-digit code"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-center text-lg tracking-widest"
+                  maxLength={6}
+                  required
+                  disabled={isVerifyingOtp}
+                />
+              </div>
+
+              <div className="flex space-x-2">
+                <button
+                  type="button"
+                  onClick={resendOtp}
+                  disabled={isSendingOtp}
+                  className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors text-sm"
+                >
+                  {isSendingOtp ? 'Sending...' : 'Resend OTP'}
+                </button>
+                
+                <button
+                  type="submit"
+                  disabled={otpCode.length !== 6 || isVerifyingOtp}
+                  className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+                >
+                  {isVerifyingOtp ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      <span>Verifying...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle size={18} />
+                      <span>Verify</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
         )}
 
         {/* Security Notice */}

@@ -11,6 +11,9 @@ import {
   Bell,
   Lock
 } from 'lucide-react';
+import SecureDataViewer from '../components/DataVisualization/SecureDataViewer';
+import { generateSafeHouseData } from '../utils/sampleData';
+import { dataSecurityManager } from '../utils/dataSecurity';
 
 interface SafeHouseDashboardProps {
   userData: any;
@@ -21,12 +24,15 @@ const SafeHouseDashboard: React.FC<SafeHouseDashboardProps> = ({ userData, onLog
   const [activeTab, setActiveTab] = useState('residents');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Generate sample data
+  const safeHouseData = generateSafeHouseData();
+
   // Mock data for demonstration
   const [houseData] = useState({
-    totalCapacity: 20,
-    currentOccupants: 8,
-    availableBeds: 12,
-    securityLevel: 'High',
+    totalCapacity: safeHouseData.houseMetrics.totalCapacity,
+    currentOccupants: safeHouseData.houseMetrics.currentOccupants,
+    availableBeds: safeHouseData.houseMetrics.availableBeds,
+    securityLevel: safeHouseData.houseMetrics.securityLevel,
     lastInspection: '2024-01-15'
   });
 
@@ -99,41 +105,65 @@ const SafeHouseDashboard: React.FC<SafeHouseDashboardProps> = ({ userData, onLog
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Mobile-First Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Home className="w-6 h-6 text-green-600" />
+        <div className="px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="p-1.5 sm:p-2 bg-green-100 rounded-lg">
+                <Home className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
               </div>
-              <div>
-                <h1 className="text-lg font-semibold text-gray-900">Safe House Dashboard</h1>
-                <p className="text-sm text-gray-600">Resident Management & Security</p>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">Safe House Dashboard</h1>
+                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Resident Management & Security</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-400 hover:text-gray-600 relative">
-                <Bell size={20} />
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <button className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 relative">
+                <Bell size={18} className="sm:w-5 sm:h-5" />
                 {securityAlerts.filter(alert => alert.severity === 'high').length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-red-500 rounded-full animate-pulse"></span>
                 )}
               </button>
               <button
                 onClick={onLogout}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
               >
-                Logout
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+      <div className="flex flex-col lg:flex-row">
+        {/* Mobile Tab Navigation */}
+        <div className="lg:hidden bg-white border-b border-gray-200">
+          <div className="flex overflow-x-auto scrollbar-hide">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-shrink-0 flex items-center space-x-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
+                    activeTab === tab.id
+                      ? 'border-green-500 text-green-700 bg-green-50'
+                      : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  <Icon size={16} />
+                  <span className="whitespace-nowrap">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
           <nav className="p-4 space-y-2">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -156,7 +186,7 @@ const SafeHouseDashboard: React.FC<SafeHouseDashboardProps> = ({ userData, onLog
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-4 sm:p-6 lg:p-8">
+        <div className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8">
           {/* Residents Tab */}
           {activeTab === 'residents' && (
             <div className="space-y-6">
@@ -269,6 +299,42 @@ const SafeHouseDashboard: React.FC<SafeHouseDashboardProps> = ({ userData, onLog
                     </table>
                   </div>
                 </div>
+
+                {/* Secure Data Visualizations */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  <SecureDataViewer
+                    data={safeHouseData.residentStatus}
+                    chartType="pie"
+                    title="Resident Status Distribution"
+                    description="Current status breakdown of all residents"
+                    userRole="SAFEHOUSE"
+                    onDataAccess={(accessLog) => {
+                      dataSecurityManager.logDataAccess(accessLog);
+                    }}
+                  />
+                  
+                  <SecureDataViewer
+                    data={safeHouseData.capacityTrend}
+                    chartType="line"
+                    title="Capacity Utilization Trend"
+                    description="Monthly capacity usage and occupancy patterns"
+                    userRole="SAFEHOUSE"
+                    onDataAccess={(accessLog) => {
+                      dataSecurityManager.logDataAccess(accessLog);
+                    }}
+                  />
+                </div>
+
+                <SecureDataViewer
+                  data={safeHouseData.resourceUsage}
+                  chartType="bar"
+                  title="Resource Usage Overview"
+                  description="Current resource consumption and availability"
+                  userRole="SAFEHOUSE"
+                  onDataAccess={(accessLog) => {
+                    dataSecurityManager.logDataAccess(accessLog);
+                  }}
+                />
               </div>
             </div>
           )}

@@ -13,6 +13,9 @@ import {
   Bell,
   Pill
 } from 'lucide-react';
+import SecureDataViewer from '../components/DataVisualization/SecureDataViewer';
+import { generateMedicalData } from '../utils/sampleData';
+import { dataSecurityManager } from '../utils/dataSecurity';
 
 interface MedicalDashboardProps {
   userData: any;
@@ -23,13 +26,16 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
   const [activeTab, setActiveTab] = useState('patients');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Generate sample data
+  const medicalData = generateMedicalData();
+
   // Mock data for demonstration
-  const [medicalData] = useState({
-    totalPatients: 1247,
-    activePatients: 892,
-    appointmentsToday: 23,
-    emergencyCases: 3,
-    averageWaitTime: 15
+  const [dashboardData] = useState({
+    totalPatients: medicalData.medicalMetrics.totalPatients,
+    activePatients: medicalData.medicalMetrics.activePatients,
+    appointmentsToday: medicalData.medicalMetrics.appointmentsToday,
+    emergencyCases: medicalData.medicalMetrics.emergencyCases,
+    averageWaitTime: medicalData.medicalMetrics.averageWaitTime
   });
 
   const [patients] = useState([
@@ -113,41 +119,65 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Mobile-First Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Heart className="w-6 h-6 text-purple-600" />
+        <div className="px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="p-1.5 sm:p-2 bg-purple-100 rounded-lg">
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
               </div>
-              <div>
-                <h1 className="text-lg font-semibold text-gray-900">Medical Dashboard</h1>
-                <p className="text-sm text-gray-600">Patient Care & Medical Services</p>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">Medical Dashboard</h1>
+                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Patient Care & Medical Services</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-400 hover:text-gray-600 relative">
-                <Bell size={20} />
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <button className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 relative">
+                <Bell size={18} className="sm:w-5 sm:h-5" />
                 {emergencyAlerts.filter(alert => alert.severity === 'high').length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-red-500 rounded-full animate-pulse"></span>
                 )}
               </button>
               <button
                 onClick={onLogout}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
               >
-                Logout
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+      <div className="flex flex-col lg:flex-row">
+        {/* Mobile Tab Navigation */}
+        <div className="lg:hidden bg-white border-b border-gray-200">
+          <div className="flex overflow-x-auto scrollbar-hide">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-shrink-0 flex items-center space-x-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
+                    activeTab === tab.id
+                      ? 'border-purple-500 text-purple-700 bg-purple-50'
+                      : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  <Icon size={16} />
+                  <span className="whitespace-nowrap">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
           <nav className="p-4 space-y-2">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -170,7 +200,7 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-4 sm:p-6 lg:p-8">
+        <div className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8">
           {/* Patients Tab */}
           {activeTab === 'patients' && (
             <div className="space-y-6">
@@ -289,6 +319,42 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
                     </table>
                   </div>
                 </div>
+
+                {/* Secure Data Visualizations */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  <SecureDataViewer
+                    data={medicalData.patientConditions}
+                    chartType="pie"
+                    title="Patient Conditions Distribution"
+                    description="Breakdown of patient conditions and treatment types"
+                    userRole="MEDICAL"
+                    onDataAccess={(accessLog) => {
+                      dataSecurityManager.logDataAccess(accessLog);
+                    }}
+                  />
+                  
+                  <SecureDataViewer
+                    data={medicalData.appointmentTrend}
+                    chartType="line"
+                    title="Appointment Trends"
+                    description="Monthly appointment scheduling and patient flow"
+                    userRole="MEDICAL"
+                    onDataAccess={(accessLog) => {
+                      dataSecurityManager.logDataAccess(accessLog);
+                    }}
+                  />
+                </div>
+
+                <SecureDataViewer
+                  data={medicalData.patientAgeGroups}
+                  chartType="bar"
+                  title="Patient Age Demographics"
+                  description="Age group distribution of patient population"
+                  userRole="MEDICAL"
+                  onDataAccess={(accessLog) => {
+                    dataSecurityManager.logDataAccess(accessLog);
+                  }}
+                />
               </div>
             </div>
           )}

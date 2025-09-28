@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { 
@@ -16,9 +16,11 @@ import {
   FileText,
   Smartphone
 } from 'lucide-react';
+import PWAInstallPrompt from '../components/PWAInstallPrompt';
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   const quickAccessItems = [
     {
@@ -140,6 +142,33 @@ const Home: React.FC = () => {
             </div>
           </div>
 
+          {/* App Download Prompt */}
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="flex items-start space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Smartphone className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Get the SafeLink App</h3>
+                <p className="text-gray-600 mb-4 text-sm sm:text-base">
+                  Download our app for the best experience with offline access, push notifications, and enhanced security.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button 
+                    onClick={() => setShowInstallPrompt(true)}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2 text-sm font-medium"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Download App</span>
+                  </button>
+                  <button className="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm">
+                    Learn More
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Quick Access - Enhanced mobile grid */}
           <div className="mb-6 sm:mb-8">
             <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
@@ -227,6 +256,17 @@ const Home: React.FC = () => {
           </div>
         </div>
       </main>
+      
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt
+        isOpen={showInstallPrompt}
+        onClose={() => setShowInstallPrompt(false)}
+        onInstall={() => {
+          // Handle manual installation instructions
+          alert('To install SafeLink as an app:\n\n1. Open this page in your browser\n2. Look for "Add to Home Screen" in your browser menu\n3. Tap "Add" to install the app');
+          setShowInstallPrompt(false);
+        }}
+      />
     </div>
   );
 };

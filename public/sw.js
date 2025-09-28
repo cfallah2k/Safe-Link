@@ -1,7 +1,9 @@
-// Service Worker for SafeLink - Offline-first SRHR Platform
-const CACHE_NAME = 'safelink-v1';
-const STATIC_CACHE = 'safelink-static-v1';
-const DYNAMIC_CACHE = 'safelink-dynamic-v1';
+// Service Worker for SafeLink - Offline-first SRHR Platform with Comprehensive Caching
+const CACHE_NAME = 'safelink-v2.0';
+const STATIC_CACHE = 'safelink-static-v2.0';
+const DYNAMIC_CACHE = 'safelink-dynamic-v2.0';
+const QR_CACHE = 'safelink-qr-v2.0';
+const COMPONENT_CACHE = 'safelink-components-v2.0';
 
 // Files to cache for offline functionality
 const STATIC_FILES = [
@@ -14,29 +16,73 @@ const STATIC_FILES = [
   '/logo512.png'
 ];
 
-// Install event - cache static files
+// New feature components to cache
+const COMPONENT_FILES = [
+  '/src/components/QRCode/QRCodeGenerator.tsx',
+  '/src/components/QRCode/QRCodeScanner.tsx',
+  '/src/components/QRCode/QRVerificationManager.tsx',
+  '/src/components/AppDownloadModal.tsx',
+  '/src/components/FloatingDownloadButton.tsx',
+  '/src/components/AppInstallBanner.tsx',
+  '/src/components/PWAInstallPrompt.tsx',
+  '/src/components/DataVisualization/SecureDataViewer.tsx',
+  '/src/components/EmergencyAlertSystem.tsx',
+  '/src/components/MapTracking.tsx'
+];
+
+// API endpoints to cache
+const API_ENDPOINTS = [
+  '/api/verification',
+  '/api/qr-generate',
+  '/api/qr-scan',
+  '/api/emergency-alerts',
+  '/api/location-tracking'
+];
+
+// Install event - cache static files and new components
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
+  console.log('Service Worker installing v2.0 with new features...');
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
+    Promise.all([
+      // Cache static files
+      caches.open(STATIC_CACHE).then((cache) => {
         console.log('Caching static files');
         return cache.addAll(STATIC_FILES);
+      }),
+      // Cache new component files
+      caches.open(COMPONENT_CACHE).then((cache) => {
+        console.log('Caching new feature components');
+        return cache.addAll(COMPONENT_FILES);
+      }),
+      // Cache QR code assets
+      caches.open(QR_CACHE).then((cache) => {
+        console.log('Caching QR code assets');
+        return cache.addAll([
+          '/qr-templates/',
+          '/qr-assets/',
+          '/verification-assets/'
+        ]);
       })
-      .then(() => self.skipWaiting())
+    ]).then(() => {
+      console.log('All caches populated successfully');
+      return self.skipWaiting();
+    })
   );
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches and claim clients
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating...');
+  console.log('Service Worker activating v2.0...');
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames
             .filter((cacheName) => {
-              return cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE;
+              return cacheName !== STATIC_CACHE && 
+                     cacheName !== DYNAMIC_CACHE && 
+                     cacheName !== QR_CACHE && 
+                     cacheName !== COMPONENT_CACHE;
             })
             .map((cacheName) => {
               console.log('Deleting old cache:', cacheName);
@@ -44,39 +90,139 @@ self.addEventListener('activate', (event) => {
             })
         );
       })
-      .then(() => self.clients.claim())
+      .then(() => {
+        console.log('Cache cleanup completed');
+        return self.clients.claim();
+      })
+      .then(() => {
+        // Notify all clients about the update
+        return self.clients.matchAll().then((clients) => {
+          clients.forEach((client) => {
+            client.postMessage({
+              type: 'SW_UPDATE',
+              version: '2.0',
+              features: [
+                'QR Code Verification',
+                'App Download System',
+                'Enhanced Mobile Support',
+                'Improved Caching'
+              ]
+            });
+          });
+        });
+      })
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Enhanced fetch event - comprehensive caching for new features
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Handle different types of requests
+  // Handle different types of requests with optimized caching
   if (request.method === 'GET') {
-    // For API calls, try network first, then cache
-    if (url.pathname.startsWith('/api/')) {
+    // QR Code and verification API calls
+    if (url.pathname.startsWith('/api/qr-') || url.pathname.startsWith('/api/verification')) {
+      event.respondWith(
+        caches.open(QR_CACHE).then((cache) => {
+          return cache.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+              // Return cached response and update in background
+              fetch(request).then((response) => {
+                if (response.status === 200) {
+                  cache.put(request, response.clone());
+                }
+              }).catch(() => {});
+              return cachedResponse;
+            }
+            return fetch(request).then((response) => {
+              if (response.status === 200) {
+                cache.put(request, response.clone());
+              }
+              return response;
+            }).catch(() => {
+              // Return offline fallback for QR features
+              return new Response(JSON.stringify({
+                offline: true,
+                message: 'QR verification available offline',
+                features: ['qr-generate', 'qr-scan', 'verification']
+              }), {
+                headers: { 'Content-Type': 'application/json' }
+              });
+            });
+          });
+        })
+      );
+    }
+    // Emergency and location API calls
+    else if (url.pathname.startsWith('/api/emergency') || url.pathname.startsWith('/api/location')) {
       event.respondWith(
         fetch(request)
           .then((response) => {
-            // Cache successful API responses
             if (response.status === 200) {
               const responseClone = response.clone();
-              caches.open(DYNAMIC_CACHE)
-                .then((cache) => {
-                  cache.put(request, responseClone);
-                });
+              caches.open(DYNAMIC_CACHE).then((cache) => {
+                cache.put(request, responseClone);
+              });
             }
             return response;
           })
           .catch(() => {
-            // Fallback to cache if network fails
+            return caches.match(request).then((cachedResponse) => {
+              if (cachedResponse) {
+                return cachedResponse;
+              }
+              // Return emergency offline response
+              return new Response(JSON.stringify({
+                offline: true,
+                emergency: true,
+                message: 'Emergency services available offline',
+                features: ['emergency-alerts', 'location-tracking']
+              }), {
+                headers: { 'Content-Type': 'application/json' }
+              });
+            });
+          })
+      );
+    }
+    // Component files and new features
+    else if (url.pathname.includes('/components/') || url.pathname.includes('/QRCode/')) {
+      event.respondWith(
+        caches.open(COMPONENT_CACHE).then((cache) => {
+          return cache.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            return fetch(request).then((response) => {
+              if (response.status === 200) {
+                cache.put(request, response.clone());
+              }
+              return response;
+            });
+          });
+        })
+      );
+    }
+    // Regular API calls
+    else if (url.pathname.startsWith('/api/')) {
+      event.respondWith(
+        fetch(request)
+          .then((response) => {
+            if (response.status === 200) {
+              const responseClone = response.clone();
+              caches.open(DYNAMIC_CACHE).then((cache) => {
+                cache.put(request, responseClone);
+              });
+            }
+            return response;
+          })
+          .catch(() => {
             return caches.match(request);
           })
       );
-    } else {
-      // For static files, try cache first, then network
+    }
+    // Static files - cache first strategy
+    else {
       event.respondWith(
         caches.match(request)
           .then((response) => {
@@ -85,13 +231,11 @@ self.addEventListener('fetch', (event) => {
             }
             return fetch(request)
               .then((response) => {
-                // Cache new files
                 if (response.status === 200) {
                   const responseClone = response.clone();
-                  caches.open(DYNAMIC_CACHE)
-                    .then((cache) => {
-                      cache.put(request, responseClone);
-                    });
+                  caches.open(DYNAMIC_CACHE).then((cache) => {
+                    cache.put(request, responseClone);
+                  });
                 }
                 return response;
               });

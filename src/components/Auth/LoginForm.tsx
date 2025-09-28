@@ -14,6 +14,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
   const [showCode, setShowCode] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isStakeholderCode, setIsStakeholderCode] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,9 +61,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
       value = value.replace(/\s+/g, ''); // Remove all spaces
       // Allow underscores for stakeholder codes
       value = value.replace(/[^A-Z0-9_]/g, '');
+      setIsStakeholderCode(true);
     } else {
       // For regular user codes, remove all non-alphanumeric characters
       value = value.replace(/[^A-Z0-9]/g, '');
+      setIsStakeholderCode(false);
     }
     
     // Allow up to 20 characters for stakeholder codes
@@ -138,7 +141,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
 
             <button
               type="submit"
-              disabled={isLoading || (code.length !== 8 && !code.startsWith('SAFELINK_'))}
+              disabled={isLoading || (code.length < 8 && !code.startsWith('SAFELINK_'))}
               className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {isLoading ? (
@@ -152,17 +155,35 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-center text-sm text-gray-600 mb-4">
-              Don't have a secret code?
-            </p>
-            <button
-              onClick={onCreateNew}
-              className="w-full btn-outline"
-            >
-              {t('auth.create')}
-            </button>
-          </div>
+          {/* Only show create code option for regular users, not stakeholders */}
+          {!isStakeholderCode && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <p className="text-center text-sm text-gray-600 mb-4">
+                Don't have a secret code?
+              </p>
+              <button
+                onClick={onCreateNew}
+                className="w-full btn-outline"
+              >
+                {t('auth.create')}
+              </button>
+            </div>
+          )}
+
+          {/* Show stakeholder-specific message when entering stakeholder code */}
+          {isStakeholderCode && (
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+              <div className="flex items-start space-x-3">
+                <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm">
+                  <p className="text-blue-800 font-medium">Stakeholder Access</p>
+                  <p className="text-blue-700">
+                    Enter your assigned stakeholder code to access your role-specific dashboard.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <div className="flex items-start space-x-3">

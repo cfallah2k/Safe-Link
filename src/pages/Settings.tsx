@@ -10,10 +10,13 @@ import {
   Trash2,
   Download,
   Eye,
-  EyeOff
+  EyeOff,
+  QrCode,
+  X
 } from 'lucide-react';
 import { offlineStorage } from '../utils/offlineStorage';
 import { secretCodeManager } from '../utils/secretCode';
+import QRCodeGenerator from '../components/QRCode/QRCodeGenerator';
 
 interface SettingsProps {
   onLogout: () => void;
@@ -25,6 +28,7 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showSecretCode, setShowSecretCode] = useState(false);
   const [storageInfo, setStorageInfo] = useState({ used: 0, available: 0 });
+  const [showQRGenerator, setShowQRGenerator] = useState(false);
 
   useEffect(() => {
     loadStorageInfo();
@@ -227,6 +231,30 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
                       </div>
                     </div>
                   </div>
+
+                  <div>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">QR Code Verification</h3>
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+                        <div className="flex items-start space-x-2 sm:space-x-3">
+                          <QrCode className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-blue-900 text-sm sm:text-base">Stakeholder Verification</h4>
+                            <p className="text-blue-800 text-xs sm:text-sm mt-1 mb-3">
+                              Generate a QR code that stakeholders (police, medical, NGO) can scan to verify your SafeLink account while keeping your identity anonymous.
+                            </p>
+                            <button
+                              onClick={() => setShowQRGenerator(true)}
+                              className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm font-medium flex items-center space-x-2"
+                            >
+                              <QrCode className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span>Generate QR Code</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -364,6 +392,32 @@ const Settings: React.FC<SettingsProps> = ({ onLogout }) => {
                   Delete All Data
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* QR Code Generator Modal */}
+      {showQRGenerator && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">QR Code Generator</h3>
+                <button
+                  onClick={() => setShowQRGenerator(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <QRCodeGenerator
+                userCode={getSecretCode()}
+                onCodeGenerated={(qrData) => {
+                  console.log('QR Code generated:', qrData);
+                }}
+              />
             </div>
           </div>
         </div>

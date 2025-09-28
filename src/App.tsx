@@ -16,6 +16,9 @@ import SafeSpaceLocator from './components/SafeSpace/SafeSpaceLocator';
 import ConsentEducationGame from './components/Games/ConsentEducationGame';
 import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
 import DashboardAccessManager from './components/Dashboard/DashboardAccessManager';
+import AppDownloadModal from './components/AppDownloadModal';
+import FloatingDownloadButton from './components/FloatingDownloadButton';
+import AppInstallBanner from './components/AppInstallBanner';
 
 // Contexts
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
@@ -46,11 +49,22 @@ import SecureMap from './pages/SecureMap';
 import { secretCodeManager } from './utils/secretCode';
 import { smsIntegration } from './utils/smsIntegration';
 
+// Hooks
+import { useAppDownloadModal } from './hooks/useAppDownloadModal';
+import { useSEO } from './hooks/useSEO';
+import { cacheManager } from './utils/cacheManager';
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showCreateCode, setShowCreateCode] = useState(false);
   const { isUpdateAvailable, updateServiceWorker, dismissUpdate } = useServiceWorkerUpdate();
   const [isLoading, setIsLoading] = useState(true);
+  
+  // App download modal
+  const { showModal, closeModal, handleDownload } = useAppDownloadModal();
+  
+  // SEO optimization
+  const seoConfig = useSEO();
 
   useEffect(() => {
     // Check if user has a valid secret code
@@ -61,15 +75,49 @@ function App() {
     // Initialize SMS integration
     smsIntegration.processOfflineQueue();
 
+    // Initialize cache manager with new features
+    cacheManager.initializeCache().then(() => {
+      console.log('Cache manager initialized with new features');
+    });
+
+    // Check if cache needs update
+    if (cacheManager.needsCacheUpdate()) {
+      console.log('Cache update available - new features ready');
+    }
+
     // Register service worker for PWA functionality
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
           console.log('Service Worker registered:', registration);
+          
+          // Listen for service worker updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('New service worker installed with updates');
+                  // Force cache refresh for new features
+                  cacheManager.forceCacheRefresh();
+                }
+              });
+            }
+          });
         })
         .catch((error) => {
           console.error('Service Worker registration failed:', error);
         });
+    }
+
+    // Listen for service worker messages
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data.type === 'SW_UPDATE') {
+          console.log('Service Worker update received:', event.data);
+          // Handle new features notification
+        }
+      });
     }
   }, []);
 
@@ -112,6 +160,12 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50 overflow-x-hidden" style={{ overflowY: 'visible' }}>
           <OfflineIndicator />
+          
+          {/* App Install Banner */}
+          <AppInstallBanner
+            onInstall={handleDownload}
+            onDismiss={closeModal}
+          />
           
           {/* Update Notification */}
           {isUpdateAvailable && (
@@ -158,6 +212,21 @@ function App() {
                 </Routes>
               </div>
             </main>
+            
+            {/* Floating Download Button - Only show for authenticated users */}
+            {isAuthenticated && (
+              <FloatingDownloadButton
+                onDownload={handleDownload}
+                onClose={closeModal}
+              />
+            )}
+            
+            {/* App Download Modal */}
+            <AppDownloadModal
+              isOpen={showModal}
+              onClose={closeModal}
+              onDownload={handleDownload}
+            />
         </div>
       </Router>
     </AccessibilityProvider>

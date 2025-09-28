@@ -193,7 +193,7 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
           </div>
         </div>
 
-        {/* Tab Navigation */}
+      {/* Tab Navigation */}
         <div className="flex space-x-1">
           <button
             onClick={() => setActiveTab('sms')}
@@ -579,8 +579,8 @@ const SMSInterface: React.FC<SMSInterfaceProps> = ({ onBack }) => {
                     <Globe className="w-4 h-4 text-blue-500 flex-shrink-0" />
                   </div>
                 </button>
+                </div>
               </div>
-            </div>
             </div>
           </div>
         )}
