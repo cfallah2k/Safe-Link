@@ -27,6 +27,7 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
     if (userCode && isVisible) {
       generateQRCode();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userCode, isVisible]);
 
   const generateQRCode = async () => {
