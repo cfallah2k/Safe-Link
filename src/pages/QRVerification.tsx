@@ -46,8 +46,7 @@ const QRVerification: React.FC = () => {
                   <QrCode className="w-4 h-4 text-blue-600" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-semibold text-gray-900">QR Code Verification</h1>
-                  <p className="text-sm text-gray-600">Stakeholder Verification</p>
+                  <h1 className="text-xl font-semibold text-gray-900">Stakeholder Verification</h1>
                 </div>
               </div>
             </div>

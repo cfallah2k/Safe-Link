@@ -18,25 +18,27 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError('');
 
-    try {
-      // First check if it's a stakeholder code
-      const stakeholderCodes: { [key: string]: string } = {
-        'SAFELINK_ADMIN_2024': 'ADMIN',
-        'SAFELINK_POLICE_2024': 'POLICE', 
-        'SAFELINK_SAFE_2024': 'SAFEHOUSE',
-        'SAFELINK_MED_2024': 'MEDICAL',
-        'SAFELINK_NGO_2024': 'NGO'
-      };
+    // First check if it's a stakeholder code - INSTANT REDIRECT
+    const stakeholderCodes: { [key: string]: string } = {
+      'SAFELINK_ADMIN_2024': 'ADMIN',
+      'SAFELINK_POLICE_2024': 'POLICE', 
+      'SAFELINK_SAFE_2024': 'SAFEHOUSE',
+      'SAFELINK_MED_2024': 'MEDICAL',
+      'SAFELINK_NGO_2024': 'NGO'
+    };
 
-      // Check if the entered code is a stakeholder code
-      if (stakeholderCodes[code]) {
-        // Redirect to dashboard system
-        window.location.href = `/dashboard?role=${stakeholderCodes[code]}`;
-        return;
-      }
+    // INSTANT REDIRECT for stakeholders - no loading, no delays
+    if (stakeholderCodes[code]) {
+      window.location.href = `/dashboard?role=${stakeholderCodes[code]}`;
+      return;
+    }
+
+    // Only show loading for regular users
+    setIsLoading(true);
+
+    try {
 
       // Otherwise, validate as regular user code
       if (secretCodeManager.validateSecretCode(code)) {
@@ -72,6 +74,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
     value = value.substring(0, 25);
     setCode(value);
     setError('');
+
+    // INSTANT REDIRECT for complete stakeholder codes
+    const stakeholderCodes: { [key: string]: string } = {
+      'SAFELINK_ADMIN_2024': 'ADMIN',
+      'SAFELINK_POLICE_2024': 'POLICE', 
+      'SAFELINK_SAFE_2024': 'SAFEHOUSE',
+      'SAFELINK_MED_2024': 'MEDICAL',
+      'SAFELINK_NGO_2024': 'NGO'
+    };
+
+    if (stakeholderCodes[value]) {
+      // INSTANT REDIRECT - no waiting, no loading
+      window.location.href = `/dashboard?role=${stakeholderCodes[value]}`;
+    }
   };
 
   const formatCodeDisplay = (value: string) => {
