@@ -12,13 +12,22 @@ const DashboardAccessManager: React.FC = () => {
 
   useEffect(() => {
     // Check if role is provided in URL parameters
+    console.log('🔍 DashboardAccessManager - useEffect triggered');
+    console.log('🔍 Current URL:', window.location.href);
+    console.log('🔍 Search params:', window.location.search);
+    
     const urlParams = new URLSearchParams(window.location.search);
     const role = urlParams.get('role');
     
+    console.log('🔍 Extracted role from URL:', role);
+    
     if (role) {
+      console.log('✅ Role detected! Setting up stakeholder login for role:', role);
       // Stakeholders go DIRECTLY to their role-specific login page
       setCurrentRole(role);
       setShowPortalLogin(true);
+    } else {
+      console.log('❌ No role found in URL parameters');
     }
   }, []);
 

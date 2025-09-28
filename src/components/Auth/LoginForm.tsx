@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, Shield, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Shield, ArrowRight, ChevronDown } from 'lucide-react';
 import { secretCodeManager } from '../../utils/secretCode';
 
 interface LoginFormProps {
@@ -14,37 +14,64 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
   const [showCode, setShowCode] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isStakeholderCode, setIsStakeholderCode] = useState(false);
+  const [showStakeholderDropdown, setShowStakeholderDropdown] = useState(false);
+  const [showStakeholderSection, setShowStakeholderSection] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowStakeholderDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Hidden trigger to show stakeholder section (triple click on logo)
+  const handleLogoClick = () => {
+    // Simple counter for triple click detection
+    if (!(window as any).logoClickCount) (window as any).logoClickCount = 0;
+    (window as any).logoClickCount++;
+    
+    setTimeout(() => {
+      if ((window as any).logoClickCount && (window as any).logoClickCount >= 3) {
+        setShowStakeholderSection(true);
+        (window as any).logoClickCount = 0;
+      } else {
+        (window as any).logoClickCount = 0;
+      }
+    }, 1000);
+  };
+
+  // Stakeholder roles configuration
+  const stakeholderRoles = [
+    { value: 'ADMIN', label: 'Administrator', icon: '👨‍💼', color: 'from-red-500 to-pink-500' },
+    { value: 'POLICE', label: 'Police', icon: '👮‍♂️', color: 'from-blue-500 to-indigo-500' },
+    { value: 'SAFEHOUSE', label: 'Safe House', icon: '🏠', color: 'from-green-500 to-emerald-500' },
+    { value: 'MEDICAL', label: 'Medical', icon: '👩‍⚕️', color: 'from-purple-500 to-violet-500' },
+    { value: 'NGO', label: 'NGO', icon: '🤝', color: 'from-orange-500 to-yellow-500' }
+  ];
+
+  const handleStakeholderLogin = (role: string) => {
+    setShowStakeholderDropdown(false);
+    // Redirect to stakeholder login page
+    window.location.href = `/dashboard?role=${role}`;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // First check if it's a stakeholder code
-    const stakeholderCodes: { [key: string]: string } = {
-      'SAFELINK_ADMIN_2024': 'ADMIN',
-      'SAFELINK_POLICE_2024': 'POLICE', 
-      'SAFELINK_SAFE_2024': 'SAFEHOUSE',
-      'SAFELINK_MED_2024': 'MEDICAL',
-      'SAFELINK_NGO_2024': 'NGO'
-    };
-
-    // Show loading state for stakeholders before redirect
-    if (stakeholderCodes[code]) {
-      setIsLoading(true);
-      // Brief loading state to make it feel real
-      setTimeout(() => {
-        window.location.href = `/dashboard?role=${stakeholderCodes[code]}`;
-      }, 800); // 800ms loading before redirect
-      return;
-    }
-
     // Only show loading for regular users
     setIsLoading(true);
 
     try {
-
-      // Otherwise, validate as regular user code
+      // Validate as regular user code
       if (secretCodeManager.validateSecretCode(code)) {
         secretCodeManager.updateLastUsed();
         onLogin(code);
@@ -61,31 +88,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.toUpperCase();
     
-    // Handle stakeholder codes - preserve underscores and remove spaces
-    if (value.includes('SAFE') || value.includes('LINK')) {
-      // For stakeholder codes, preserve underscores and remove spaces
-      value = value.replace(/\s+/g, ''); // Remove all spaces
-      // Allow underscores for stakeholder codes
-      value = value.replace(/[^A-Z0-9_]/g, '');
-      setIsStakeholderCode(true);
-    } else {
-      // For regular user codes, remove all non-alphanumeric characters
-      value = value.replace(/[^A-Z0-9]/g, '');
-      setIsStakeholderCode(false);
-    }
+    // For regular user codes, remove all non-alphanumeric characters
+    value = value.replace(/[^A-Z0-9]/g, '');
     
-    // Allow up to 25 characters for stakeholder codes
-    value = value.substring(0, 25);
+    // Allow up to 8 characters for regular user codes
+    value = value.substring(0, 8);
     setCode(value);
     setError('');
   };
 
   const formatCodeDisplay = (value: string) => {
-    // For stakeholder codes, don't add spaces
-    if (value.startsWith('SAFELINK_')) {
-      return value;
-    }
-    
     // For regular user codes, add space after 4 characters
     if (value.length <= 4) return value;
     return `${value.substring(0, 4)} ${value.substring(4)}`;
@@ -95,7 +107,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
+          <div 
+            className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4 cursor-pointer hover:bg-primary-200 transition-colors"
+            onClick={handleLogoClick}
+            title="Triple click to access stakeholder login"
+          >
             <Shield className="w-8 h-8 text-primary-600" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -147,7 +163,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
 
             <button
               type="submit"
-              disabled={isLoading || (code.length < 8 && !code.startsWith('SAFELINK_'))}
+              disabled={isLoading || code.length < 8}
               className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {isLoading ? (
@@ -161,35 +177,68 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
             </button>
           </form>
 
-          {/* Only show create code option for regular users, not stakeholders */}
-          {!isStakeholderCode && (
+          {/* Stakeholder Login Section - Hidden by default */}
+          {showStakeholderSection && (
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <p className="text-center text-sm text-gray-600 mb-4">
-                Don't have a secret code?
-              </p>
-              <button
-                onClick={onCreateNew}
-                className="w-full btn-outline"
-              >
-                {t('auth.create')}
-              </button>
-            </div>
-          )}
+              <div className="text-center mb-4">
+                <p className="text-sm text-gray-600 mb-4">
+                  Stakeholder Access Portal
+                </p>
+                
+                {/* Stakeholder Login Button */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setShowStakeholderDropdown(!showStakeholderDropdown)}
+                    className="w-full btn-outline flex items-center justify-center space-x-2"
+                  >
+                    <Shield size={16} />
+                    <span>Select Your Role</span>
+                    <ChevronDown size={16} />
+                  </button>
 
-          {/* Show stakeholder-specific message when entering stakeholder code */}
-          {isStakeholderCode && (
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <div className="flex items-start space-x-3">
-                <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div className="text-sm">
-                  <p className="text-blue-800 font-medium">Stakeholder Access</p>
-                  <p className="text-blue-700">
-                    Enter your assigned stakeholder code to access your role-specific dashboard.
-                  </p>
+                  {/* Dropdown Menu */}
+                  {showStakeholderDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                      {stakeholderRoles.map((role) => (
+                        <button
+                          key={role.value}
+                          onClick={() => handleStakeholderLogin(role.value)}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 first:rounded-t-lg last:rounded-b-lg"
+                        >
+                          <span className="text-2xl">{role.icon}</span>
+                          <div>
+                            <p className="font-medium text-gray-900">{role.label}</p>
+                            <p className="text-sm text-gray-500">Click to login</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
+                
+                {/* Hide button */}
+                <button
+                  onClick={() => setShowStakeholderSection(false)}
+                  className="mt-2 text-xs text-gray-500 hover:text-gray-700"
+                >
+                  Hide Stakeholder Access
+                </button>
               </div>
             </div>
           )}
+
+          {/* Create Code Option for Regular Users */}
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <p className="text-center text-sm text-gray-600 mb-4">
+              Don't have a secret code?
+            </p>
+            <button
+              onClick={onCreateNew}
+              className="w-full btn-outline"
+            >
+              {t('auth.create')}
+            </button>
+          </div>
 
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <div className="flex items-start space-x-3">
