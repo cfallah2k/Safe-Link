@@ -1,9 +1,9 @@
 // Service Worker for SafeLink - Offline-first SRHR Platform with Comprehensive Caching
-const CACHE_NAME = 'safelink-v2.0';
-const STATIC_CACHE = 'safelink-static-v2.0';
-const DYNAMIC_CACHE = 'safelink-dynamic-v2.0';
-const QR_CACHE = 'safelink-qr-v2.0';
-const COMPONENT_CACHE = 'safelink-components-v2.0';
+const CACHE_NAME = 'safelink-v2.1';
+const STATIC_CACHE = 'safelink-static-v2.1';
+const DYNAMIC_CACHE = 'safelink-dynamic-v2.1';
+const QR_CACHE = 'safelink-qr-v2.1';
+const COMPONENT_CACHE = 'safelink-components-v2.1';
 
 // Files to cache for offline functionality
 const STATIC_FILES = [
@@ -41,7 +41,7 @@ const API_ENDPOINTS = [
 
 // Install event - cache static files and new components
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing v2.0 with new features...');
+  console.log('Service Worker installing v2.1 with stakeholder authentication fixes...');
   event.waitUntil(
     Promise.all([
       // Cache static files
@@ -72,7 +72,7 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches and claim clients
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating v2.0...');
+  console.log('Service Worker activating v2.1...');
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
@@ -100,12 +100,13 @@ self.addEventListener('activate', (event) => {
           clients.forEach((client) => {
             client.postMessage({
               type: 'SW_UPDATE',
-              version: '2.0',
+              version: '2.1',
               features: [
                 'QR Code Verification',
                 'App Download System',
                 'Enhanced Mobile Support',
-                'Improved Caching'
+                'Improved Caching',
+                'Fixed Stakeholder Authentication'
               ]
             });
           });

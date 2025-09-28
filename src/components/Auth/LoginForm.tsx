@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Shield, ArrowRight, ChevronDown } from 'lucide-react';
 import { secretCodeManager } from '../../utils/secretCode';
-import StakeholderFlowTest from '../Test/StakeholderFlowTest';
 
 interface LoginFormProps {
   onLogin: (code: string) => void;
@@ -146,7 +145,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
                   onChange={handleCodeChange}
                   placeholder={t('auth.codePlaceholder')}
                   className="input-field pr-20"
-                  maxLength={26} // 25 chars + 1 space
+                  maxLength={9} // 8 chars + 1 space
                   required
                 />
                 <button
@@ -253,8 +252,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
             </div>
           </div>
 
-          {/* Stakeholder Flow Test Component */}
-          <StakeholderFlowTest />
         </div>
       </div>
     </div>
