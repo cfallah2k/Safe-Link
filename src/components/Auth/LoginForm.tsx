@@ -53,8 +53,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.toUpperCase();
-    // Remove any non-alphanumeric characters
-    value = value.replace(/[^A-Z0-9]/g, '');
+    
+    // Handle stakeholder codes - preserve underscores and remove spaces
+    if (value.includes('SAFE') || value.includes('LINK')) {
+      // For stakeholder codes, preserve underscores and remove spaces
+      value = value.replace(/\s+/g, ''); // Remove all spaces
+      // Allow underscores for stakeholder codes
+      value = value.replace(/[^A-Z0-9_]/g, '');
+    } else {
+      // For regular user codes, remove all non-alphanumeric characters
+      value = value.replace(/[^A-Z0-9]/g, '');
+    }
+    
     // Allow up to 20 characters for stakeholder codes
     value = value.substring(0, 20);
     setCode(value);
@@ -62,6 +72,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
   };
 
   const formatCodeDisplay = (value: string) => {
+    // For stakeholder codes, don't add spaces
+    if (value.startsWith('SAFELINK_')) {
+      return value;
+    }
+    
+    // For regular user codes, add space after 4 characters
     if (value.length <= 4) return value;
     return `${value.substring(0, 4)} ${value.substring(4)}`;
   };
