@@ -213,7 +213,7 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Total Patients</p>
-                        <p className="text-2xl font-semibold text-gray-900">{medicalData.totalPatients.toLocaleString()}</p>
+                        <p className="text-2xl font-semibold text-gray-900">{medicalData.medicalMetrics.totalPatients.toLocaleString()}</p>
                       </div>
                       <Users className="w-8 h-8 text-blue-500" />
                     </div>
@@ -223,7 +223,7 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Active Patients</p>
-                        <p className="text-2xl font-semibold text-green-600">{medicalData.activePatients.toLocaleString()}</p>
+                        <p className="text-2xl font-semibold text-green-600">{medicalData.medicalMetrics.activePatients.toLocaleString()}</p>
                       </div>
                       <Activity className="w-8 h-8 text-green-500" />
                     </div>
@@ -233,7 +233,7 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Appointments Today</p>
-                        <p className="text-2xl font-semibold text-blue-600">{medicalData.appointmentsToday}</p>
+                        <p className="text-2xl font-semibold text-blue-600">{medicalData.medicalMetrics.appointmentsToday}</p>
                       </div>
                       <Calendar className="w-8 h-8 text-blue-500" />
                     </div>
@@ -243,7 +243,7 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Emergency Cases</p>
-                        <p className="text-2xl font-semibold text-red-600">{medicalData.emergencyCases}</p>
+                        <p className="text-2xl font-semibold text-red-600">{medicalData.medicalMetrics.emergencyCases}</p>
                       </div>
                       <AlertTriangle className="w-8 h-8 text-red-500" />
                     </div>

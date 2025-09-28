@@ -164,7 +164,7 @@ export const useSEO = (customConfig?: Partial<SEOConfig>) => {
       } else {
         meta = document.createElement('meta');
         meta.setAttribute('property', property);
-        meta.content = content;
+        meta.setAttribute('content', content);
         document.head.appendChild(meta);
       }
     };
@@ -186,7 +186,7 @@ export const useSEO = (customConfig?: Partial<SEOConfig>) => {
       } else {
         meta = document.createElement('meta');
         meta.setAttribute('name', `twitter:${name}`);
-        meta.content = content;
+        meta.setAttribute('content', content);
         document.head.appendChild(meta);
       }
     };

@@ -201,7 +201,7 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ userData, onLogout }) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Total Beneficiaries</p>
-                        <p className="text-2xl font-semibold text-gray-900">{ngoData.totalBeneficiaries.toLocaleString()}</p>
+                        <p className="text-2xl font-semibold text-gray-900">{ngoData.ngoMetrics.totalBeneficiaries.toLocaleString()}</p>
                       </div>
                       <Users className="w-8 h-8 text-blue-500" />
                     </div>
@@ -211,7 +211,7 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ userData, onLogout }) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Active Programs</p>
-                        <p className="text-2xl font-semibold text-green-600">{ngoData.activePrograms}</p>
+                        <p className="text-2xl font-semibold text-green-600">{ngoData.ngoMetrics.activePrograms}</p>
                       </div>
                       <Target className="w-8 h-8 text-green-500" />
                     </div>
@@ -221,7 +221,7 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ userData, onLogout }) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Completed Programs</p>
-                        <p className="text-2xl font-semibold text-blue-600">{ngoData.completedPrograms}</p>
+                        <p className="text-2xl font-semibold text-blue-600">{ngoData.ngoMetrics.completedPrograms}</p>
                       </div>
                       <CheckCircle className="w-8 h-8 text-blue-500" />
                     </div>
@@ -231,7 +231,7 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ userData, onLogout }) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Community Reach</p>
-                        <p className="text-2xl font-semibold text-orange-600">{ngoData.communityReach.toLocaleString()}</p>
+                        <p className="text-2xl font-semibold text-orange-600">{ngoData.ngoMetrics.communityReach.toLocaleString()}</p>
                       </div>
                       <Globe className="w-8 h-8 text-orange-500" />
                     </div>

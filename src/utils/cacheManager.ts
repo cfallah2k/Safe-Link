@@ -195,7 +195,7 @@ export class CacheManager {
   public async getCacheStats(): Promise<any> {
     try {
       const cacheNames = await caches.keys();
-      const stats = {};
+      const stats: { [key: string]: any } = {};
       
       for (const cacheName of cacheNames) {
         const cache = await caches.open(cacheName);

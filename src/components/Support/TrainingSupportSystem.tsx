@@ -20,7 +20,6 @@ import {
   Headphones, 
   Phone, 
   Mail, 
-  Chat, 
   Calendar, 
   Award, 
   Target, 
@@ -30,7 +29,9 @@ import {
   ArrowRight,
   ArrowLeft,
   RotateCcw,
-  Settings
+  Settings,
+  X,
+  Eye
 } from 'lucide-react';
 
 interface TrainingModule {

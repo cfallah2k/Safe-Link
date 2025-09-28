@@ -17,7 +17,6 @@ export class PerformanceMonitor {
   public initialize(): void {
     this.setupPerformanceObservers();
     this.trackPageLoad();
-    this.trackResourceTiming();
     this.trackUserInteractions();
     this.trackCachePerformance();
   }
@@ -90,7 +89,7 @@ export class PerformanceMonitor {
       ssl: entry.secureConnectionStart > 0 ? entry.connectEnd - entry.secureConnectionStart : 0,
       ttfb: entry.responseStart - entry.fetchStart,
       download: entry.responseEnd - entry.responseStart,
-      domProcessing: entry.domComplete - entry.domLoading,
+      domProcessing: entry.domComplete - entry.domContentLoadedEventStart,
       loadComplete: entry.loadEventEnd - entry.loadEventStart
     };
 
@@ -183,7 +182,7 @@ export class PerformanceMonitor {
   private async monitorCacheStats(): Promise<void> {
     try {
       const cacheNames = await caches.keys();
-      const stats = {};
+      const stats: { [key: string]: any } = {};
       
       for (const cacheName of cacheNames) {
         const cache = await caches.open(cacheName);

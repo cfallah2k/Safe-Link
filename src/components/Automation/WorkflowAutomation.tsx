@@ -24,7 +24,8 @@ import {
   TrendingUp,
   Target,
   Shield,
-  Database
+  Database,
+  X
 } from 'lucide-react';
 
 interface WorkflowRule {

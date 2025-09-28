@@ -51,7 +51,6 @@ import { smsIntegration } from './utils/smsIntegration';
 
 // Hooks
 import { useAppDownloadModal } from './hooks/useAppDownloadModal';
-import { useSEO } from './hooks/useSEO';
 import { cacheManager } from './utils/cacheManager';
 
 function App() {
@@ -62,9 +61,6 @@ function App() {
   
   // App download modal
   const { showModal, closeModal, handleDownload } = useAppDownloadModal();
-  
-  // SEO optimization
-  const seoConfig = useSEO();
 
   useEffect(() => {
     // Check if user has a valid secret code
