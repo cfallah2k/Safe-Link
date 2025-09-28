@@ -68,8 +68,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
       setIsStakeholderCode(false);
     }
     
-    // Allow up to 20 characters for stakeholder codes
-    value = value.substring(0, 20);
+    // Allow up to 25 characters for stakeholder codes
+    value = value.substring(0, 25);
     setCode(value);
     setError('');
   };
@@ -123,7 +123,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
                   onChange={handleCodeChange}
                   placeholder={t('auth.codePlaceholder')}
                   className="input-field pr-20"
-                  maxLength={21} // 20 chars + 1 space
+                  maxLength={26} // 25 chars + 1 space
                   required
                 />
                 <button
