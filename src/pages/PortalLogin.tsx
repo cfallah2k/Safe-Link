@@ -130,49 +130,49 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 max-w-md w-full p-6 sm:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 max-w-md w-full p-4 sm:p-6 lg:p-8">
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-4"
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-4 text-sm sm:text-base"
         >
-          <ArrowLeft size={18} />
-          <span className="text-sm">Back to Access Portal</span>
+          <ArrowLeft size={16} className="sm:w-5 sm:h-5" />
+          <span className="text-xs sm:text-sm">Back to Access Portal</span>
         </button>
 
         {/* Header */}
-        <div className="text-center mb-6">
-          <div className={`mx-auto flex items-center justify-center w-16 h-16 bg-gradient-to-r ${currentRole.color} rounded-full mb-4`}>
-            <span className="text-2xl">{currentRole.icon}</span>
+        <div className="text-center mb-4 sm:mb-6">
+          <div className={`mx-auto flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r ${currentRole.color} rounded-full mb-3 sm:mb-4`}>
+            <span className="text-lg sm:text-2xl">{currentRole.icon}</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">
+          <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 mb-2">
             {currentRole.title}
           </h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <p className="text-xs sm:text-sm lg:text-base text-gray-600 px-2">
             {currentRole.description}
           </p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
-            <span className="text-sm text-red-700">{error}</span>
+          <div className="mb-3 sm:mb-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
+            <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-red-600 flex-shrink-0" />
+            <span className="text-xs sm:text-sm text-red-700">{error}</span>
           </div>
         )}
 
         {/* Login/Signup Options */}
         {currentStep === 'login' && (
-          <div className="space-y-4">
-            <div className="text-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Sign In to Your Account</h2>
-              <p className="text-sm text-gray-600">Enter your credentials to access your dashboard</p>
+          <div className="space-y-3 sm:space-y-4">
+            <div className="text-center mb-4 sm:mb-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Sign In to Your Account</h2>
+              <p className="text-xs sm:text-sm text-gray-600">Enter your credentials to access your dashboard</p>
             </div>
 
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
+            <form onSubmit={handleLoginSubmit} className="space-y-3 sm:space-y-4">
             <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="phoneNumber" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                 Phone Number
               </label>
                 <input
@@ -181,14 +181,14 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="Enter your phone number"
-                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
                   required
                   disabled={isSendingOtp}
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Email Address
                 </label>
                 <input
@@ -197,7 +197,7 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
-                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
                   required
                   disabled={isSendingOtp}
                 />
@@ -206,27 +206,27 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
             <button
               type="submit"
                 disabled={!phoneNumber.trim() || !email.trim() || isSendingOtp}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+              className="w-full bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
             >
               {isSendingOtp ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                    <span>Signing In...</span>
+                  <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-2 border-white border-t-transparent"></div>
+                    <span className="text-xs sm:text-sm">Signing In...</span>
                 </>
               ) : (
                 <>
-                    <LogIn size={18} />
-                    <span>Sign In</span>
+                    <LogIn size={16} className="sm:w-5 sm:h-5" />
+                    <span className="text-xs sm:text-sm">Sign In</span>
                 </>
               )}
             </button>
           </form>
 
             <div className="text-center">
-              <p className="text-sm text-gray-600 mb-3">Don't have an account?</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">Don't have an account?</p>
               <button
                 onClick={() => setCurrentStep('signup')}
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
               >
                 Create New Account
               </button>
@@ -308,10 +308,10 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
 
         {/* OTP Verification */}
         {currentStep === 'otp' && (
-          <div className="space-y-4">
-            <div className="text-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Verify Your Account</h2>
-              <p className="text-sm text-gray-600">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="text-center mb-4 sm:mb-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Verify Your Account</h2>
+              <p className="text-xs sm:text-sm text-gray-600">
                 {isNewUser ? 'We sent a verification code to your phone' : 'Enter the OTP sent to your phone'}
               </p>
               <p className="text-xs text-gray-500 mt-1">
@@ -319,9 +319,9 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
               </p>
             </div>
 
-          <form onSubmit={handleOtpSubmit} className="space-y-4">
+          <form onSubmit={handleOtpSubmit} className="space-y-3 sm:space-y-4">
             <div>
-              <label htmlFor="otpCode" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="otpCode" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Verification Code
               </label>
               <input
@@ -330,7 +330,7 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
                 value={otpCode}
                   onChange={(e) => setOtpCode(e.target.value)}
                   placeholder="Enter 6-digit code"
-                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-center text-lg tracking-widest"
+                  className="w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-center text-base sm:text-lg tracking-widest"
                 maxLength={6}
                 required
                 disabled={isVerifyingOtp}
@@ -342,7 +342,7 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
                 type="button"
                 onClick={resendOtp}
                 disabled={isSendingOtp}
-                className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors text-sm"
+                className="flex-1 bg-gray-100 text-gray-700 py-2.5 sm:py-3 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors text-xs sm:text-sm"
               >
                 {isSendingOtp ? 'Sending...' : 'Resend OTP'}
               </button>
@@ -350,17 +350,17 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
               <button
                 type="submit"
                 disabled={otpCode.length !== 6 || isVerifyingOtp}
-                className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+                className="flex-1 bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
               >
                 {isVerifyingOtp ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                    <span>Verifying...</span>
+                    <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-2 border-white border-t-transparent"></div>
+                    <span className="text-xs sm:text-sm">Verifying...</span>
                   </>
                 ) : (
                   <>
-                    <CheckCircle size={18} />
-                    <span>Verify</span>
+                    <CheckCircle size={16} className="sm:w-5 sm:h-5" />
+                    <span className="text-xs sm:text-sm">Verify</span>
                   </>
                 )}
               </button>
@@ -370,7 +370,7 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
         )}
 
         {/* Security Notice */}
-        <div className="mt-6 p-3 bg-gray-50 rounded-lg">
+        <div className="mt-4 sm:mt-6 p-2 sm:p-3 bg-gray-50 rounded-lg">
           <p className="text-xs text-gray-600 text-center">
             🔒 Secure OTP authentication required for {currentRole.title}
           </p>
