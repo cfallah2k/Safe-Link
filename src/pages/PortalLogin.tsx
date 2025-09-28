@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, AlertTriangle, CheckCircle, LogIn, UserPlus, Send } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, CheckCircle, LogIn, UserPlus } from 'lucide-react';
 
 interface PortalLoginProps {
   role: string;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   AlertTriangle, 
   Volume2, 
@@ -46,7 +46,7 @@ const EmergencyAlertSystem: React.FC<EmergencyAlertSystemProps> = ({
   const [soundPlaying, setSoundPlaying] = useState(false);
 
   // Emergency alert sound
-  const playEmergencySound = () => {
+  const playEmergencySound = useCallback(() => {
     if (!isSoundEnabled || soundPlaying) return;
     
     setSoundPlaying(true);
@@ -71,7 +71,7 @@ const EmergencyAlertSystem: React.FC<EmergencyAlertSystemProps> = ({
     oscillator.stop(audioContext.currentTime + 1);
     
     setTimeout(() => setSoundPlaying(false), 1000);
-  };
+  }, [isSoundEnabled, soundPlaying]);
 
   // Simulate receiving emergency alerts
   useEffect(() => {
