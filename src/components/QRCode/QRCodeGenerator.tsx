@@ -3,11 +3,8 @@ import {
   QrCode, 
   Download, 
   Copy, 
-  CheckCircle, 
-  AlertCircle,
   Shield,
   Eye,
-  EyeOff,
   RefreshCw
 } from 'lucide-react';
 

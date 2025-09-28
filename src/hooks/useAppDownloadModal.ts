@@ -45,13 +45,10 @@ export const useAppDownloadModal = (): UseAppDownloadModalReturn => {
 
   // Check for PWA install prompt
   useEffect(() => {
-    let deferredPrompt: any = null;
 
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Stash the event so it can be triggered later
-      deferredPrompt = e;
       
       // Show our custom modal instead
       if (!hasSeenModal) {

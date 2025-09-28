@@ -30,8 +30,6 @@ const PoliceDashboard: React.FC<PoliceDashboardProps> = ({ userData, onLogout })
   const [activeTab, setActiveTab] = useState('emergency');
   const [searchQuery, setSearchQuery] = useState('');
   const [emergencyLocations, setEmergencyLocations] = useState<any[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<any>(null);
-  const [showQRScanner, setShowQRScanner] = useState(false);
 
   // Generate sample data
   const policeData = generatePoliceData();
@@ -334,7 +332,8 @@ const PoliceDashboard: React.FC<PoliceDashboardProps> = ({ userData, onLogout })
                     setEmergencyLocations(prev => [alert, ...prev]);
                   }}
                   onLocationUpdate={(location) => {
-                    setSelectedLocation(location);
+                    // Handle location update
+                    console.log('Location updated:', location);
                   }}
                 />
 
@@ -342,7 +341,8 @@ const PoliceDashboard: React.FC<PoliceDashboardProps> = ({ userData, onLogout })
                 <MapTracking
                   locations={emergencyLocations}
                   onLocationSelect={(location) => {
-                    setSelectedLocation(location);
+                    // Handle location selection
+                    console.log('Location selected:', location);
                   }}
                   onNavigateToLocation={(location) => {
                     // Handle navigation to emergency location
@@ -363,7 +363,8 @@ const PoliceDashboard: React.FC<PoliceDashboardProps> = ({ userData, onLogout })
                 <MapTracking
                   locations={emergencyLocations}
                   onLocationSelect={(location) => {
-                    setSelectedLocation(location);
+                    // Handle location selection
+                    console.log('Location selected:', location);
                   }}
                   onNavigateToLocation={(location) => {
                     // Handle navigation to emergency location

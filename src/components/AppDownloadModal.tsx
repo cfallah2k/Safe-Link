@@ -3,7 +3,6 @@ import {
   Download, 
   Smartphone, 
   X, 
-  CheckCircle, 
   Star, 
   Shield, 
   Heart, 

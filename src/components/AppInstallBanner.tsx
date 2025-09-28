@@ -3,7 +3,6 @@ import {
   Download, 
   Smartphone, 
   X, 
-  CheckCircle,
   ArrowRight
 } from 'lucide-react';
 
@@ -17,7 +16,6 @@ const AppInstallBanner: React.FC<AppInstallBannerProps> = ({
   onDismiss
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [hasSeenBanner, setHasSeenBanner] = useState(false);
 
   useEffect(() => {
     // Check if user has seen the banner before

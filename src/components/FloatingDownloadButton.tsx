@@ -3,9 +3,7 @@ import {
   Download, 
   Smartphone, 
   X, 
-  ArrowUp,
-  CheckCircle,
-  Star
+  CheckCircle
 } from 'lucide-react';
 
 interface FloatingDownloadButtonProps {

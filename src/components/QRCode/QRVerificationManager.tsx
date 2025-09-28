@@ -3,13 +3,8 @@ import {
   QrCode, 
   CheckCircle, 
   AlertCircle, 
-  Clock, 
-  User, 
-  Shield,
   RefreshCw,
-  Download,
-  Eye,
-  EyeOff
+  Download
 } from 'lucide-react';
 
 interface VerificationRecord {

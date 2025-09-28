@@ -19,12 +19,9 @@ import {
   Shield, 
   Lock, 
   Eye, 
-  EyeOff, 
   AlertTriangle, 
   CheckCircle,
-  Download,
-  Phone,
-  Mail
+  Download
 } from 'lucide-react';
 
 interface SecureDataViewerProps {
@@ -45,7 +42,6 @@ const SecureDataViewer: React.FC<SecureDataViewerProps> = ({
   onDataAccess
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showData, setShowData] = useState(false);
   const [otpCode, setOtpCode] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState('');
@@ -96,7 +92,6 @@ const SecureDataViewer: React.FC<SecureDataViewerProps> = ({
 
     if (otpCode.length === 6) {
       setIsAuthenticated(true);
-      setShowData(true);
       onDataAccess({
         timestamp: new Date().toISOString(),
         userRole,
@@ -133,7 +128,6 @@ const SecureDataViewer: React.FC<SecureDataViewerProps> = ({
     if (isAuthenticated) {
       const timer = setTimeout(() => {
         setIsAuthenticated(false);
-        setShowData(false);
         setNdaAccepted(false);
         setOtpCode('');
       }, 30 * 60 * 1000); // 30 minutes

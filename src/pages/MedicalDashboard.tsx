@@ -29,14 +29,6 @@ const MedicalDashboard: React.FC<MedicalDashboardProps> = ({ userData, onLogout 
   // Generate sample data
   const medicalData = generateMedicalData();
 
-  // Mock data for demonstration
-  const [dashboardData] = useState({
-    totalPatients: medicalData.medicalMetrics.totalPatients,
-    activePatients: medicalData.medicalMetrics.activePatients,
-    appointmentsToday: medicalData.medicalMetrics.appointmentsToday,
-    emergencyCases: medicalData.medicalMetrics.emergencyCases,
-    averageWaitTime: medicalData.medicalMetrics.averageWaitTime
-  });
 
   const [patients] = useState([
     { 

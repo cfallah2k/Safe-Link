@@ -43,7 +43,6 @@ const EmergencyAlertSystem: React.FC<EmergencyAlertSystemProps> = ({
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [currentAlert, setCurrentAlert] = useState<EmergencyAlert | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [soundPlaying, setSoundPlaying] = useState(false);
 
   // Emergency alert sound
@@ -113,7 +112,7 @@ const EmergencyAlertSystem: React.FC<EmergencyAlertSystemProps> = ({
     const interval = setInterval(simulateAlerts, 30000 + Math.random() * 30000);
     
     return () => clearInterval(interval);
-  }, [onAlertReceived, onLocationUpdate]);
+  }, [onAlertReceived, onLocationUpdate, playEmergencySound]);
 
   const handleAlertResponse = (alertId: string, action: 'accept' | 'resolve') => {
     setAlerts(prev => prev.map(alert => 

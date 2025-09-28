@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Smartphone, ArrowLeft, AlertTriangle, CheckCircle, LogIn, UserPlus, Send } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, CheckCircle, LogIn, UserPlus, Send } from 'lucide-react';
 
 interface PortalLoginProps {
   role: string;
@@ -11,7 +11,6 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [otpCode, setOtpCode] = useState('');
-  const [showOtpInput, setShowOtpInput] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [error, setError] = useState('');
@@ -65,7 +64,6 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
     // For demo purposes, assume user exists if phone number is provided
     if (phoneNumber && email) {
       setCurrentStep('otp');
-      setShowOtpInput(true);
     } else {
       setError('Please provide both phone number and email.');
     }
@@ -83,7 +81,6 @@ const PortalLogin: React.FC<PortalLoginProps> = ({ role, onLoginSuccess, onBack 
     if (phoneNumber && email) {
       setIsNewUser(true);
       setCurrentStep('otp');
-      setShowOtpInput(true);
     } else {
       setError('Please provide both phone number and email.');
     }

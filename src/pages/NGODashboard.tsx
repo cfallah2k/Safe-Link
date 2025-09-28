@@ -28,14 +28,6 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ userData, onLogout }) => {
   // Generate sample data
   const ngoData = generateNGOData();
 
-  // Mock data for demonstration
-  const [dashboardData] = useState({
-    totalBeneficiaries: ngoData.ngoMetrics.totalBeneficiaries,
-    activePrograms: ngoData.ngoMetrics.activePrograms,
-    completedPrograms: ngoData.ngoMetrics.completedPrograms,
-    upcomingEvents: ngoData.ngoMetrics.upcomingEvents,
-    communityReach: ngoData.ngoMetrics.communityReach
-  });
 
   const [programs] = useState([
     { 

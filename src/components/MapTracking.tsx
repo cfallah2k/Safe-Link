@@ -4,14 +4,10 @@ import {
   Navigation, 
   Phone, 
   Clock, 
-  User, 
-  AlertTriangle,
-  CheckCircle,
   X,
   ZoomIn,
   ZoomOut,
-  RefreshCw,
-  Layers
+  RefreshCw
 } from 'lucide-react';
 
 interface LocationData {
