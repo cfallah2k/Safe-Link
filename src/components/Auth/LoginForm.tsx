@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Shield, ArrowRight, ChevronDown } from 'lucide-react';
 import { secretCodeManager } from '../../utils/secretCode';
+import StakeholderFlowTest from '../Test/StakeholderFlowTest';
 
 interface LoginFormProps {
   onLogin: (code: string) => void;
@@ -251,6 +252,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCreateNew }) => {
               </div>
             </div>
           </div>
+
+          {/* Stakeholder Flow Test Component */}
+          <StakeholderFlowTest />
         </div>
       </div>
     </div>
