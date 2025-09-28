@@ -206,7 +206,7 @@ const DesktopHeader: React.FC = () => {
       <>
         {/* Mobile menu backdrop */}
         <div 
-          className="fixed inset-0 z-20 lg:hidden" 
+          className="fixed inset-0 z-20 lg:hidden bg-black bg-opacity-25" 
           onClick={() => setIsMobileMenuOpen(false)}
         />
         <div className="lg:hidden bg-white border-b border-gray-200 shadow-lg relative z-30 max-h-[80vh] overflow-y-auto">
@@ -235,8 +235,15 @@ const DesktopHeader: React.FC = () => {
                           <Link
                             key={item.path}
                             to={item.path}
-                            onClick={handleItemClick}
-                            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 touch-manipulation min-h-[48px] ${
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleItemClick();
+                              // Small delay to ensure menu closes before navigation
+                              setTimeout(() => {
+                                window.location.href = item.path;
+                              }, 100);
+                            }}
+                            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 touch-manipulation min-h-[48px] cursor-pointer ${
                               active
                                 ? 'bg-primary-50 text-primary-700 border border-primary-200 shadow-sm'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 active:bg-gray-100'
@@ -295,8 +302,15 @@ const DesktopHeader: React.FC = () => {
                     <Link
                       key={item.path}
                       to={item.path}
-                      onClick={handleItemClick}
-                      className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleItemClick();
+                        // Small delay to ensure dropdown closes before navigation
+                        setTimeout(() => {
+                          window.location.href = item.path;
+                        }, 100);
+                      }}
+                      className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer ${
                         active
                           ? 'bg-primary-50 text-primary-700 border border-primary-200'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'

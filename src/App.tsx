@@ -15,6 +15,7 @@ import StorytellingPlatform from './components/Storytelling/StorytellingPlatform
 import SafeSpaceLocator from './components/SafeSpace/SafeSpaceLocator';
 import ConsentEducationGame from './components/Games/ConsentEducationGame';
 import InclusiveYouthSupport from './components/Inclusive/InclusiveYouthSupport';
+import DashboardAccessManager from './components/Dashboard/DashboardAccessManager';
 
 // Contexts
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
@@ -152,6 +153,7 @@ function App() {
             <Route path="/medication-order" element={<MedicationOrder />} />
             <Route path="/secure-map" element={<SecureMap />} />
             <Route path="/settings" element={<Settings onLogout={handleLogout} />} />
+            <Route path="/dashboard" element={<DashboardAccessManager />} />
             <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </div>

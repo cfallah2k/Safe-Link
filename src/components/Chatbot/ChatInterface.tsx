@@ -43,11 +43,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationContext, setConversationContext] = useState<string>('');
-  const [isOnboarding, setIsOnboarding] = useState(true);
   const [userProfile] = useState<UserProfile>({});
   const [isRecording, setIsRecording] = useState(false);
   const [showChatHistory, setShowChatHistory] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [showMiniDropdown, setShowMiniDropdown] = useState(false);
+  const [hasShownIntroduction, setHasShownIntroduction] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -222,28 +223,42 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
     // Load previous messages from offline storage
     loadPreviousMessages();
     
-    // Add welcome message and start onboarding
-    if (messages.length === 0 && isOnboarding) {
-      const welcomeMessage: Message = {
+    // Add AI introduction message if no messages exist
+    if (messages.length === 0 && !hasShownIntroduction) {
+      const introductionMessage: Message = {
         id: Date.now().toString(),
-        text: "Hello! I'm your confidential SRHR assistant. I'm here to provide safe, non-judgmental support for your sexual and reproductive health questions. Everything we discuss is completely private and confidential. Are you ready to begin?",
+        text: "Hello! I'm your SafeLink AI assistant. I'm here to provide you with accurate, confidential, and supportive information about sexual and reproductive health and rights. I'm completely anonymous and your conversations with me are private. How can I help you today?",
         isUser: false,
         timestamp: Date.now(),
-        suggestions: ['Yes, I\'m ready', 'I have questions about privacy', 'I\'m not sure'],
-        followUpQuestions: [
-          "I'm not sure what to ask - can you help me?",
-          "I have a specific concern I'd like to discuss",
-          "I want to learn about contraception",
-          "I'm worried about my health"
+        suggestions: [
+          "Tell me about contraception options",
+          "I have questions about my period", 
+          "What should I know about STIs?",
+          "I need help with relationships"
         ]
       };
-      setMessages([welcomeMessage]);
+      setMessages([introductionMessage]);
+      setHasShownIntroduction(true);
     }
-  }, [messages.length, commonQuestions, isOnboarding]);
+  }, [messages.length, hasShownIntroduction]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Close mini dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showMiniDropdown && !(event.target as Element).closest('.relative')) {
+        setShowMiniDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMiniDropdown]);
 
   const loadPreviousMessages = async () => {
     try {
@@ -802,7 +817,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
     if (window.confirm('Are you sure you want to delete this conversation?')) {
       setMessages([]);
       setConversationContext('');
-      setIsOnboarding(true);
+      setHasShownIntroduction(false);
     }
   };
 
@@ -836,13 +851,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
                 )}
               </div>
               
-              {/* Message bubble */}
-              <div className={`rounded-2xl px-4 py-3 shadow-lg backdrop-blur-sm ${
+              {/* Message bubble - Mobile Responsive */}
+              <div className={`rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-lg backdrop-blur-sm ${
                 message.isUser 
                   ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white' 
                   : 'bg-white/90 text-gray-900 border border-gray-200/50'
               }`}>
-                <p className="text-sm sm:text-base leading-relaxed break-words">{message.text}</p>
+                <p className="text-xs sm:text-sm lg:text-base leading-relaxed break-words">{message.text}</p>
                 
                 {/* Follow-up questions with modern design */}
                 {message.followUpQuestions && message.followUpQuestions.length > 0 && (
@@ -932,48 +947,82 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
           </div>
         </div>
 
-        {/* Enhanced Input field with voice and file options */}
+        {/* Enhanced Input field with mini dropdown - Mobile Responsive */}
         <div className="flex space-x-2">
-          {/* Voice recording button */}
-          <button
-            onClick={isRecording ? stopRecording : startRecording}
-            className={`p-2 rounded-xl transition-all duration-200 ${
-              isRecording 
-                ? 'bg-red-500 hover:bg-red-600 text-white' 
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
-            }`}
-            disabled={isLoading}
-          >
-            {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
-          </button>
+          {/* Mini Dropdown for AI Tools */}
+          <div className="relative">
+            <button
+              onClick={() => setShowMiniDropdown(!showMiniDropdown)}
+              className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl transition-all duration-200"
+              disabled={isLoading}
+            >
+              <Sparkles size={18} />
+            </button>
+            
+            {/* Dropdown Menu */}
+            {showMiniDropdown && (
+              <div className="absolute bottom-full left-0 mb-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 z-50">
+                <div className="p-2 space-y-1">
+                  {/* Voice recording */}
+                  <button
+                    onClick={() => {
+                      setShowMiniDropdown(false);
+                      isRecording ? stopRecording() : startRecording();
+                    }}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                      isRecording 
+                        ? 'bg-red-50 text-red-600' 
+                        : 'hover:bg-gray-50 text-gray-700'
+                    }`}
+                    disabled={isLoading}
+                  >
+                    {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
+                    <span className="text-sm">{isRecording ? 'Stop Recording' : 'Voice Message'}</span>
+                  </button>
+                  
+                  {/* File upload */}
+                  <button
+                    onClick={() => {
+                      setShowMiniDropdown(false);
+                      fileInputRef.current?.click();
+                    }}
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 transition-all duration-200"
+                    disabled={isLoading}
+                  >
+                    <Upload size={16} />
+                    <span className="text-sm">Upload File</span>
+                  </button>
+                  
+                  {/* Camera */}
+                  <button
+                    onClick={() => {
+                      setShowMiniDropdown(false);
+                      cameraInputRef.current?.click();
+                    }}
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 transition-all duration-200"
+                    disabled={isLoading}
+                  >
+                    <Camera size={16} />
+                    <span className="text-sm">Take Photo</span>
+                  </button>
+                  
+                  {/* Chat history */}
+                  <button
+                    onClick={() => {
+                      setShowMiniDropdown(false);
+                      setShowChatHistory(!showChatHistory);
+                    }}
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 transition-all duration-200"
+                  >
+                    <Save size={16} />
+                    <span className="text-sm">Chat History</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
-          {/* File upload button */}
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl transition-all duration-200"
-            disabled={isLoading}
-          >
-            <Upload size={18} />
-          </button>
-
-          {/* Camera button */}
-          <button
-            onClick={() => cameraInputRef.current?.click()}
-            className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl transition-all duration-200"
-            disabled={isLoading}
-          >
-            <Camera size={18} />
-          </button>
-
-          {/* Chat history button */}
-          <button
-            onClick={() => setShowChatHistory(!showChatHistory)}
-            className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl transition-all duration-200"
-          >
-            <Save size={18} />
-          </button>
-
-          {/* Input field */}
+          {/* Input field - Mobile Responsive */}
           <div className="flex-1 relative">
             <input
               ref={inputRef}
@@ -982,21 +1031,21 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask about sexual and reproductive health..."
-              className="w-full px-3 py-2 bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-xl text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 shadow-sm"
+              className="w-full px-3 py-2.5 sm:py-3 bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-xl text-xs sm:text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 shadow-sm"
               disabled={isLoading}
             />
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-              <MessageCircle className="w-4 h-4 text-gray-400" />
+              <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
             </div>
           </div>
 
-          {/* Send button */}
+          {/* Send button - Mobile Responsive */}
           <button
             onClick={handleSendMessage}
             disabled={!inputText.trim() || isLoading}
-            className="p-2 bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg transition-all duration-200 active:scale-95"
+            className="p-2 sm:p-2.5 bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg transition-all duration-200 active:scale-95"
           >
-            <Send size={18} className="text-white" />
+            <Send size={16} className="sm:w-5 sm:h-5 text-white" />
           </button>
         </div>
 
@@ -1018,43 +1067,43 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onBack }) => {
         />
       </div>
 
-      {/* Chat History Panel */}
+      {/* Chat History Panel - Mobile Responsive */}
       {showChatHistory && (
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Chat History</h3>
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Chat History</h3>
               <button
                 onClick={() => setShowChatHistory(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 p-1"
               >
                 ×
               </button>
             </div>
             
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               <button
                 onClick={saveConversation}
-                className="w-full flex items-center space-x-2 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+                className="w-full flex items-center space-x-2 p-2.5 sm:p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
               >
-                <Save size={18} className="text-blue-600" />
-                <span className="text-blue-600 font-medium">Save Conversation</span>
+                <Save size={14} className="sm:w-4 sm:h-4 text-blue-600" />
+                <span className="text-xs sm:text-sm text-blue-600 font-medium">Save Conversation</span>
               </button>
               
               <button
                 onClick={exportConversation}
-                className="w-full flex items-center space-x-2 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+                className="w-full flex items-center space-x-2 p-2.5 sm:p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
               >
-                <Download size={18} className="text-green-600" />
-                <span className="text-green-600 font-medium">Export Conversation</span>
+                <Download size={14} className="sm:w-4 sm:h-4 text-green-600" />
+                <span className="text-xs sm:text-sm text-green-600 font-medium">Export Conversation</span>
               </button>
               
               <button
                 onClick={deleteConversation}
-                className="w-full flex items-center space-x-2 p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
+                className="w-full flex items-center space-x-2 p-2.5 sm:p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
               >
-                <Trash2 size={18} className="text-red-600" />
-                <span className="text-red-600 font-medium">Delete Conversation</span>
+                <Trash2 size={14} className="sm:w-4 sm:h-4 text-red-600" />
+                <span className="text-xs sm:text-sm text-red-600 font-medium">Delete Conversation</span>
               </button>
             </div>
           </div>
